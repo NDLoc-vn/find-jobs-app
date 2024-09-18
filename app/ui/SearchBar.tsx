@@ -3,8 +3,8 @@ import Image from "next/image";
 
 const SearchBar = () => {
   return (
-    <div className="flex justify-center mt-8">
-      <div className="relative w-96">
+    <div className="flex flex-nowrap flex-col md:flex-row justify-center mt-8">
+      <div className="relative md:w-80 w-full mb-2 md:mb-0 mr-2">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <Image
             src="/icon/mag-glass.svg"
@@ -16,10 +16,10 @@ const SearchBar = () => {
         <input
           type="text"
           placeholder="Chức danh, kĩ năng, ..."
-          className="border px-10 py-2 w-full rounded-l-md"
+          className="border px-10 py-2 w-full rounded-md"
         />
       </div>
-      <div className="relative w-64">
+      <div className="relative md:w-64 w-full mb-2 md:mb-0">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <Image
             src="/icon/location.svg"
@@ -31,10 +31,10 @@ const SearchBar = () => {
         <input
           type="text"
           placeholder="Vị trí"
-          className="border px-10 py-2 w-64 rounded-r-md"
+          className="border px-10 py-2 md:w-64 w-full rounded-md"
         />
       </div>
-      <button className="px-6 py-2 bg-xanhduong-600 text-white rounded ml-2">
+      <button className="px-6 py-2 bg-xanhduong-600 text-white rounded md:ml-2">
         Tìm kiếm
       </button>
     </div>
