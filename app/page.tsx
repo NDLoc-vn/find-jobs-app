@@ -1,12 +1,18 @@
+import { Lexend } from "next/font/google"
 import Header from "./ui/Header";
 import SearchBar from "./ui/SearchBar";
 import Categories from "./ui/hompage/Categories";
 import JobCard from "./ui/hompage/JobCart";
 import Footer from "./ui/Footer";
 
+const lexend = Lexend({
+  subsets: ['latin'],
+  weight: ['400'],
+});
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen bg-white ${lexend.className}`}>
       <Header />
       <div className="text-center mt-4 px-4">
         <h1 className="text-3xl md:text-4xl font-bold mt-10">
