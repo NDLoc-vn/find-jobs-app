@@ -4,7 +4,7 @@ import Image from "next/image";
 const SearchBar = () => {
   return (
     <div className="flex flex-nowrap flex-col md:flex-row justify-center mt-8">
-      <div className="relative md:w-80 w-full mb-2 md:mb-0 mr-2">
+      <div className="relative md:w-1/3 w-full mb-2 md:mb-0 mr-2">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <Image
             src="/icon/mag-glass.svg"

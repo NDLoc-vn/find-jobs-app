@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const categories = [
   { name: "Graphics & Design", positions: 357 },
@@ -9,7 +10,15 @@ const categories = [
 const Categories = () => {
   return (
     <div className="mt-12">
-      <h2 className="text-xl font-bold mb-4">Danh mục phổ biến</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">Danh mục phổ biến</h2>
+        <Link
+          className="text-xanhduong-600 hover:underline"
+          href="#"
+        >
+          Xem tất cả &#8594;
+        </Link>
+      </div>
       <div className="grid grid-cols-4 gap-6">
         {categories.map((category, index) => (
           <div key={index} className="p-4 border rounded text-center">
