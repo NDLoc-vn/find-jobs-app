@@ -11,7 +11,6 @@ const categories = [
 const Categories = () => {
   return (
     <div className="mt-12">
-      {/* Header của Categories */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Danh mục phổ biến</h2>
         <Link className="text-xanhduong-600 hover:underline" href="#">
@@ -19,10 +18,12 @@ const Categories = () => {
         </Link>
       </div>
 
-      {/* Responsive grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {categories.map((category, index) => (
-          <div key={index} className="p-4 border rounded text-center">
+          <div
+            key={index}
+            className="p-4 border rounded text-center gradient-hover"
+          >
             <p className="font-semibold text-sm sm:text-base lg:text-lg">
               {category.name}
             </p>
