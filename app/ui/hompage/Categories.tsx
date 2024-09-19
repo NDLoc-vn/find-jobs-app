@@ -22,7 +22,7 @@ const Categories = () => {
         {categories.map((category, index) => (
           <div
             key={index}
-            className="p-4 border rounded text-center gradient-hover"
+            className="cursor-pointer p-4 border rounded text-center gradient-hover"
           >
             <p className="font-semibold text-sm sm:text-base lg:text-lg">
               {category.name}

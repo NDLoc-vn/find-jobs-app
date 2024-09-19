@@ -15,7 +15,7 @@ const JobCard: React.FC<JobCardProps> = ({
   location,
 }) => {
   return (
-    <div className="p-4 border rounded mb-4 gradient-hover">
+    <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
       <h3 className="font-bold text-lg">{title}</h3>
       <div className="flex flex-wrap items-center mt-1 gap-x-2">
         <span className="bg-green-100 text-green-600 font-semibold px-2 py-1 text-xs rounded">
