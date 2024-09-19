@@ -5,8 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --blue-600: #374CF4;
-  --blue-800: #222FA0;
+  --blue-600: #374cf4;
+  --blue-800: #222fa0;
+  --torea-bay-100: #ddebff;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -26,4 +27,17 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.gradient-hover {
+  background-color: var(--background);
+  transition: background 0.5s ease-in-out;
+}
+
+.gradient-hover:hover {
+  background: linear-gradient(
+    to right,
+    var(--torea-bay-100),
+    var(--background)
+  );
 }

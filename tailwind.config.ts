@@ -17,5 +17,6 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: ["gradient-hover"],
 };
 export default config;
