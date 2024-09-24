@@ -23,9 +23,11 @@ const Header = () => {
                 Đăng nhập
               </button>
             </Link>
-            <button className="w-32 h-12 px-4 py-2 border border-blue-500 text-blue-500 rounded-lg gradient-hover">
-              Đăng ký
-            </button>
+            <Link href={"/signup"}>
+              <button className="w-32 h-12 px-4 py-2 border border-blue-500 text-blue-500 rounded-lg gradient-hover">
+                Đăng ký
+              </button>
+            </Link>
           </div>
           <Link href="#" className="text-sm text-blue-600 hover:underline">
             Đăng nhập với tư cách nhà tuyển dụng ?
