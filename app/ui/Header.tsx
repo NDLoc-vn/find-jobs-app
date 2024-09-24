@@ -18,9 +18,11 @@ const Header = () => {
 
         <div className="flex flex-col items-center space-y-2">
           <div className="flex space-x-4">
-            <button className="w-32 h-12 px-4 py-2 bg-xanhduong-600 text-white rounded-lg font-semibold">
-              Đăng nhập
-            </button>
+            <Link href={"/login"}>
+              <button className="w-32 h-12 px-4 py-2 bg-xanhduong-600 text-white rounded-lg font-semibold">
+                Đăng nhập
+              </button>
+            </Link>
             <button className="w-32 h-12 px-4 py-2 border border-blue-500 text-blue-500 rounded-lg gradient-hover">
               Đăng ký
             </button>
