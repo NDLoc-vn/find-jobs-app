@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -9,19 +10,24 @@ const Header = () => {
           <Image
             src="/logo.png"
             alt="Logo"
-            width={50}
-            height={50}
+            width={64}
+            height={64}
             className="mr-2"
           />
         </div>
 
-        <div className="flex items-center space-x-4">
-          <button className="w-32 h-12 px-4 py-2 bg-xanhduong-600 text-white rounded-lg font-semibold">
-            Đăng nhập
-          </button>
-          <button className="w-32 h-12 px-4 py-2 border border-blue-500 text-blue-500 rounded-lg gradient-hover">
-            Đăng ký
-          </button>
+        <div className="flex flex-col items-center space-y-2">
+          <div className="flex space-x-4">
+            <button className="w-32 h-12 px-4 py-2 bg-xanhduong-600 text-white rounded-lg font-semibold">
+              Đăng nhập
+            </button>
+            <button className="w-32 h-12 px-4 py-2 border border-blue-500 text-blue-500 rounded-lg gradient-hover">
+              Đăng ký
+            </button>
+          </div>
+          <Link href="#" className="text-sm text-blue-600 hover:underline">
+            Đăng nhập với tư cách nhà tuyển dụng ?
+          </Link>
         </div>
       </div>
     </header>
