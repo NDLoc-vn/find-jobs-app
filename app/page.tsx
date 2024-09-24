@@ -2,8 +2,10 @@ import { Lexend } from "next/font/google"
 import Header from "./ui/Header";
 import SearchBar from "./ui/SearchBar";
 import Categories from "./ui/hompage/Categories";
-import JobCard from "./ui/hompage/JobCart";
 import Footer from "./ui/Footer";
+import { Suspense } from "react";
+import { JobListSkeleton } from "./ui/sketetons";
+import JobList from "./ui/hompage/JobList";
 
 const lexend = Lexend({
   subsets: ['latin'],
@@ -29,32 +31,10 @@ export default function Home() {
             Việc làm nổi bật
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <JobCard
-              title="Junior Graphic Designer"
-              company="Google Inc."
-              salary="$20,000 - $25,000"
-              location="Da Nang, Viet Nam"
-            />
-            <JobCard
-              title="Junior Graphic Designer"
-              company="Google Inc."
-              salary="$20,000 - $25,000"
-              location="Da Nang, Viet Nam"
-            />
-            <JobCard
-              title="Junior Graphic Designer"
-              company="Google Inc."
-              salary="$20,000 - $25,000"
-              location="Da Nang, Viet Nam"
-            />
-            <JobCard
-              title="Junior Graphic Designer"
-              company="Google Inc."
-              salary="$20,000 - $25,000"
-              location="Da Nang, Viet Nam"
-            />
-          </div>
+          <Suspense fallback={<JobListSkeleton />}>
+            <JobList />
+          </Suspense>
+
         </section>
       </div>
 
