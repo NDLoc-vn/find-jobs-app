@@ -53,7 +53,7 @@ const Login = () => {
           </p>
           <p className="mt-2">
             Hoặc{" "}
-            <Link href="/employer-login" className="text-blue-600">
+            <Link href="/recruiter-login" className="text-blue-600">
               Nhà tuyển dụng
             </Link>
           </p>

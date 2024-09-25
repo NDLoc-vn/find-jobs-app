@@ -4,3 +4,12 @@ export type Job = {
   salary: string;
   location: string;
 };
+
+export type Company = {
+  name: string;
+  email: string;
+  industry: string;
+  city: string;
+  address: string;
+  website: string;
+}
