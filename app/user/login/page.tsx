@@ -62,13 +62,13 @@ const Login = () => {
         <div className="mt-6 text-center">
           <p>
             Chưa có tài khoản?{" "}
-            <Link href="/signup" className="text-blue-600">
+            <Link href="/user/signup" className="text-blue-600">
               Đăng ký
             </Link>
           </p>
           <p className="mt-2">
             Hoặc{" "}
-            <Link href="/recruiter-login" className="text-blue-600">
+            <Link href="/recruiter/login" className="text-blue-600">
               Nhà tuyển dụng
             </Link>
           </p>

@@ -83,13 +83,13 @@ export default function RecruiterLogin() {
         <div className="mt-6 text-center">
           <p>
             Chưa có tài khoản cho công ty?{" "}
-            <Link href="/company-signup" className="text-blue-600">
+            <Link href="/company/signup" className="text-blue-600">
               Đăng ký
             </Link>
           </p>
           <p className="mt-2">
             Bạn muốn tìm việc?{" "}
-            <Link href="/login" className="text-blue-600">
+            <Link href="/user/login" className="text-blue-600">
               Người tìm việc
             </Link>
           </p>

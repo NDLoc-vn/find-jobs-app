@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Company } from '../../lib/definitions';
+import axios from 'axios';
 
 export default function CompanySignup() {
   const [companyData, setCompanyData] = useState<Company>({
@@ -16,6 +17,8 @@ export default function CompanySignup() {
   
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<{ name: string; code: number }[]>([]);
+
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -23,6 +26,34 @@ export default function CompanySignup() {
       ...companyData,
       [name]: value,
     });
+
+    if (name === 'city') {
+      fetchCitySuggestions(value);
+    }
+  };
+
+  const fetchCitySuggestions = async (query: string) => {
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION}${query}`);
+      console.log(response.data);
+      setSuggestions(response.data);
+    } catch (error) {
+      console.error("Error fetching city suggestions:", error);
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (city: { name: string; code: number }) => {
+    setCompanyData({
+      ...companyData,
+      city: city.name,
+    });
+    setSuggestions([]);
   };
 
   const handleSubmit = (e: any) => {
@@ -130,6 +161,15 @@ export default function CompanySignup() {
               onChange={handleInputChange} 
               placeholder="Thành phố"
             />
+            {suggestions.length > 0 && (
+              <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto shadow-lg">
+                {suggestions.map((city, index) => (
+                  <li key={index} className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => handleSuggestionClick(city)}>
+                    {city.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="col-span-1 md:col-span-2">
@@ -158,13 +198,13 @@ export default function CompanySignup() {
         <div className="mt-6 text-center">
           <p>
             Nhà tuyển dụng?{" "}
-            <Link href="/recruiter-login" className="text-blue-600">
+            <Link href="/recruiter/login" className="text-blue-600">
               Đăng nhập
             </Link>
           </p>
           <p className="mt-2">
             Bạn muốn tìm việc?{" "}
-            <Link href="/login" className="text-blue-600">
+            <Link href="/user/login" className="text-blue-600">
               Người tìm việc
             </Link>
           </p>

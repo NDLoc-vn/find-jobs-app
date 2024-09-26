@@ -89,13 +89,13 @@ const Signup = () => {
         <div className="mt-6 text-center">
           <p>
             Đã có tài khoản?{" "}
-            <Link href="/login" className="text-blue-600">
+            <Link href="/user/login" className="text-blue-600">
               Đăng nhập
             </Link>
           </p>
           <p className="mt-2">
             Hoặc{" "}
-            <Link href="/recruiter-login" className="text-blue-600">
+            <Link href="/recruiter/login" className="text-blue-600">
               Nhà tuyển dụng
             </Link>
           </p>
