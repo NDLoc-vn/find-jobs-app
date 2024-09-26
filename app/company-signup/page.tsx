@@ -46,92 +46,111 @@ export default function CompanySignup() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-white to-toreabay-700">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 className="text-3xl font-semibold mb-6 text-center">Đăng ký công ty</h1>
 
-        <form onSubmit={handleSubmit}>
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            <strong>Tên công ty</strong>
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-            name="name"
-            value={companyData.name} 
-            onChange={handleInputChange} 
-            placeholder="Tên công ty"
-          />
+        <form onSubmit={handleSubmit} className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Tên công ty</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="name"
+              value={companyData.name} 
+              onChange={handleInputChange} 
+              placeholder="Tên công ty"
+            />
 
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            <strong>Email</strong>
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="email"
-            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-            name="email"
-            value={companyData.email} 
-            onChange={handleInputChange} 
-            placeholder="Email"
-          />
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Email</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="email"
+              value={companyData.email} 
+              onChange={handleInputChange} 
+              placeholder="Email"
+            />
 
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            <strong>Lĩnh vực</strong>
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-            name="industry"
-            value={companyData.industry} 
-            onChange={handleInputChange} 
-            placeholder="Lĩnh vực"
-          />
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Lĩnh vực</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="industry"
+              value={companyData.industry} 
+              onChange={handleInputChange} 
+              placeholder="Lĩnh vực"
+            />
+          </div>
 
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            <strong>Địa chỉ</strong>
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-            name="address"
-            value={companyData.address} 
-            onChange={handleInputChange} 
-            placeholder="Địa chỉ"
-          />
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Thành phố</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="city"
+              value={companyData.address} 
+              onChange={handleInputChange} 
+              placeholder="Thành phố"
+            />
 
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            <strong>Thành phố</strong>
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-            name="city"
-            value={companyData.city} 
-            onChange={handleInputChange} 
-            placeholder="Thành phố"
-          />
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Địa chỉ</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="address"
+              value={companyData.address} 
+              onChange={handleInputChange} 
+              placeholder="Địa chỉ"
+            />
 
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            <strong>Website</strong>
-            <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-            name="website"
-            value={companyData.website} 
-            onChange={handleInputChange} 
-            placeholder="Website"
-          />
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Thành phố</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="city"
+              value={companyData.city} 
+              onChange={handleInputChange} 
+              placeholder="Thành phố"
+            />
+          </div>
 
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
+          <div className="col-span-1 md:col-span-2">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              <strong>Website</strong>
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              name="website"
+              value={companyData.website} 
+              onChange={handleInputChange} 
+              placeholder="Website"
+            />
+          </div>
 
-          <button type="submit" className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
+          {error && <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>}
+          {success && <p className="text-green-500 col-span-1 md:col-span-2">{success}</p>}
+
+          <button type="submit" className="col-span-1 md:col-span-2 w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
             Yêu cầu cấp tài khoản
           </button>
         </form>
