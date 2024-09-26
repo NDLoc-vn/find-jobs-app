@@ -2,8 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-white to-toreabay-700">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -30,10 +33,22 @@ const Login = () => {
           </label>
           <div className="relative mb-4">
             <input
-              type={"password"}
+              type={showPassword ? "text" : "password"}
               className="w-full p-2 border border-gray-300 rounded-lg"
               placeholder="Mật khẩu"
             />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-0 flex items-center pr-3"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <Image
+                src={showPassword ? "/icon/eye.svg" : "/icon/eye-slash.svg"}
+                alt="Toggle Password Visibility"
+                width={20}
+                height={20}
+              />
+            </button>
           </div>
           <Link href="#" className="text-blue-600 text-sm">
             Quên mật khẩu
