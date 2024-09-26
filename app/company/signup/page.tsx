@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Company } from '../lib/definitions';
+import { Company } from '../../lib/definitions';
 
 export default function CompanySignup() {
   const [companyData, setCompanyData] = useState<Company>({
