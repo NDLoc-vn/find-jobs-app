@@ -26,3 +26,54 @@ export function JobListSkeleton() {
     </div>
   );
 }
+
+export function JobDetailSkeleton() {
+  return (
+    <div className="container mx-auto p-6 bg-white max-w-5xl animate-pulse">
+      {/* Header Skeleton */}
+      <div className="flex justify-between items-center border-b pb-4 mb-4">
+        <div className="flex items-center">
+          <div className="w-24 h-24 bg-gray-300 rounded-full mr-4"></div>
+          <div>
+            <div className="h-8 bg-gray-300 rounded w-48 mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-32 mb-2"></div>
+            <div className="h-6 bg-gray-300 rounded w-24"></div>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="rounded bg-gray-300 p-5 w-10 h-10"></div>
+          <div className="bg-gray-300 h-10 w-32 rounded"></div>
+        </div>
+      </div>
+
+      {/* Body Skeleton */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Left side */}
+        <div className="p-4">
+          <div className="h-6 bg-gray-300 rounded w-36 mb-4"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+        </div>
+
+        {/* Right side */}
+        <div className="p-4">
+          <div className="flex justify-between space-x-4 mb-4">
+            <div className="bg-gray-300 h-24 w-full rounded"></div>
+            <div className="bg-gray-300 h-24 w-full rounded"></div>
+          </div>
+          <div className="h-6 bg-gray-300 rounded w-36 mb-4"></div>
+          <div className="h-4 bg-gray-300 rounded w-24 mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-20 mb-2"></div>
+          <div className="h-6 bg-gray-300 rounded w-48 mt-4 mb-2"></div>
+          <div className="flex space-x-4">
+            <div className="bg-gray-300 h-10 w-32 rounded"></div>
+            <div className="bg-gray-300 h-10 w-10 rounded"></div>
+            <div className="bg-gray-300 h-10 w-10 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

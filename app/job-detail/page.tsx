@@ -1,36 +1,61 @@
-import React from "react";
+'use client';
+
+import React, { useEffect } from "react";
 import Image from "next/image";
+import { JobDetailSkeleton } from "../ui/sketetons";
 
 const JobPage = () => {
-  const job = {
-    title: "Senior UX Designer",
-    category: "Design",
-    company: { name: "Facebook" },
-    description:
-      "Here at Velstar, we don’t just make websites; we create exceptional digital experiences that consumers love. Our team of designers, developers, strategists, and creators work together to push brands to the next level.",
-    requirements: [
-      "3+ years of experience in back-end development.",
-      "Experience with HTML, JavaScript, CSS, PHP, Symfony, and/or Laravel.",
-      "Working regularly with APIs and Web Services (REST, GraphQL, SOAP, etc.)",
-      "Ambitious and hungry to grow your career in a fast-growing agency.",
-    ],
-    salary: {
-      min: 100000,
-      max: 120000,
-      currency: "USD",
-    },
-    location: {
-      city: "Da Nang",
-      address: "Lien Chieu",
-    },
-    employmentType: "Full-Time",
-    postedDate: "14 Jun, 2021",
-    status: "Open",
-  };
+  const [loading, setLoading] = React.useState(true);
+  //viet definition sau
+  const [job, setJob] = React.useState<any>(null);
+
+  useEffect(() => {
+    const fetchJobData = async () => {
+      const job = {
+        title: "Senior UX Designer",
+        category: "Design",
+        company: { name: "Facebook" },
+        description:
+          "Here at Velstar, we don’t just make websites; we create exceptional digital experiences that consumers love. Our team of designers, developers, strategists, and creators work together to push brands to the next level.",
+        requirements: [
+          "3+ years of experience in back-end development.",
+          "Experience with HTML, JavaScript, CSS, PHP, Symfony, and/or Laravel.",
+          "Working regularly with APIs and Web Services (REST, GraphQL, SOAP, etc.)",
+          "Ambitious and hungry to grow your career in a fast-growing agency.",
+        ],
+        salary: {
+          min: 100000,
+          max: 120000,
+          currency: "USD",
+        },
+        location: {
+          city: "Da Nang",
+          address: "Lien Chieu",
+        },
+        employmentType: "Full-Time",
+        postedDate: "14 Jun, 2021",
+        status: "Open",
+      };
+
+      // Simulate a delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setJob(job);
+      setLoading(false);
+    };
+
+    fetchJobData();
+  }, []);
+
+  if (loading) {
+    return (
+      <JobDetailSkeleton />
+    )
+  }
 
   return (
     <div className="container mx-auto p-6 bg-white max-w-5xl">
-      <div className="flex justify-between items-center border-b pb-4 mb-4">
+      <div className="flex md:flex-row flex-col justify-between items-center border-b pb-4 mb-4">
         <div className="flex items-center">
           <Image
             src="/icon/facebook.svg"
@@ -48,17 +73,21 @@ const JobPage = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="rounded bg-blue-600 hover:bg-blue-500 p-2.5">
-            <Image
-              src="/icon/bookmark.svg"
-              width={20}
-              height={20}
-              alt="bookmark"
-            />
+          <div className="flex-shrink-0">
+            <div className="rounded bg-blue-600 hover:bg-blue-500 p-2">
+              <Image
+                src="/icon/bookmark.svg"
+                width={20}
+                height={20}
+                alt="bookmark"
+              />
+            </div>
           </div>
-          <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded shadow-md">
-            Apply Now &#8594;
-          </button>
+          <div className="flex-grow">
+            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+              Apply Now &#8594;
+            </button>
+          </div>
         </div>
       </div>
 
@@ -68,7 +97,7 @@ const JobPage = () => {
           <p className="text-gray-600 mb-6">{job.description}</p>
           <h2 className="text-xl mb-2 font-semibold text-gray-800">Requirements</h2>
           <ul className="list-disc pl-6 text-gray-600">
-            {job.requirements.map((req, index) => (
+            {job.requirements.map((req: any, index: any) => (
               <li key={index}>{req}</li>
             ))}
           </ul>
