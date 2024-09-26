@@ -1,30 +1,52 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const Login = () => {
+export default function RecruiterLogin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!email || !password) {
+      setError("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+
+    try {
+      //api
+
+      setSuccess("Đăng nhập thành công");
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-white to-toreabay-700">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-semibold mb-6 text-center">Đăng nhập</h1>
-        <button className="w-full py-2 px-4 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-6">
-          <img src="/icon/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-          Đăng nhập bằng Google
-        </button>
+        <h1 className="text-3xl font-semibold mb-6 text-center">Đăng nhập cho nhà tuyển dụng</h1>
 
-        <hr className="my-6" />
+        {error && <p className="text-red-500">{error}</p>}
+        {success && <p className="text-green-500">{success}</p>}
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <label className="block mb-1 text-sm font-medium text-gray-700">
             <strong>Email</strong>
           </label>
           <input
             type="email"
             className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
           />
 
@@ -35,6 +57,8 @@ const Login = () => {
             <input
               type={showPassword ? "text" : "password"}
               className="w-full p-2 border border-gray-300 rounded-lg"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Mật khẩu"
             />
             <button
@@ -50,26 +74,23 @@ const Login = () => {
               />
             </button>
           </div>
-          <Link href="#" className="text-blue-600 text-sm">
-            Quên mật khẩu
-          </Link>
 
-          <button className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
+          <button type="submit" className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
             Đăng nhập
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <p>
-            Chưa có tài khoản?{" "}
-            <Link href="/signup" className="text-blue-600">
+            Chưa có tài khoản cho công ty?{" "}
+            <Link href="/company/signup" className="text-blue-600">
               Đăng ký
             </Link>
           </p>
           <p className="mt-2">
-            Hoặc{" "}
-            <Link href="/recruiter-login" className="text-blue-600">
-              Nhà tuyển dụng
+            Bạn muốn tìm việc?{" "}
+            <Link href="/user/login" className="text-blue-600">
+              Người tìm việc
             </Link>
           </p>
         </div>
@@ -77,5 +98,3 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;
