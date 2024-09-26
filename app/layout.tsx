@@ -1,3 +1,4 @@
+import { Lexend } from "next/font/google"
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -13,6 +14,11 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const lexend = Lexend({
+  subsets: ['latin'],
+  weight: ['400'],
+});
+
 export const metadata: Metadata = {
   title: "Find Jobs App",
   description: "Web tìm kiếm việc làm số 1 Việt Nam",
@@ -26,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>

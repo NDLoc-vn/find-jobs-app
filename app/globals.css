@@ -5,8 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --blue-600: #374cf4;
-  --blue-800: #222fa0;
+  --xanhduong-500: #5575FF;
+  --xanhduong-600: #374cf4;
+  --xanhduong-800: #222fa0;
   --torea-bay-100: #ddebff;
   --torea-bay-700: #2a3ad8;
 }
@@ -36,9 +37,7 @@ body {
 }
 
 .gradient-hover:hover {
-  background: linear-gradient(
-    to right,
-    var(--torea-bay-100),
-    var(--background)
-  );
+  background: linear-gradient(to right,
+      var(--torea-bay-100),
+      var(--background));
 }

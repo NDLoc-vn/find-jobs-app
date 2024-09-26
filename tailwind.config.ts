@@ -11,8 +11,9 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        "xanhduong-600": "var(--blue-600)",
-        "xanhduong-800": "var(--blue-800)",
+        "xanhduong-500": "var(--xanhduong-500)",
+        "xanhduong-600": "var(--xanhduong-600)",
+        "xanhduong-800": "var(--xanhduong-800)",
         "toreabay-100": "var(--torea-bay-100)",
         "toreabay-700": "var(--torea-bay-700)",
       },
