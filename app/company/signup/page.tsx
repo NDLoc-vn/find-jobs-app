@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Company } from '../../lib/definitions';
+import CityInput from '@/app/ui/CityInput';
 import axios from 'axios';
 
 export default function CompanySignup() {
@@ -17,46 +18,21 @@ export default function CompanySignup() {
   
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [suggestions, setSuggestions] = useState<{ name: string; code: number }[]>([]);
+  const [isValidCity, setIsValidCity] = useState<boolean>(false);
 
-
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCompanyData({
       ...companyData,
       [name]: value,
     });
-
-    if (name === 'city') {
-      fetchCitySuggestions(value);
-    }
   };
 
-  const fetchCitySuggestions = async (query: string) => {
-    if (query.length < 3) {
-      setSuggestions([]);
-      return;
-    }
-
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION}${query}`);
-      console.log(response.data);
-      setSuggestions(response.data);
-    } catch (error) {
-      console.error("Error fetching city suggestions:", error);
-      setSuggestions([]);
-    }
+  const handleCityValidChange = (isValid: boolean) => {
+    setIsValidCity(isValid);
   };
 
-  const handleSuggestionClick = (city: { name: string; code: number }) => {
-    setCompanyData({
-      ...companyData,
-      city: city.name,
-    });
-    setSuggestions([]);
-  };
-
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -66,12 +42,22 @@ export default function CompanySignup() {
       return;
     }
 
+    if (!isValidCity) {
+      setError("Vui lòng chọn thành phố hợp lệ")
+      return;
+    }
+
     try {
+      console.log(companyData);
       //api
 
       setSuccess("Company registered successfully!");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     }
   };
 
@@ -90,7 +76,7 @@ export default function CompanySignup() {
               type="text"
               className="w-full p-2 border border-gray-300 rounded-lg mb-4"
               name="name"
-              value={companyData.name} 
+              // value={companyData.name} 
               onChange={handleInputChange} 
               placeholder="Tên công ty"
             />
@@ -103,7 +89,7 @@ export default function CompanySignup() {
               type="email"
               className="w-full p-2 border border-gray-300 rounded-lg mb-4"
               name="email"
-              value={companyData.email} 
+              // value={companyData.email} 
               onChange={handleInputChange} 
               placeholder="Email"
             />
@@ -116,26 +102,13 @@ export default function CompanySignup() {
               type="text"
               className="w-full p-2 border border-gray-300 rounded-lg mb-4"
               name="industry"
-              value={companyData.industry} 
+              // value={companyData.industry} 
               onChange={handleInputChange} 
               placeholder="Lĩnh vực"
             />
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              <strong>Thành phố</strong>
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-              name="city"
-              value={companyData.address} 
-              onChange={handleInputChange} 
-              placeholder="Thành phố"
-            />
-
             <label className="block mb-1 text-sm font-medium text-gray-700">
               <strong>Địa chỉ</strong>
               <span className="text-red-500">*</span>
@@ -144,32 +117,15 @@ export default function CompanySignup() {
               type="text"
               className="w-full p-2 border border-gray-300 rounded-lg mb-4"
               name="address"
-              value={companyData.address} 
+              // value={companyData.address} 
               onChange={handleInputChange} 
               placeholder="Địa chỉ"
             />
-
             <label className="block mb-1 text-sm font-medium text-gray-700">
               <strong>Thành phố</strong>
               <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-              name="city"
-              value={companyData.city} 
-              onChange={handleInputChange} 
-              placeholder="Thành phố"
-            />
-            {suggestions.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto shadow-lg">
-                {suggestions.map((city, index) => (
-                  <li key={index} className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => handleSuggestionClick(city)}>
-                    {city.name}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <CityInput onCityInput={handleInputChange} changeCityValid={handleCityValidChange} />
           </div>
 
           <div className="col-span-1 md:col-span-2">
@@ -181,7 +137,7 @@ export default function CompanySignup() {
               type="text"
               className="w-full p-2 border border-gray-300 rounded-lg mb-4"
               name="website"
-              value={companyData.website} 
+              // value={companyData.website} 
               onChange={handleInputChange} 
               placeholder="Website"
             />
