@@ -13,6 +13,7 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
   const [searchQuery, setSearchQuery] = useState("");
   const [cityNames, setCityNames] = useState<string[]>([]);
   const [isValidCity, setIsValidCity] = useState<boolean>(false);
+  const excludeCity = ['Thành phố Hồ Chí Minh'];
 
   useEffect(() => {
     document.addEventListener("click", () => {
@@ -28,7 +29,12 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
   const fetchAllCity = async () => {
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION_ALL}`);
-      const cityNames = data.map((city: { name: string; code: number }) => city.name.replace(/(Thành phố) |(Tỉnh) /g, ''));
+      const cityNames = data.map((city: { name: string; code: number }) => {
+        if (excludeCity.includes(city.name)) {
+          return city.name;
+        }
+        city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+      });
       setCityNames(cityNames);
     } catch (err) {
       console.error("Error fetching city names: ", err);
@@ -44,7 +50,9 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION}${searchQuery}`);
       data.map((city: { name: string; code: number }) => {
-        city.name = city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+        if (!excludeCity.includes(city.name)) {
+          city.name = city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+        }
       })
       setSuggestions(data);
     } catch (error) {
