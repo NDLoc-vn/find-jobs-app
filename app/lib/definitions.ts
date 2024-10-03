@@ -5,6 +5,26 @@ export type Job = {
   location: string;
 };
 
+export type Job2 = {
+  title: string;
+  category: string;
+  company: { name: string };
+  description: string;
+  requirements: string[];
+  salary: {
+    min: number;
+    max: number
+    currency: string;
+  },
+  location: {
+    city: string;
+    address: string;
+  },
+  employmentType: string;
+  postedDate: string;
+  status: string;
+}
+
 export type Company = {
   name: string;
   email: string;

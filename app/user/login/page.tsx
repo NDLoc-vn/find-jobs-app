@@ -12,7 +12,7 @@ const Login = () => {
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-semibold mb-6 text-center">Đăng nhập</h1>
         <button className="w-full py-2 px-4 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-6">
-          <img src="/icon/google.svg" alt="Google" className="w-5 h-5 mr-2" />
+          <Image src="/icon/google.svg" width={20} height={20} alt="Google" className="w-5 h-5 mr-2" />
           Đăng nhập bằng Google
         </button>
 

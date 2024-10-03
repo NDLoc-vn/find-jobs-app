@@ -1,5 +1,3 @@
-import { Job } from "./definitions";
-
 export async function fetchJobs() {
   // delay de demo
   await new Promise(resolve => setTimeout(resolve, 1000));
