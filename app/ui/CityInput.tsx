@@ -5,9 +5,10 @@ import clsx from "clsx";
 interface CityInputProps {
   onCityInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
   changeCityValid: (isValid: boolean) => void;
+  className?: string;
 }
 
-export default function CityInput({onCityInput, changeCityValid}: CityInputProps) {
+export default function CityInput({onCityInput, changeCityValid, className}: CityInputProps) {
   const [suggestions, setSuggestions] = useState<{ name: string; code: number }[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [cityNames, setCityNames] = useState<string[]>([]);
@@ -74,7 +75,10 @@ export default function CityInput({onCityInput, changeCityValid}: CityInputProps
     <>
       <input
         type="text"
-        className={clsx("w-full p-2 border border-gray-300 rounded-lg mb-4", isValidCity ? "text-black" : "text-red-300")}
+        className={clsx(
+          className ? className : "w-full p-2 border border-gray-300 rounded-lg",
+          !isValidCity && searchQuery !== "" ? "text-red-300" : "text-black",
+        )}
         name="city"
         value={searchQuery}
         onChange={handleInputChange} 
@@ -91,7 +95,9 @@ export default function CityInput({onCityInput, changeCityValid}: CityInputProps
         </ul>
       )}
       {!isValidCity && searchQuery !== "" && (
-        <div className="text-red-500 text-sm -mt-4 ml-2">Địa điểm không phù hợp</div>
+        <div className="absolute z-9 mt-1 max-h-40 overflow-y-auto text-red-500 text-sm">
+          Thành phố không hợp lệ
+        </div>
       )}
     </>
   );
