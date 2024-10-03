@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1">
           <div className="mb-4">
-            <img src="/logo.png" alt="Logo" className="w-16 h-16" />
+            <Image src="/logo.png" width={64} height={64} alt="Logo" className="w-16 h-16" />
           </div>
           <div className="flex space-x-4">
             <Image

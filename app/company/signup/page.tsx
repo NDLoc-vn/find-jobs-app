@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Company } from '../../lib/definitions';
 import CityInput from '@/app/ui/CityInput';
-import axios from 'axios';
 
 export default function CompanySignup() {
   const [companyData, setCompanyData] = useState<Company>({

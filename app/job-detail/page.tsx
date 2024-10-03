@@ -3,11 +3,12 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { JobDetailSkeleton } from "../ui/sketetons";
+import { Job2 } from "../lib/definitions";
 
 const JobPage = () => {
   const [loading, setLoading] = React.useState(true);
   //viet definition sau
-  const [job, setJob] = React.useState<any>(null);
+  const [job, setJob] = React.useState<Job2 | null>(null);
 
   useEffect(() => {
     const fetchJobData = async () => {
@@ -65,10 +66,10 @@ const JobPage = () => {
             className="mr-4"
           />
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">{job.title}</h1>
-            <span className="text-lg text-gray-500 mr-2">at {job.company.name}</span>
+            <h1 className="text-3xl font-bold text-gray-800">{job?.title}</h1>
+            <span className="text-lg text-gray-500 mr-2">at {job?.company.name}</span>
             <span className="text-sm font-semibold bg-green-600 text-white px-2 pt-0.5 pb-1 rounded">
-              {job.employmentType}
+              {job?.employmentType}
             </span>
           </div>
         </div>
@@ -94,10 +95,10 @@ const JobPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4">
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Job Description</h2>
-          <p className="text-gray-600 mb-6">{job.description}</p>
+          <p className="text-gray-600 mb-6">{job?.description}</p>
           <h2 className="text-xl mb-2 font-semibold text-gray-800">Requirements</h2>
           <ul className="list-disc pl-6 text-gray-600">
-            {job.requirements.map((req: any, index: any) => (
+            {job?.requirements.map((req: string, index: number) => (
               <li key={index}>{req}</li>
             ))}
           </ul>
@@ -105,24 +106,24 @@ const JobPage = () => {
         <div className="p-4">
           <div className="flex justify-between space-x-4 mb-4">
             <div className="bg-white p-4 border border-gray-300 rounded-lg shadow-md flex-1">
-              <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">Salary ({job.salary.currency})</h3>
+              <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">Salary ({job?.salary.currency})</h3>
               <p className="font-semibold text-lg text-green-500 text-center whitespace-nowrap">
-                {job.salary.min.toLocaleString()} - {job.salary.max.toLocaleString()}
+                {job?.salary.min.toLocaleString()} - {job?.salary.max.toLocaleString()}
               </p>
             </div>
             <div className="bg-white p-4 border border-gray-300 rounded-lg shadow-md flex-1">
               <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">Location</h3>
               <p className="text-gray-600 text-center whitespace-nowrap">
-                {job.location.city}, {job.location.address}
+                {job?.location.city}, {job?.location.address}
               </p>
             </div>
           </div>
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Job Overview</h2>
           <p className="text-gray-600">
-            <strong>Job Posted:</strong> {job.postedDate}
+            <strong>Job Posted:</strong> {job?.postedDate}
           </p>
           <p className="text-gray-600">
-            <strong>Status:</strong> {job.status}
+            <strong>Status:</strong> {job?.status}
           </p>
           <h2 className="text-xl font-semibold text-gray-800 mt-4 mb-2">Share this job:</h2>
           <div className="flex space-x-4">
