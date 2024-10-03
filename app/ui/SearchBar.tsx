@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import CityInput from "./CityInput";
+// import CityInput from "./CityInput";
 
 const SearchBar = () => {
   // const [searchQuery, setSearchQuery] = React.useState("");

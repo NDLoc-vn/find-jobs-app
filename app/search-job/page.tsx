@@ -7,14 +7,16 @@ import { Suspense } from "react";
 const SearchJob = () => {
   return (
     <>
-      <div className="container mx-auto px-4 flex flex-col gap-8">
+      <div className="container mx-auto mb-14 px-4 flex flex-col gap-8">
         <SearchBar />
         <Suspense fallback={<JobListSkeleton />}>
           <JobList />
         </Suspense>
-        <div className="flex justify-center">
-          <Pagination totalPages={10} />
-        </div>
+        <Suspense>
+          <div className="flex justify-center">
+            <Pagination totalPages={10} />
+          </div>
+        </Suspense>
       </div>
     </>
   );

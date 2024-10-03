@@ -7,13 +7,15 @@ const Header = () => {
     <header className="w-full px-4 py-2 bg-white shadow">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={64}
-            height={64}
-            className="mr-2"
-          />
+          <Link href="/">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={64}
+              height={64}
+              className="mr-2"
+            />
+          </Link>
         </div>
 
         <div className="flex flex-col items-center space-y-2">
@@ -29,7 +31,7 @@ const Header = () => {
               </button>
             </Link>
           </div>
-          <Link href="#" className="text-sm text-blue-600 hover:underline">
+          <Link href={"/recruiter/login" } className="text-sm text-blue-600 hover:underline">
             Đăng nhập với tư cách nhà tuyển dụng ?
           </Link>
         </div>

@@ -2,6 +2,8 @@ import { Lexend } from "next/font/google"
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Header from "./ui/Header";
+import Footer from "./ui/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,7 +36,9 @@ export default function RootLayout({
       <body
         className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
