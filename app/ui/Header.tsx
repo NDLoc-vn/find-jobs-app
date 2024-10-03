@@ -29,7 +29,10 @@ const Header = () => {
               </button>
             </Link>
           </div>
-          <Link href="#" className="text-sm text-blue-600 hover:underline">
+          <Link
+            href="recruiter/login"
+            className="text-sm text-blue-600 hover:underline"
+          >
             Đăng nhập với tư cách nhà tuyển dụng ?
           </Link>
         </div>
