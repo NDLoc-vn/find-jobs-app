@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import Image from "next/image";
 
@@ -14,6 +16,13 @@ const JobCard: React.FC<JobCardProps> = ({
   salary,
   location,
 }) => {
+  // se lay state tu db sau?
+  const [isBookmarked, setIsBookmarked] = React.useState(false);
+
+  const handleBookmarkClick = () => {
+    setIsBookmarked(!isBookmarked);
+  };
+
   return (
     <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
       <h3 className="font-bold text-lg">{title}</h3>
@@ -34,7 +43,13 @@ const JobCard: React.FC<JobCardProps> = ({
           />
           <p>{location}</p>
         </div>
-        <Image src="/icon/bookmark.svg" width={20} height={20} alt="Location" />
+        <Image
+          src={isBookmarked ? "/icon/bookmark-filled.svg" : "/icon/bookmark.svg"}
+          width={20}
+          height={20}
+          alt="Bookmard"
+          onClick={handleBookmarkClick}
+        />
       </div>
     </div>
   );

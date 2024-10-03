@@ -53,7 +53,7 @@ const JobPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-white max-w-5xl">
+    <div className="container mx-auto h-screen p-6 mt-10 bg-white max-w-5xl">
       <div className="flex md:flex-row flex-col justify-between items-center border-b pb-4 mb-4">
         <div className="flex items-center">
           <Image

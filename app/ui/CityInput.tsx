@@ -5,13 +5,15 @@ import clsx from "clsx";
 interface CityInputProps {
   onCityInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
   changeCityValid: (isValid: boolean) => void;
+  className?: string;
 }
 
-export default function CityInput({onCityInput, changeCityValid}: CityInputProps) {
+export default function CityInput({onCityInput, changeCityValid, className}: CityInputProps) {
   const [suggestions, setSuggestions] = useState<{ name: string; code: number }[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [cityNames, setCityNames] = useState<string[]>([]);
   const [isValidCity, setIsValidCity] = useState<boolean>(false);
+  const excludeCity = ['Thành phố Hồ Chí Minh'];
 
   useEffect(() => {
     document.addEventListener("click", () => {
@@ -27,7 +29,12 @@ export default function CityInput({onCityInput, changeCityValid}: CityInputProps
   const fetchAllCity = async () => {
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION_ALL}`);
-      const cityNames = data.map((city: { name: string; code: number }) => city.name.replace(/(Thành phố) |(Tỉnh) /g, ''));
+      const cityNames = data.map((city: { name: string; code: number }) => {
+        if (excludeCity.includes(city.name)) {
+          return city.name;
+        }
+        city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+      });
       setCityNames(cityNames);
     } catch (err) {
       console.error("Error fetching city names: ", err);
@@ -43,7 +50,9 @@ export default function CityInput({onCityInput, changeCityValid}: CityInputProps
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION}${searchQuery}`);
       data.map((city: { name: string; code: number }) => {
-        city.name = city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+        if (!excludeCity.includes(city.name)) {
+          city.name = city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+        }
       })
       setSuggestions(data);
     } catch (error) {
@@ -74,7 +83,10 @@ export default function CityInput({onCityInput, changeCityValid}: CityInputProps
     <>
       <input
         type="text"
-        className={clsx("w-full p-2 border border-gray-300 rounded-lg mb-4", isValidCity ? "text-black" : "text-red-300")}
+        className={clsx(
+          className ? className : "w-full p-2 border border-gray-300 rounded-lg",
+          !isValidCity && searchQuery !== "" ? "text-red-300" : "text-black",
+        )}
         name="city"
         value={searchQuery}
         onChange={handleInputChange} 
@@ -91,7 +103,9 @@ export default function CityInput({onCityInput, changeCityValid}: CityInputProps
         </ul>
       )}
       {!isValidCity && searchQuery !== "" && (
-        <div className="text-red-500 text-sm -mt-4 ml-2">Địa điểm không phù hợp</div>
+        <div className="absolute z-9 mt-1 max-h-40 overflow-y-auto text-red-500 text-sm">
+          Thành phố không hợp lệ
+        </div>
       )}
     </>
   );

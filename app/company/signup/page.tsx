@@ -73,7 +73,7 @@ export default function CompanySignup() {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="name"
               // value={companyData.name} 
               onChange={handleInputChange} 
@@ -86,7 +86,7 @@ export default function CompanySignup() {
             </label>
             <input
               type="email"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="email"
               // value={companyData.email} 
               onChange={handleInputChange} 
@@ -99,7 +99,7 @@ export default function CompanySignup() {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="industry"
               // value={companyData.industry} 
               onChange={handleInputChange} 
@@ -114,7 +114,7 @@ export default function CompanySignup() {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="address"
               // value={companyData.address} 
               onChange={handleInputChange} 
@@ -127,14 +127,14 @@ export default function CompanySignup() {
             <CityInput onCityInput={handleInputChange} changeCityValid={handleCityValidChange} />
           </div>
 
-          <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1 md:col-span-2 mt-8 md:mt-0">
             <label className="block mb-1 text-sm font-medium text-gray-700">
               <strong>Website</strong>
               <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="website"
               // value={companyData.website} 
               onChange={handleInputChange} 
