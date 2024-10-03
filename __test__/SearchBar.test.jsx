@@ -6,7 +6,7 @@ describe('Page', () => {
   it('renders the search bar inputs and button', () => {
     render(<SearchBar />)
 
-    const jobTitleInput = screen.getByPlaceholderText("Chức danh, kĩ năng, ...");
+    const jobTitleInput = screen.getByPlaceholderText("Chức dnh, kĩ năng, ...");
     expect(jobTitleInput).toBeInTheDocument();
 
     const locationInput = screen.getByPlaceholderText("Vị trí");
