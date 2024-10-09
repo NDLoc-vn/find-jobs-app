@@ -39,9 +39,6 @@ export default function RecruiterLogin() {
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-semibold mb-6 text-center">Đăng nhập cho nhà tuyển dụng</h1>
 
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
-
         <form onSubmit={handleSubmit}>
           <label className="block mb-1 text-sm font-medium text-gray-700">
             <strong>Email</strong>
@@ -78,6 +75,9 @@ export default function RecruiterLogin() {
               />
             </button>
           </div>
+
+          {error && <p className="text-red-500">{error}</p>}
+          {success && <p className="text-green-500">{success}</p>}
 
           <button type="submit" className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
             Đăng nhập
