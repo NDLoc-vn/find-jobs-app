@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Company } from "../../lib/definitions";
+import { Company } from '@/app/lib/definitions';
 import CityInput from "@/app/ui/CityInput";
 import Header from "@/app/ui/homepage/Header";
 
