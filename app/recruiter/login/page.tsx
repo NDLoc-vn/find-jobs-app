@@ -126,5 +126,6 @@ export default function RecruiterLogin() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
