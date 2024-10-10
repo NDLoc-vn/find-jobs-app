@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
@@ -15,12 +15,8 @@ const MobileNav = () => {
   return (
     <div className="relative flex items-center">
       <button className="mr-6" onClick={handleMenuToggle}>
-        <Image
-          src="/icon/bars-3.svg"
-          alt="Menu"
-          width={26}
-          height={26}
-        />
+        <Image src="/icon/bars-3.svg" alt="Menu" width={26} height={26} />
+        <span className="sr-only">Toggle</span>
       </button>
 
       {isMenuOpen && (
@@ -34,7 +30,7 @@ const MobileNav = () => {
           "fixed inset-y-0 right-0 bg-white z-20 transform",
           isMenuOpen ? "translate-x-0" : "translate-x-full",
           "transition-transform duration-300 ease-in-out",
-          "w-full sm:w-1/4",
+          "w-full sm:w-1/4"
         )}
       >
         <button className="absolute top-6 right-6" onClick={handleMenuToggle}>
@@ -45,6 +41,7 @@ const MobileNav = () => {
             height={26}
             className="mr-6"
           />
+          <span className="sr-only">Toggle</span>
         </button>
 
         <nav className="px-4 flex flex-col items-center justify-start mt-20 h-full space-y-6">
@@ -58,7 +55,10 @@ const MobileNav = () => {
               Đăng ký
             </button>
           </Link>
-          <Link href={"/recruiter/login"} className="text-sm text-blue-600 hover:underline">
+          <Link
+            href={"/recruiter/login"}
+            className="text-sm text-blue-600 hover:underline"
+          >
             Đăng nhập với tư cách nhà tuyển dụng ?
           </Link>
         </nav>

@@ -1,8 +1,7 @@
-import { Lexend } from "next/font/google"
+import { Lexend } from "next/font/google";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "./ui/Header";
 import Footer from "./ui/Footer";
 
 const geistSans = localFont({
@@ -17,8 +16,8 @@ const geistMono = localFont({
 });
 
 const lexend = Lexend({
-  subsets: ['latin'],
-  weight: ['400'],
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -36,7 +35,6 @@ export default function RootLayout({
       <body
         className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
         {children}
         <Footer />
       </body>
