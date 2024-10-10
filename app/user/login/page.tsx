@@ -3,9 +3,53 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import axios from "axios";
+import { LoginUser } from "@/app/lib/definitions";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [userData, setUserData] = useState<LoginUser>({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+
+  const checkError = () => {
+    return true;
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!checkError()) {
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/auth`, userData);
+      if (response.status >= 200 && response.status < 300) {
+        Cookies.set("token", response.headers["Authorization"], { expires: 7 });
+        router.push("/");
+      } else if (response.status === 401) {
+        setError("Sai tài khoản hoặc mật khẩu");
+      } else {
+        setError("Đăng nhập thất bại");
+      }
+    } catch (err) {
+      setError("Đăng nhập thất bại");
+      console.error("An unknown error occurred", err);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-white to-toreabay-700">
@@ -24,7 +68,7 @@ const Login = () => {
 
         <hr className="my-6" />
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <label className="block mb-1 text-sm font-medium text-gray-700">
             <strong>Email</strong>
           </label>
@@ -32,6 +76,9 @@ const Login = () => {
             type="email"
             className="w-full p-2 border border-gray-300 rounded-lg mb-4"
             placeholder="Email"
+            defaultValue={userData.email}
+            onChange={handleInputChange}
+            name="email"
           />
 
           <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -42,6 +89,9 @@ const Login = () => {
               type={showPassword ? "text" : "password"}
               className="w-full p-2 border border-gray-300 rounded-lg"
               placeholder="Mật khẩu"
+              defaultValue={userData.password}
+              onChange={handleInputChange}
+              name="password"
             />
             <button
               type="button"
@@ -61,6 +111,8 @@ const Login = () => {
           <Link href="#" className="text-blue-600 text-sm">
             Quên mật khẩu
           </Link>
+
+          {error && <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>}
 
           <button className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
             Đăng nhập

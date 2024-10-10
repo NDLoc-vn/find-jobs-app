@@ -40,3 +40,8 @@ export type SignupUser = {
   location: string;
   password: string;
 }
+
+export type LoginUser = {
+  email: string;
+  password: string;
+}
