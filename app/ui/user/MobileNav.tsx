@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation";
 const MobileNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [showDropdown, setShowDropdown] = useState(false);
   const pathname = usePathname();
 
   const handleMenuToggle = () => {

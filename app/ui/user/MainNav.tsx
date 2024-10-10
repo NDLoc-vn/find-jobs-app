@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -62,13 +63,16 @@ const MainNav = () => {
           <div className="relative">
             <button
               onClick={toggleDropdown}
-              className="w-12 h-12 rounded-full bg-gray-400"
+              className="rounded-full bg-gray-400"
             >
-              <img
+              <Image
                 src="/avatar_temp.jpg"
                 alt="User Avatar"
-                className="w-full h-full rounded-full"
+                width={64}
+                height={64}
+                className="rounded-full"
               />
+              <span className="sr-only">Toggle</span>
             </button>
 
             {showDropdown && (
