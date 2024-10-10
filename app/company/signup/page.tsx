@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Company } from '../../lib/definitions';
+import { Company } from '@/app/lib/definitions';
 import CityInput from '@/app/ui/CityInput';
 
 export default function CompanySignup() {
@@ -14,7 +14,7 @@ export default function CompanySignup() {
     address: '',
     website: '',
   });
-  
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isValidCity, setIsValidCity] = useState<boolean>(false);
@@ -76,7 +76,7 @@ export default function CompanySignup() {
               className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="name"
               // value={companyData.name} 
-              onChange={handleInputChange} 
+              onChange={handleInputChange}
               placeholder="Tên công ty"
             />
 
@@ -89,7 +89,7 @@ export default function CompanySignup() {
               className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="email"
               // value={companyData.email} 
-              onChange={handleInputChange} 
+              onChange={handleInputChange}
               placeholder="Email"
             />
 
@@ -102,7 +102,7 @@ export default function CompanySignup() {
               className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="industry"
               // value={companyData.industry} 
-              onChange={handleInputChange} 
+              onChange={handleInputChange}
               placeholder="Lĩnh vực"
             />
           </div>
@@ -117,7 +117,7 @@ export default function CompanySignup() {
               className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="address"
               // value={companyData.address} 
-              onChange={handleInputChange} 
+              onChange={handleInputChange}
               placeholder="Địa chỉ"
             />
             <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -137,7 +137,7 @@ export default function CompanySignup() {
               className="w-full p-2 border border-gray-300 rounded-lg mb-8"
               name="website"
               // value={companyData.website} 
-              onChange={handleInputChange} 
+              onChange={handleInputChange}
               placeholder="Website"
             />
           </div>

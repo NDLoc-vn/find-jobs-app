@@ -2,7 +2,7 @@ import Link from "next/link";
 import UserMenu from "./UserMenu";
 
 const MainNav = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   return (
     <div className="flex flex-col items-center space-y-2">
       {isAuthenticated ? (

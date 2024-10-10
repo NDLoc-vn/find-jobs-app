@@ -33,3 +33,10 @@ export type Company = {
   address: string;
   website: string;
 }
+
+export type SignupUser = {
+  name: string;
+  email: string;
+  location: string;
+  password: string;
+}
