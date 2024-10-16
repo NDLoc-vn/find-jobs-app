@@ -6,36 +6,44 @@ import Header from "../ui/user/Header";
 import { useAuth } from "../contexts/auth-context";
 import axios from "axios";
 import { UserProfileType } from "../lib/definitions";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const ProfilePage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [activeForm, setActiveForm] = useState<string | null>(null);
+  const [richTextContent, setRichTextContent] = useState<string>("");
 
   const { token, user } = useAuth();
 
   const fetchUserInfo = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_USERS_API_URL}/profile/${user?.id}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      console.log(response)
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_USERS_API_URL}/profile/${user?.id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      console.log(response);
       setUserProfile({
         name: response.data.name,
         location: response.data.location,
         skills: response.data.skills,
         experience: response.data.experiences,
         education: response.data.education,
-      })
+      });
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   useEffect(() => {
     fetchUserInfo();
-  }, [])
+  }, []);
 
   const openForm = (formName: string) => {
     setActiveForm(formName);
@@ -72,7 +80,11 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📍</span>
-                  <p className="text-gray-500">{userProfile?.location === '' ? "Địa điểm" : userProfile?.location}</p>
+                  <p className="text-gray-500">
+                    {userProfile?.location === ""
+                      ? "Địa điểm"
+                      : userProfile?.location}
+                  </p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📞</span>
@@ -185,7 +197,7 @@ const ProfilePage = () => {
               {/* Form Content*/}
               <div className="overflow-y-auto p-4 flex-1">
                 {/* Edit Profile Form */}
-                {activeForm === "editProfile" && (
+                {activeForm === "editProfile" ? (
                   <form>
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
@@ -254,8 +266,18 @@ const ProfilePage = () => {
                       </select>
                     </div>
                   </form>
+                ) : (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nội dung
+                    </label>
+                    <ReactQuill
+                      theme="snow"
+                      value={richTextContent}
+                      onChange={setRichTextContent}
+                    />
+                  </div>
                 )}
-                {/* Similar form fields for other activeForm sections */}
               </div>
 
               {/* Form Footer */}
