@@ -35,14 +35,9 @@ const Login = () => {
         const token = response.headers["authorization"];
         const userData = response.data.user;
         login(token, userData);
-      } else if (response.status === 401) {
-        setError("Sai tài khoản hoặc mật khẩu");
-      } else {
-        setError("Đăng nhập thất bại");
       }
     } catch (err) {
       setError("Đăng nhập thất bại");
-      console.error("An unknown error occurred", err);
     }
   };
 
