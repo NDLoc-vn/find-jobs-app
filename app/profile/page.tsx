@@ -1,11 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Header from "../ui/user/Header";
+import { useAuth } from "../contexts/auth-context";
+import axios from "axios";
+import { UserProfileType } from "../lib/definitions";
 
 const ProfilePage = () => {
+  const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [activeForm, setActiveForm] = useState<string | null>(null);
+
+  const { token, user } = useAuth();
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_USERS_API_URL}/profile/${user?.id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response)
+      setUserProfile({
+        name: response.data.name,
+        location: response.data.location,
+        skills: response.data.skills,
+        experience: response.data.experiences,
+        education: response.data.education,
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, [])
 
   const openForm = (formName: string) => {
     setActiveForm(formName);
@@ -30,27 +60,27 @@ const ProfilePage = () => {
               className="rounded-full place-self-start"
             />
             <div>
-              <h2 className="text-3xl font-bold">Trần Lê Huy Hoàng</h2>
+              <h2 className="text-3xl font-bold">{userProfile?.name}</h2>
               <div className="text-sm flex flex-col mt-2">
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📧</span>
-                  <p>hoang@gmail.com</p>
+                  <p>{user?.email}</p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📅</span>
-                  <p className="text-gray-500">Sinh nhật</p>
+                  <p className="text-gray-500">Sinh nhật (be ch tra ve)</p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📍</span>
-                  <p className="text-gray-500">Địa chỉ</p>
+                  <p className="text-gray-500">{userProfile?.location === '' ? "Địa điểm" : userProfile?.location}</p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📞</span>
-                  <p>0914141141</p>
+                  <p>0914141141 (be ch tra ve)</p>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2 text-blue-500">👤</span>
-                  <p className="text-gray-500">Giới tính</p>
+                  <p className="text-gray-500">Giới tính (be ch tra ve)</p>
                 </div>
               </div>
             </div>
@@ -164,7 +194,7 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         placeholder="Nhập họ và tên"
-                        value={"Trần Lê Huy Hoàng"}
+                        value={userProfile?.name}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -175,7 +205,7 @@ const ProfilePage = () => {
                       <input
                         type="email"
                         placeholder="Nhập email"
-                        value={"hoang@gmail.com"}
+                        value={user?.email}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -196,6 +226,7 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         placeholder="Nhập địa chỉ"
+                        value={userProfile?.location}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>

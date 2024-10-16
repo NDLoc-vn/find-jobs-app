@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/app/contexts/auth-context";
 
 const MobileNav = () => {
+  const { isLoggedIn, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const pathname = usePathname();
 
   const handleMenuToggle = () => {
@@ -16,9 +17,7 @@ const MobileNav = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logged out");
-    setIsLoggedIn(false);
-    // Redirect or additional logic for logging out
+    logout();
   };
 
   const activeClass = "bg-xanhduong-600 text-white";

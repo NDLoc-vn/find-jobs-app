@@ -5,11 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import { LoginUser } from "@/app/lib/definitions";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/contexts/auth-context";
 
 const Login = () => {
-  const router = useRouter();
+  const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [userData, setUserData] = useState<LoginUser>({
@@ -32,17 +31,13 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/auth`, userData);
-      if (response.status >= 200 && response.status < 300) {
-        Cookies.set("token", response.headers["Authorization"], { expires: 7 });
-        router.push("/");
-      } else if (response.status === 401) {
-        setError("Sai tài khoản hoặc mật khẩu");
-      } else {
-        setError("Đăng nhập thất bại");
+      if (response.status >= 200 && response.status < 300 && response.headers["authorization"]) {
+        const token = response.headers["authorization"];
+        const userData = response.data.user;
+        login(token, userData);
       }
     } catch (err) {
       setError("Đăng nhập thất bại");
-      console.error("An unknown error occurred", err);
     }
   };
 

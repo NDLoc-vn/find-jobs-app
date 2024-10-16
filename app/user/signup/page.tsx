@@ -13,7 +13,7 @@ const Signup = () => {
   const [userData, setUserData] = useState<SignupUser>({
     name: "",
     email: "",
-    location: "placeholder",
+    location: "",
     password: "",
   })
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,7 +30,8 @@ const Signup = () => {
       setError("Vui lòng điền đầy đủ thông tin");
       return false;
     }
-    if (!userData.name || !userData.email || !userData.location || !userData.password) {
+    // if (!userData.name || !userData.email || !userData.location || !userData.password) {
+    if (!userData.name || !userData.email || !userData.password) {
       setError("Vui lòng điền đầy đủ thông tin");
       return false;
     }
@@ -55,6 +56,7 @@ const Signup = () => {
         setSuccess("Đăng ký thành công");
         console.log("User registered successfully", response.data);
       } else if (response.status === 409) {
+        // bug: khi tao tk trung thi chi nhan ve loi 500 chu ko phai 409
         setError("Tài khoản đã tồn tại");
       } else {
         setError("Đăng ký thất bại");

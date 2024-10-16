@@ -1,8 +1,10 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MobileNav from "./MobileNav";
-import MainNav from "./MainNav";
+import MobileNav from "../user/MobileNav";
+import MainNav from "../user/MainNav";
 
 const Header = () => {
   return (
