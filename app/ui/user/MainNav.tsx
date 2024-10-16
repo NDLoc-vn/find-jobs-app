@@ -2,17 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/app/contexts/auth-context";
 
 const MainNav = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { isLoggedIn, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
   const pathname = usePathname();
 
   const handleLogout = () => {
-    // Logic to handle logout
-    console.log("Logged out");
-    setIsLoggedIn(false);
+    logout();
+    setShowDropdown(false);
   };
 
   const toggleDropdown = () => {
@@ -21,41 +21,38 @@ const MainNav = () => {
 
   const isActive = (route: string) => pathname === route;
 
+
   return (
     <div className="flex items-center space-x-4">
       {isLoggedIn ? (
         <>
           <Link
             href="/search-job"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/search-job")
-                ? "bg-blue-600 text-white"
-                : "text-blue-600"
-            } hover:bg-blue-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/search-job")
+              ? "bg-blue-600 text-white"
+              : "text-blue-600"
+              } hover:bg-blue-500 hover:text-white`}
           >
             Tìm việc
           </Link>
           <Link
             href="/my-jobs"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/my-jobs") ? "bg-blue-600 text-white" : "text-blue-600"
-            } hover:bg-blue-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/my-jobs") ? "bg-blue-600 text-white" : "text-blue-600"
+              } hover:bg-blue-500 hover:text-white`}
           >
             Công việc
           </Link>
           <Link
             href="/messages"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/messages") ? "bg-blue-600 text-white" : "text-blue-600"
-            } hover:bg-blue-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/messages") ? "bg-blue-600 text-white" : "text-blue-600"
+              } hover:bg-blue-500 hover:text-white`}
           >
             Nhắn tin
           </Link>
           <Link
             href="/profile"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/profile") ? "bg-blue-600 text-white" : "text-blue-600"
-            } hover:bg-blue-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/profile") ? "bg-blue-600 text-white" : "text-blue-600"
+              } hover:bg-blue-500 hover:text-white`}
           >
             Cá nhân
           </Link>
@@ -88,7 +85,6 @@ const MainNav = () => {
           </div>
         </>
       ) : (
-        // Render login/signup buttons when not logged in
         <div className="flex flex-col items-center space-y-2">
           <div className="flex space-x-4">
             <Link href={"/user/login"}>

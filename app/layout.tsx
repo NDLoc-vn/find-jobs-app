@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "./ui/Footer";
+import { AuthProvider } from "./contexts/auth-context";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,13 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="en">
+        <body
+          className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+          <Footer />
+        </body>
+      </html>
+    </AuthProvider>
   );
 }

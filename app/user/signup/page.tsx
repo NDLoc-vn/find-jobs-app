@@ -55,6 +55,7 @@ const Signup = () => {
         setSuccess("Đăng ký thành công");
         console.log("User registered successfully", response.data);
       } else if (response.status === 409) {
+        // bug: khi tao tk trung thi chi nhan ve loi 500 chu ko phai 409
         setError("Tài khoản đã tồn tại");
       } else {
         setError("Đăng ký thất bại");
