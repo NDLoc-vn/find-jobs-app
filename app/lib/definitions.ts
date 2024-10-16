@@ -45,3 +45,17 @@ export type LoginUser = {
   email: string;
   password: string;
 }
+
+export type UserDataType = {
+  id: string;
+  email: string;
+  name: string;
+}
+
+export type UserProfileType = {
+  name: string;
+  location: string;
+  skills: string[];
+  experience: string[];
+  education: string[];
+}

@@ -13,7 +13,7 @@ const Signup = () => {
   const [userData, setUserData] = useState<SignupUser>({
     name: "",
     email: "",
-    location: "placeholder",
+    location: "",
     password: "",
   })
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,7 +30,8 @@ const Signup = () => {
       setError("Vui lòng điền đầy đủ thông tin");
       return false;
     }
-    if (!userData.name || !userData.email || !userData.location || !userData.password) {
+    // if (!userData.name || !userData.email || !userData.location || !userData.password) {
+    if (!userData.name || !userData.email || !userData.password) {
       setError("Vui lòng điền đầy đủ thông tin");
       return false;
     }

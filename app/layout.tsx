@@ -32,15 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
-      <html lang="en">
-        <body
-          className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+    <html lang="en">
+      <body
+        className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>
           {children}
-          <Footer />
-        </body>
-      </html>
-    </AuthProvider>
+        </AuthProvider>
+        <Footer />
+      </body>
+    </html>
   );
 }
