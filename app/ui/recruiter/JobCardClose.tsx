@@ -16,8 +16,6 @@ const JobCardClose: React.FC<JobCardProps> = ({
   salary,
   location,
 }) => {
-  const [isBookmarked, setIsBookmarked] = React.useState(false);
-
   return (
     <div className="cursor-pointer p-4 border rounded mb-4 bg-[#b3b3b3]">
       <div className="flex justify-between items-center mb-2">
