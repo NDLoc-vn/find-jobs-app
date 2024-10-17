@@ -1,14 +1,12 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MobileNav from "../user/MobileNav";
-import MainNav from "../user/MainNav";
+import MainNav from "./MainNav";
+import MobileNav from "./MobileNav";
 
 const Header = () => {
   return (
-    <header className="fixed top-0 left-0 w-full px-4 py-2 bg-white z-50 shadow">
+    <header className="fixed top-0 left-0 w-full px-4 py-2 bg-white shadow z-50 mb-64">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Link href="/">
