@@ -4,6 +4,7 @@ import JobList from "@/app/ui/homepage/JobList";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import { useState, Suspense, useRef, useEffect } from "react";
 import Header from "../ui/user/Header";
+import SearchBar from "../ui/SearchBar";
 
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState<"applied" | "saved">("applied");
@@ -23,6 +24,7 @@ const MyJobs = () => {
   return (
     <>
       <Header />
+      <SearchBar />
       <div className="container mx-auto mb-14 px-4 flex flex-col gap-8">
         <div className="relative">
           <div className="flex justify-start mt-5 gap-8 text-xl">

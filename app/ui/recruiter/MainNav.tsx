@@ -23,12 +23,12 @@ const MainNav = () => {
 
   return (
     <div className="flex items-center space-x-4">
-      {isLoggedIn ? (
+      {true ? (
         <>
           <Link
             href="/home"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/search-job")
+              isActive("/home")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -38,7 +38,7 @@ const MainNav = () => {
           <Link
             href="/job-posting"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/my-jobs")
+              isActive("/job-posting")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -48,7 +48,7 @@ const MainNav = () => {
           <Link
             href="/post-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/messages")
+              isActive("/post-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -58,7 +58,7 @@ const MainNav = () => {
           <Link
             href="/messages"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/profile")
+              isActive("/message")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
