@@ -18,10 +18,6 @@ const JobCardOpen: React.FC<JobCardProps> = ({
 }) => {
   const [isBookmarked, setIsBookmarked] = React.useState(false);
 
-  const handleBookmarkClick = () => {
-    setIsBookmarked(!isBookmarked);
-  };
-
   return (
     <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
       <div className="flex justify-between items-center mb-2">
