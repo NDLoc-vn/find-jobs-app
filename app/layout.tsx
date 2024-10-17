@@ -34,11 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} pt-20 antialiased`}
       >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
         <Footer />
       </body>
     </html>
