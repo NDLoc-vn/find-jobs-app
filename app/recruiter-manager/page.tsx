@@ -90,9 +90,9 @@ const RecruiterManager = () => {
         </h1>
 
         {/* Two-column layout */}
-        <div className="grid grid-cols-3 md:grid-cols-10 gap-4 mt-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mt-4 mb-8">
           {/* Left column: Recruiter accounts */}
-          <div className="col-span-3 space-y-4">
+          <div className="col-span-1 md:col-span-4 space-y-4">
             {accounts.map((account) => (
               <div
                 key={account.id}
@@ -103,10 +103,12 @@ const RecruiterManager = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <img
+                    <Image
                       src={account.avatar}
+                      width={55}
+                      height={55}
                       alt="Avatar"
-                      className="w-12 h-12 rounded-full mr-4"
+                      className="rounded-full mr-4"
                     />
                     <div>
                       <p className="font-bold">{account.name}</p>
@@ -135,7 +137,7 @@ const RecruiterManager = () => {
           </div>
 
           {/* Right column: Job list for the selected account */}
-          <div className="col-span-7 border p-4 rounded-lg shadow-md">
+          <div className="col-span-1 md:col-span-6 border p-4 rounded-lg shadow-md">
             {activeAccount ? (
               <>
                 <div className="relative">
