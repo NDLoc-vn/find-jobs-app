@@ -36,9 +36,9 @@ const MainNav = () => {
             Trang chủ
           </Link>
           <Link
-            href="/job-posting"
+            href="/post-job"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/job-posting")
+              isActive("/post-job")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}

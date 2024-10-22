@@ -51,18 +51,6 @@ const accounts: RecruiterAccount[] = [
     email: "nguyenhoa@gmail.com",
     avatar: "/avatar_temp.jpg",
   },
-  {
-    id: 7,
-    name: "Lý Gia Hưng",
-    email: "lyhung@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 8,
-    name: "Trương Nhật Linh",
-    email: "truonglinh@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
 ];
 
 const RecruiterManager = () => {
@@ -73,7 +61,6 @@ const RecruiterManager = () => {
   const openJobsRef = useRef<HTMLButtonElement | null>(null);
   const closeJobsRef = useRef<HTMLButtonElement | null>(null);
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
-  const jobListRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const currentTab =
@@ -82,22 +69,11 @@ const RecruiterManager = () => {
       const { offsetWidth, offsetLeft } = currentTab;
       setUnderlineStyle({ width: offsetWidth, left: offsetLeft });
     }
-  }, [activeTab]);
+  }, [activeTab, activeAccount]);
 
   const handleAccountClick = (accountId: number) => {
     setActiveAccount(accountId);
     setActiveTab("openJobs");
-
-    setTimeout(() => {
-      if (jobListRef.current) {
-        const yOffset = -90;
-        const y =
-          jobListRef.current.getBoundingClientRect().top +
-          window.scrollY +
-          yOffset;
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
-    }, 0);
   };
 
   return (
@@ -113,93 +89,105 @@ const RecruiterManager = () => {
           Danh sách tài khoản tuyển dụng: {accounts.length}
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 mb-8">
-          {accounts.map((account) => (
-            <div
-              key={account.id}
-              onClick={() => handleAccountClick(account.id)}
-              className={`border p-4 rounded-lg shadow-md cursor-pointer ${
-                activeAccount === account.id ? "border-blue-500" : ""
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <img
-                    src={account.avatar}
-                    alt="Avatar"
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <p className="font-bold">{account.name}</p>
-                    <p>Email: {account.email}</p>
+        {/* Two-column layout */}
+        <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mt-4 mb-8">
+          {/* Left column: Recruiter accounts */}
+          <div className="col-span-1 md:col-span-4 space-y-4">
+            {accounts.map((account) => (
+              <div
+                key={account.id}
+                onClick={() => handleAccountClick(account.id)}
+                className={`border p-4 rounded-lg shadow-md cursor-pointer ${
+                  activeAccount === account.id ? "border-blue-500" : ""
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Image
+                      src={account.avatar}
+                      width={55}
+                      height={55}
+                      alt="Avatar"
+                      className="rounded-full mr-4"
+                    />
+                    <div>
+                      <p className="font-bold">{account.name}</p>
+                      <p>Email: {account.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Image
+                      src="/icon/edit-button.svg"
+                      width={20}
+                      height={20}
+                      alt="Edit"
+                      className="mr-2 cursor-pointer"
+                    />
+                    <Image
+                      src="/icon/delete-circle.svg"
+                      width={20}
+                      height={20}
+                      alt="Delete"
+                      className="cursor-pointer"
+                    />
                   </div>
                 </div>
-                <div className="flex space-x-2">
-                  <Image
-                    src="/icon/edit-button.svg"
-                    width={20}
-                    height={20}
-                    alt="Edit"
-                    className="mr-2 cursor-pointer"
-                  />
-                  <Image
-                    src="/icon/delete-circle.svg"
-                    width={20}
-                    height={20}
-                    alt="Delete"
-                    className="cursor-pointer"
-                  />
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Show tabs and job list for the selected account */}
-        {activeAccount && (
-          <div
-            ref={jobListRef}
-            className="container mx-auto mb-14 px-4 flex flex-col gap-8"
-          >
-            <div className="relative">
-              <div className="flex justify-start gap-8 text-xl">
-                <button
-                  ref={openJobsRef}
-                  className={`py-2 text-xl ${
-                    activeTab === "openJobs" ? "text-blue-500" : "text-gray-500"
-                  }`}
-                  onClick={() => setActiveTab("openJobs")}
-                >
-                  Đang tuyển
-                </button>
-                <button
-                  ref={closeJobsRef}
-                  className={`py-2 text-xl ${
-                    activeTab === "closeJobs"
-                      ? "text-blue-500"
-                      : "text-gray-500"
-                  }`}
-                  onClick={() => setActiveTab("closeJobs")}
-                >
-                  Đã đóng
-                </button>
-              </div>
-
-              {/* Sliding underline */}
-              <div
-                className="absolute bottom-0 h-0.5 bg-blue-500 transition-all duration-300"
-                style={{
-                  width: underlineStyle.width,
-                  left: underlineStyle.left,
-                }}
-              ></div>
-            </div>
-
-            <Suspense fallback={<JobListSkeleton />}>
-              <JobList activeTab={activeTab} />
-            </Suspense>
+            ))}
           </div>
-        )}
+
+          {/* Right column: Job list for the selected account */}
+          <div className="col-span-1 md:col-span-6 border p-4 rounded-lg shadow-md">
+            {activeAccount ? (
+              <>
+                <div className="relative">
+                  <div className="flex justify-start gap-8 text-xl">
+                    <button
+                      ref={openJobsRef}
+                      className={`py-2 text-xl ${
+                        activeTab === "openJobs"
+                          ? "text-blue-500"
+                          : "text-gray-500"
+                      }`}
+                      onClick={() => setActiveTab("openJobs")}
+                    >
+                      Đang tuyển
+                    </button>
+                    <button
+                      ref={closeJobsRef}
+                      className={`py-2 text-xl ${
+                        activeTab === "closeJobs"
+                          ? "text-blue-500"
+                          : "text-gray-500"
+                      }`}
+                      onClick={() => setActiveTab("closeJobs")}
+                    >
+                      Đã đóng
+                    </button>
+                  </div>
+
+                  {/* Sliding underline */}
+                  <div
+                    className="absolute bottom-0 h-0.5 bg-blue-500 transition-all duration-300"
+                    style={{
+                      width: underlineStyle.width,
+                      left: underlineStyle.left,
+                      bottom: "4px",
+                    }}
+                  ></div>
+                </div>
+
+                <Suspense fallback={<JobListSkeleton />}>
+                  <JobList activeTab={activeTab} />
+                </Suspense>
+              </>
+            ) : (
+              <p className="text-gray-500">
+                Chọn một tài khoản để xem danh sách các bài đăng tuyển
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

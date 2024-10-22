@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Header from "@/app/ui/homepage/Header";
+import Header from "@/app/ui/recruiter/Header";
 
 export default function PostJob() {
   return (
@@ -12,7 +12,12 @@ export default function PostJob() {
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="space-y-6 flex-1">
             <div>
-              <label htmlFor="title" className="block font-medium text-gray-700">Tên công việc<span className="text-red-500">*</span></label>
+              <label
+                htmlFor="title"
+                className="block font-medium text-gray-700"
+              >
+                Tên công việc<span className="text-red-500">*</span>
+              </label>
               <input
                 id="title"
                 name="title"
@@ -24,7 +29,12 @@ export default function PostJob() {
             </div>
 
             <div>
-              <label htmlFor="employmentType" className="block font-medium text-gray-700">Loại công việc<span className="text-red-500">*</span></label>
+              <label
+                htmlFor="employmentType"
+                className="block font-medium text-gray-700"
+              >
+                Loại công việc<span className="text-red-500">*</span>
+              </label>
               <select
                 id="employmentType"
                 name="employmentType"
@@ -38,7 +48,12 @@ export default function PostJob() {
             </div>
 
             <div>
-              <label htmlFor="location" className="block font-medium text-gray-700">Địa điểm<span className="text-red-500">*</span></label>
+              <label
+                htmlFor="location"
+                className="block font-medium text-gray-700"
+              >
+                Địa điểm<span className="text-red-500">*</span>
+              </label>
               <input
                 id="location"
                 name="location"
@@ -51,7 +66,12 @@ export default function PostJob() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="minSalary" className="block font-medium text-gray-700">Mức lương (Tối thiểu)</label>
+                <label
+                  htmlFor="minSalary"
+                  className="block font-medium text-gray-700"
+                >
+                  Mức lương (Tối thiểu)
+                </label>
                 <input
                   id="minSalary"
                   type="number"
@@ -60,7 +80,12 @@ export default function PostJob() {
                 />
               </div>
               <div>
-                <label htmlFor="maxSalary" className="block font-medium text-gray-700">Mức lương (Tối đa)</label>
+                <label
+                  htmlFor="maxSalary"
+                  className="block font-medium text-gray-700"
+                >
+                  Mức lương (Tối đa)
+                </label>
                 <input
                   id="maxSalary"
                   type="number"
@@ -71,7 +96,12 @@ export default function PostJob() {
             </div>
 
             <div>
-              <label htmlFor="dueDate" className="block font-medium text-gray-700">Tuyển đến ngày<span className="text-red-500">*</span></label>
+              <label
+                htmlFor="dueDate"
+                className="block font-medium text-gray-700"
+              >
+                Tuyển đến ngày<span className="text-red-500">*</span>
+              </label>
               <input
                 id="dueDate"
                 name="dueDate"
@@ -82,10 +112,14 @@ export default function PostJob() {
             </div>
           </div>
 
-
           <div className="flex flex-col space-y-6 flex-1">
             <div className="flex flex-col h-full">
-              <label htmlFor="description" className="block font-medium text-gray-700">Mô tả<span className="text-red-500">*</span></label>
+              <label
+                htmlFor="description"
+                className="block font-medium text-gray-700"
+              >
+                Mô tả<span className="text-red-500">*</span>
+              </label>
               <textarea
                 id="description"
                 name="description"
@@ -95,7 +129,12 @@ export default function PostJob() {
             </div>
 
             <div className="flex flex-col h-full">
-              <label htmlFor="requirements" className="block font-medium text-gray-700">Yêu cầu<span className="text-red-500">*</span></label>
+              <label
+                htmlFor="requirements"
+                className="block font-medium text-gray-700"
+              >
+                Yêu cầu<span className="text-red-500">*</span>
+              </label>
               <textarea
                 id="requirements"
                 name="requirements"
@@ -116,5 +155,5 @@ export default function PostJob() {
         </div>
       </form>
     </>
-  )
-};
+  );
+}
