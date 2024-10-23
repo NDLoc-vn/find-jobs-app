@@ -41,6 +41,35 @@ const ProfilePage = () => {
     }
   };
 
+  const handleSave = () => {
+    if (activeForm === "editProfile") {
+      axios
+        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/profile`, {
+          headers: {
+            Authorization: token,
+          },
+          _id: user?.id,
+
+          name: userProfile?.name,
+          location: userProfile?.location,
+        })
+        .then(() => {
+          fetchUserInfo();
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      console.log("not available");
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserProfile({ ...userProfile!, [name]: value });
+  };
+
   useEffect(() => {
     fetchUserInfo();
   }, []);
@@ -207,7 +236,9 @@ const ProfilePage = () => {
                         type="text"
                         placeholder="Nhập họ và tên"
                         value={userProfile?.name}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-300"
+                        disabled
+                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -218,7 +249,9 @@ const ProfilePage = () => {
                         type="email"
                         placeholder="Nhập email"
                         value={user?.email}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-300"
+                        disabled
+                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -229,6 +262,8 @@ const ProfilePage = () => {
                         type="date"
                         placeholder="Nhập ngày sinh"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        disabled
+                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -238,7 +273,9 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         placeholder="Nhập địa chỉ"
+                        name="location"
                         value={userProfile?.location}
+                        onChange={handleInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -251,6 +288,8 @@ const ProfilePage = () => {
                         placeholder="Nhập số điện thoại"
                         value={"0914141141"}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        disabled
+                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -260,6 +299,7 @@ const ProfilePage = () => {
                       <select
                         title="Gender"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        disabled
                       >
                         <option>Nam</option>
                         <option>Nữ</option>
@@ -288,7 +328,10 @@ const ProfilePage = () => {
                 >
                   Hủy bỏ
                 </button>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                >
                   Lưu
                 </button>
               </div>
