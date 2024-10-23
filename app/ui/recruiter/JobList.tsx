@@ -4,7 +4,6 @@ import JobCardOpen from "./JobCardOpen";
 import JobCardClose from "./JobCardClose";
 import { fetchJobs } from "@/app/lib/data";
 import { Job } from "@/app/lib/definitions";
-import Link from "next/link";
 // import { useEffect, useState } from 'react';
 
 interface JobListProps {
@@ -31,15 +30,13 @@ export default async function JobList({ activeTab }: JobListProps) {
         // Sử dụng JobCardOpen hoặc JobCardClose tùy thuộc vào activeTab
         const JobCard = activeTab === "openJobs" ? JobCardOpen : JobCardClose;
         return (
-          <Link href={"/candidate-manager"}>
-            <JobCard
-              key={index}
-              title={job.title}
-              company={job.company}
-              salary={job.salary}
-              location={job.location}
-            />
-          </Link>
+          <JobCard
+            key={index}
+            title={job.title}
+            company={job.company}
+            salary={job.salary}
+            location={job.location}
+          />
         );
       })}
     </div>
