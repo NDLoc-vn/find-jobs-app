@@ -19,7 +19,7 @@ const MainNav = () => {
     setShowDropdown((prev) => !prev);
   };
 
-  const isActive = (route: string) => pathname.endsWith(route);
+  const isActive = (route: string) => pathname.startsWith(route);
 
   return (
     <div className="flex items-center space-x-4">
@@ -28,7 +28,7 @@ const MainNav = () => {
           <Link
             href="/admin/home"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/home")
+              isActive("/admin/home")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -38,7 +38,7 @@ const MainNav = () => {
           <Link
             href="/admin/grant-accounts"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/grant-accounts")
+              isActive("/admin/grant-accounts")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -48,7 +48,7 @@ const MainNav = () => {
           <Link
             href="/admin/post-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/post-manager")
+              isActive("/admin/post-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -56,9 +56,9 @@ const MainNav = () => {
             Bài đăng
           </Link>
           <Link
-            href="/admin/recruiter-manager"
+            href="/admin/company-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/recruiter-manager")
+              isActive("/admin/company-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -68,7 +68,7 @@ const MainNav = () => {
           <Link
             href="/admin/candidate-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/candidate-manager")
+              isActive("/admin/candidate-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
