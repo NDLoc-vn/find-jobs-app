@@ -62,8 +62,8 @@ const accounts: RecruiterAccount[] = [
   },
 ];
 
-const RecruiterManager = ({ params }: { params: { id: string } }) => {
-  const company = {
+const RecruiterManager = ({ params }: { params: { id: number } }) => {
+  const company: Company = {
     id: params.id,
     name: "Facebook",
     avatar: "/icon/facebook.svg",
