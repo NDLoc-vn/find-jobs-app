@@ -19,48 +19,61 @@ const MainNav = () => {
     setShowDropdown((prev) => !prev);
   };
 
-  const isActive = (route: string) => pathname === route;
+  const isActive = (route: string) => pathname.startsWith(route);
 
   return (
     <div className="flex items-center space-x-4">
       {isLoggedIn ? (
         <>
           <Link
-            href="/home"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/home")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
-          >
-            Trang chủ
-          </Link>
-          <Link
-            href="/post-job"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/post-job")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
-          >
-            Đăng tuyển
-          </Link>
-          <Link
-            href="/post-manager"
+            href="/admin/home"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/post-manager") || isActive("/candidate-manager")
+              isActive("/admin/home")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            } hover:bg-xanhduong-500 hover:text-white`}
+          >
+            Số liệu
+          </Link>
+          <Link
+            href="/admin/grant-accounts"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/admin/grant-accounts")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
+          >
+            Cấp TK
+          </Link>
+          <Link
+            href="/admin/post-manager"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/admin/post-manager")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Bài đăng
           </Link>
           <Link
-            href="/recruiter/message"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/message")
+            href="/admin/company-manager"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/admin/company-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
-            Nhắn tin
+            Nhà tuyển dụng
+          </Link>
+          <Link
+            href="/admin/candidate-manager"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/admin/candidate-manager")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
+          >
+            Người ứng tuyển
           </Link>
 
           <div className="relative">
