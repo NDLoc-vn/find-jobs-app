@@ -27,21 +27,19 @@ const MainNav = () => {
         <>
           <Link
             href="/home"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/home")
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/home")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Trang chủ
           </Link>
           <Link
             href="/post-job"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/post-job")
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/post-job")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Đăng tuyển
           </Link>
@@ -51,17 +49,16 @@ const MainNav = () => {
               isActive("/post-manager") || isActive("/candidate-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Bài đăng
           </Link>
           <Link
-            href="/messages"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/message")
+            href="/recruiter/message"
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/message")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Nhắn tin
           </Link>

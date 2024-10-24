@@ -6,6 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import { LoginUser } from "@/app/lib/definitions";
 import { useAuth } from "@/app/contexts/auth-context";
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { login } = useAuth();
@@ -35,9 +36,11 @@ const Login = () => {
         const token = response.headers["authorization"];
         const userData = response.data.user;
         login(token, userData);
+        toast.success("Đăng nhận thành công");
       }
     } catch (err) {
       setError("Đăng nhập thất bại");
+      toast.error("Đăng nhập thất bại");
     }
   };
 
