@@ -63,7 +63,9 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname.endsWith("/home") ? activeClass : inactiveClass
+                    pathname.endsWith("/admin/home")
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Số liệu
@@ -73,7 +75,7 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname.endsWith("/grant-accounts")
+                    pathname.startsWith("/admin/grant-accounts")
                       ? activeClass
                       : inactiveClass
                   )}
@@ -85,7 +87,7 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname.endsWith("/post-manager")
+                    pathname.startsWith("/admin/post-manager")
                       ? activeClass
                       : inactiveClass
                   )}
@@ -93,11 +95,11 @@ const MobileNav = () => {
                   Bài đăng
                 </button>
               </Link>
-              <Link href="/admin/recruiter-manager" className="w-full">
+              <Link href="/admin/company-manager" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname.endsWith("/recruiter-manager")
+                    pathname.startsWith("/admin/company-manager")
                       ? activeClass
                       : inactiveClass
                   )}
@@ -109,7 +111,7 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname.endsWith("/candidate-manager")
+                    pathname.startsWith("/admin/candidate-manager")
                       ? activeClass
                       : inactiveClass
                   )}
