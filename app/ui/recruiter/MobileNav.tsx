@@ -58,42 +58,49 @@ const MobileNav = () => {
 
         <nav className="px-4 flex flex-col items-center justify-start mt-20 h-full space-y-6">
           {isLoggedIn ? (
+            // {true ? (
             <>
-              <Link href="/home" className="w-full">
+              <Link href="/recruiter/" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/search-job" ? activeClass : inactiveClass
+                    pathname === "/recruiter/" ? activeClass : inactiveClass
                   )}
                 >
                   Trang chủ
                 </button>
               </Link>
-              <Link href="/job-postings" className="w-full">
+              <Link href="/recruiter/post-job" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/my-jobs" ? activeClass : inactiveClass
+                    pathname === "/recruiter/post-job"
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Đăng tuyển
                 </button>
               </Link>
-              <Link href="/post-manager" className="w-full">
+              <Link href="/recruiter/post-manager" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/messages" ? activeClass : inactiveClass
+                    pathname === "/recruiter/post-manager"
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Bài đăng
                 </button>
               </Link>
-              <Link href="/messages" className="w-full">
+              <Link href="/recruiter/message" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/recruiter/message" ? activeClass : inactiveClass
+                    pathname === "/recruiter/message"
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Nhắn tin

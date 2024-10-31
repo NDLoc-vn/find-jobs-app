@@ -24,11 +24,12 @@ const MainNav = () => {
   return (
     <div className="flex items-center space-x-4">
       {isLoggedIn ? (
+        // {true ? (
         <>
           <Link
-            href="/admin/home"
+            href="/admin/dashboard"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/admin/home")
+              isActive("/admin/dashboard")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}

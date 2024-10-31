@@ -24,41 +24,46 @@ const MainNav = () => {
   return (
     <div className="flex items-center space-x-4">
       {isLoggedIn ? (
+        // {true ? (
         <>
           <Link
-            href="/home"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/home")
+            href="/recruiter/"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/recruiter/")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Trang chủ
           </Link>
           <Link
-            href="/post-job"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/post-job")
+            href="/recruiter/post-job"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/recruiter/post-job")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Đăng tuyển
           </Link>
           <Link
-            href="/post-manager"
+            href="/recruiter/post-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/post-manager") || isActive("/candidate-manager")
+              isActive("/recruiter/post-manager") ||
+              isActive("/recruiter/candidate-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Bài đăng
           </Link>
           <Link
             href="/recruiter/message"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/message")
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/recruiter/message")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Nhắn tin
           </Link>

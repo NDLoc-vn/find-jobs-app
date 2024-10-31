@@ -6,10 +6,12 @@ import Image from "next/image";
 import axios from "axios";
 import { LoginUser } from "@/app/lib/definitions";
 import { useAuth } from "@/app/contexts/auth-context";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const { login } = useAuth();
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const [userData, setUserData] = useState<LoginUser>({
@@ -21,7 +23,7 @@ const Login = () => {
 
   const checkError = () => {
     return true;
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,12 +33,20 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/auth`, userData);
-      if (response.status >= 200 && response.status < 300 && response.headers["authorization"]) {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_USERS_API_URL}/auth`,
+        userData
+      );
+      if (
+        response.status >= 200 &&
+        response.status < 300 &&
+        response.headers["authorization"]
+      ) {
         const token = response.headers["authorization"];
         const userData = response.data.user;
         login(token, userData);
         toast.success("Đăng nhận thành công");
+        router.push("/search-job");
       }
     } catch (err) {
       setError("Đăng nhập thất bại");
@@ -110,7 +120,9 @@ const Login = () => {
             Quên mật khẩu
           </Link>
 
-          {error && <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>}
+          {error && (
+            <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>
+          )}
 
           <button className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
             Đăng nhập

@@ -18,7 +18,7 @@ const JobCardClose: React.FC<JobCardProps> = ({
   location,
 }) => {
   return (
-    <Link href={"/candidate-manager"}>
+    <Link href={"/recruiter/candidate-manager"}>
       <div className="cursor-pointer p-4 border rounded mb-4 bg-[#b3b3b3]">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-lg">{title}</h3>

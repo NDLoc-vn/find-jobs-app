@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
-import Header from "@/app/ui/user/Header";
+import Header from "@/app/ui/company/Header";
 
 interface Message {
   id: number;

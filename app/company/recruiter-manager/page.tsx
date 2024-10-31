@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, Suspense, useRef, useEffect } from "react";
-import Header from "../ui/company/Header";
 import JobList from "@/app/ui/recruiter/JobList";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import Image from "next/image";
-import CreateAccountForm from "../ui/company/CreateAccountForm";
+import Header from "@/app/ui/company/Header";
+import CreateAccountForm from "@/app/ui/company/CreateAccountForm";
 
 interface RecruiterAccount {
   id: number;
