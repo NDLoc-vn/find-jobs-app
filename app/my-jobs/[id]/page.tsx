@@ -2,11 +2,18 @@
 
 import React, { useEffect } from "react";
 import Image from "next/image";
-import { JobDetailSkeleton } from "../ui/sketetons";
-import { Job2 } from "../lib/definitions";
+import { useRouter } from "next/navigation";
+import { Job2 } from "@/app/lib/definitions";
+import { JobDetailSkeleton } from "@/app/ui/sketetons";
+import Header from "@/app/ui/user/Header";
 
 const JobPage = () => {
   const [loading, setLoading] = React.useState(true);
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.back();
+  };
   //viet definition sau
   const [job, setJob] = React.useState<Job2 | null>(null);
 
@@ -54,6 +61,13 @@ const JobPage = () => {
 
   return (
     <div className="container mx-auto h-screen p-6 mt-10 bg-white max-w-5xl">
+      <Header />
+      <button
+        onClick={handleBack}
+        className="text-blue-600 hover:text-blue-800 mb-4"
+      >
+        ← Back
+      </button>
       <div className="flex md:flex-row flex-col justify-between items-center border-b pb-4 mb-4">
         <div className="flex items-center">
           <Image

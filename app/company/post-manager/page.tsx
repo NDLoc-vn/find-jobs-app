@@ -1,10 +1,10 @@
 "use client";
 
+import Header from "@/app/ui/company/Header";
 import JobList from "@/app/ui/recruiter/JobList";
+import SearchBar from "@/app/ui/SearchBar";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import { useState, Suspense, useRef, useEffect } from "react";
-import Header from "../ui/recruiter/Header";
-import SearchBar from "../ui/SearchBar";
 
 const PostManager = () => {
   const [activeTab, setActiveTab] = useState<"openJobs" | "closeJobs">(

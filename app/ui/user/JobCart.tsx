@@ -24,7 +24,7 @@ const JobCard: React.FC<JobCardProps> = ({
   };
 
   return (
-    <Link href={"/1"}>
+    <Link href={"/search-job/1"}>
       <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <h3 className="font-bold text-lg">{title}</h3>
         <div className="flex flex-wrap items-center mt-1 gap-x-2">

@@ -1,9 +1,9 @@
 "use client";
 
-import Pagination from "../ui/Pagination";
-import Header from "../ui/recruiter/Header";
-import JobCardOpen from "../ui/recruiter/JobCardOpen";
-import SearchBar from "../ui/SearchBar";
+import Pagination from "@/app/ui/Pagination";
+import Header from "@/app/ui/recruiter/Header";
+import JobCardOpen from "@/app/ui/recruiter/JobCardOpen";
+import SearchBar from "@/app/ui/SearchBar";
 import { useRouter } from "next/navigation";
 
 const candidates = [

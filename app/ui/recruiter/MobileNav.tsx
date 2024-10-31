@@ -58,6 +58,7 @@ const MobileNav = () => {
 
         <nav className="px-4 flex flex-col items-center justify-start mt-20 h-full space-y-6">
           {isLoggedIn ? (
+            // {true ? (
             <>
               <Link href="/home" className="w-full">
                 <button
@@ -93,7 +94,9 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/recruiter/message" ? activeClass : inactiveClass
+                    pathname === "/recruiter/message"
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Nhắn tin

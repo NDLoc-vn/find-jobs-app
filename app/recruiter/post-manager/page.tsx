@@ -1,20 +1,22 @@
 "use client";
 
-import JobList from "@/app/ui/user/JobList";
+import Header from "@/app/ui/recruiter/Header";
+import JobList from "@/app/ui/recruiter/JobList";
+import SearchBar from "@/app/ui/SearchBar";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import { useState, Suspense, useRef, useEffect } from "react";
-import Header from "../ui/user/Header";
-import SearchBar from "../ui/SearchBar";
 
-const MyJobs = () => {
-  const [activeTab, setActiveTab] = useState<"applied" | "saved">("applied");
-  const appliedRef = useRef<HTMLButtonElement | null>(null);
-  const savedRef = useRef<HTMLButtonElement | null>(null);
+const PostManager = () => {
+  const [activeTab, setActiveTab] = useState<"openJobs" | "closeJobs">(
+    "openJobs"
+  );
+  const openJobsdRef = useRef<HTMLButtonElement | null>(null);
+  const closeJobsRef = useRef<HTMLButtonElement | null>(null);
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
 
   useEffect(() => {
     const currentTab =
-      activeTab === "applied" ? appliedRef.current : savedRef.current;
+      activeTab === "openJobs" ? openJobsdRef.current : closeJobsRef.current;
     if (currentTab) {
       const { offsetWidth, offsetLeft } = currentTab;
       setUnderlineStyle({ width: offsetWidth, left: offsetLeft });
@@ -24,27 +26,27 @@ const MyJobs = () => {
   return (
     <>
       <Header />
-      <SearchBar />
       <div className="container mx-auto mb-14 px-4 flex flex-col gap-8">
+        <SearchBar />
         <div className="relative">
-          <div className="flex justify-start mt-5 gap-8 text-xl">
+          <div className="flex justify-start gap-8 text-xl">
             <button
-              ref={appliedRef}
+              ref={openJobsdRef}
               className={`py-2 text-xl ${
-                activeTab === "applied" ? "text-blue-500" : "text-gray-500"
+                activeTab === "openJobs" ? "text-blue-500" : "text-gray-500"
               }`}
-              onClick={() => setActiveTab("applied")}
+              onClick={() => setActiveTab("openJobs")}
             >
-              Đã Ứng Tuyển
+              Đang tuyển
             </button>
             <button
-              ref={savedRef}
+              ref={closeJobsRef}
               className={`py-2 text-xl ${
-                activeTab === "saved" ? "text-blue-500" : "text-gray-500"
+                activeTab === "closeJobs" ? "text-blue-500" : "text-gray-500"
               }`}
-              onClick={() => setActiveTab("saved")}
+              onClick={() => setActiveTab("closeJobs")}
             >
-              Đã Lưu
+              Đã đóng
             </button>
           </div>
 
@@ -56,11 +58,11 @@ const MyJobs = () => {
         </div>
 
         <Suspense fallback={<JobListSkeleton />}>
-          <JobList />
+          <JobList activeTab={activeTab} />
         </Suspense>
       </div>
     </>
   );
 };
 
-export default MyJobs;
+export default PostManager;

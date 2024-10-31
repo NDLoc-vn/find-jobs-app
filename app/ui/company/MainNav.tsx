@@ -24,11 +24,12 @@ const MainNav = () => {
   return (
     <div className="flex items-center space-x-4">
       {isLoggedIn ? (
+        // {true ? (
         <>
           <Link
-            href="/home"
+            href="/company/"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/home")
+              isActive("/company/")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -36,9 +37,9 @@ const MainNav = () => {
             Trang chủ
           </Link>
           <Link
-            href="/job-posting"
+            href="/company/post-job"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/job-posting")
+              isActive("/company/post-job")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -46,9 +47,9 @@ const MainNav = () => {
             Đăng tuyển
           </Link>
           <Link
-            href="/recruiter-manager"
+            href="/company/recruiter-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/recruiter-manager")
+              isActive("/company/recruiter-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -56,9 +57,9 @@ const MainNav = () => {
             TK tuyển dụng
           </Link>
           <Link
-            href="/post-manager"
+            href="/company/post-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/post-manager")
+              isActive("/company/post-manager")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
@@ -66,9 +67,9 @@ const MainNav = () => {
             Bài đăng
           </Link>
           <Link
-            href="/messages"
+            href="/company/message"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/messages")
+              isActive("/company/message")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}
