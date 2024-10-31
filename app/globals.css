@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --xanhduong-500: #5575FF;
+  --xanhduong-500: #5575ff;
   --xanhduong-600: #374cf4;
   --xanhduong-800: #222fa0;
   --torea-bay-100: #ddebff;
@@ -28,14 +28,12 @@ body {
 }
 
 .gradient-hover {
-  background-color: var(--background);
-  transition: background 0.5s ease-in-out;
+  background-color: #ffffff;
+  transition: #ffffff 0.5s ease-in-out;
 }
 
 .gradient-hover:hover {
-  background: linear-gradient(to right,
-      var(--torea-bay-100),
-      var(--background));
+  background: linear-gradient(to right, var(--torea-bay-100), #ffffff);
 }
 
 @layer base {
