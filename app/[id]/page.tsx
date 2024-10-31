@@ -6,6 +6,7 @@ import { JobDetailSkeleton } from "../ui/sketetons";
 import { Job2 } from "../lib/definitions";
 import Header from "../ui/homepage/Header";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const JobPage = () => {
   const [loading, setLoading] = React.useState(true);
@@ -20,6 +21,7 @@ const JobPage = () => {
   useEffect(() => {
     const fetchJobData = async () => {
       const job = {
+        id: "1",
         title: "Senior UX Designer",
         category: "Design",
         company: { name: "Facebook" },
@@ -89,7 +91,7 @@ const JobPage = () => {
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex-shrink-0">
-            <div className="rounded bg-blue-600 hover:bg-blue-500 p-2">
+            <div className="rounded bg-green-600 hover:bg-green-500 p-2">
               <Image
                 src="/icon/bookmark.svg"
                 width={20}
@@ -98,8 +100,15 @@ const JobPage = () => {
               />
             </div>
           </div>
+          <div>
+            <Link href="/message">
+              <button className="w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+                Contact Recruiter
+              </button>
+            </Link>
+          </div>
           <div className="flex-grow">
-            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+            <button className="w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
               Apply Now &#8594;
             </button>
           </div>

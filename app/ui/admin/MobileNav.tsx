@@ -60,11 +60,11 @@ const MobileNav = () => {
           {isLoggedIn ? (
             // {true ? (
             <>
-              <Link href="/admin/home" className="w-full">
+              <Link href="/admin/dashboard" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname.endsWith("/admin/home")
+                    pathname.endsWith("/admin/dashboard")
                       ? activeClass
                       : inactiveClass
                   )}

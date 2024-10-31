@@ -86,7 +86,7 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/company/recuiter-manager"
+                    pathname === "/company/recruiter-manager"
                       ? activeClass
                       : inactiveClass
                   )}
@@ -106,11 +106,11 @@ const MobileNav = () => {
                   Bài đăng
                 </button>
               </Link>
-              <Link href="/company/messages" className="w-full">
+              <Link href="/company/message" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/company/messages"
+                    pathname === "/company/message"
                       ? activeClass
                       : inactiveClass
                   )}
