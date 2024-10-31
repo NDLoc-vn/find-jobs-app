@@ -20,8 +20,6 @@ import {
 import Header from "@/app/ui/admin/Header"
 import Link from "next/link"
 
-export const description = "An interactive bar chart"
-
 const chartData = [
   //   { date: "2024-04-01", candidate: 222, company: 150 },
   //   { date: "2024-04-02", candidate: 97, company: 180 },
@@ -134,7 +132,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function Dashboard() {
+const Dashboard = () => {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("candidate")
 
   const total = React.useMemo(
