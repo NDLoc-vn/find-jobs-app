@@ -34,18 +34,6 @@ export type Company = {
   website: string;
 }
 
-export type SignupUser = {
-  name: string;
-  email: string;
-  location: string;
-  password: string;
-}
-
-export type LoginUser = {
-  email: string;
-  password: string;
-}
-
 export type UserDataType = {
   id: string;
   email: string;

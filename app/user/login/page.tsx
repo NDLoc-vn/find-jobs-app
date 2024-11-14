@@ -4,10 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
-import { LoginUser } from "@/app/lib/definitions";
 import { useAuth } from "@/app/contexts/auth-context";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+
+type LoginUser = {
+  email: string;
+  password: string;
+};
 
 const Login = () => {
   const { login } = useAuth();
@@ -38,19 +42,23 @@ const Login = () => {
         userData
       );
       if (
-        response.status >= 200 &&
-        response.status < 300 &&
+        response.status === 200 &&
         response.headers["authorization"]
       ) {
         const token = response.headers["authorization"];
         const userData = response.data.user;
         login(token, userData);
         toast.success("Đăng nhận thành công");
-        router.push("/search-job");
+        router.push("/");
+      } else if (response.status === 400) {
+        // bughh return wrong status code
+        setError("Đăng nhập thất bại");
+      } else if (response.status === 401) {
+        setError("Đăng nhập thất bại");
       }
     } catch (err) {
       setError("Đăng nhập thất bại");
-      toast.error("Đăng nhập thất bại");
+      // toast.error("Đăng nhập thất bại");
     }
   };
 
