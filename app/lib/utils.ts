@@ -30,3 +30,17 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export const formatDOB = (dob: string | undefined) => {
+  if (!dob) return "Sinh nhật";
+  const date = new Date(dob);
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const year = date.getUTCFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+export const toYYYYMMDD = (date: string) => {
+  const [day, month, year] = date.split('/');
+  return `${year}-${month}-${day}`;
+}

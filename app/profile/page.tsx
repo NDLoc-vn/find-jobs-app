@@ -5,11 +5,19 @@ import Image from "next/image";
 import Header from "../ui/user/Header";
 import { useAuth } from "../contexts/auth-context";
 import axios from "axios";
-import { UserProfileType } from "../lib/definitions";
+// import { UserProfileType } from "../lib/definitions";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
+import { formatDOB, toYYYYMMDD } from "../lib/utils";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+type UserProfileType = {
+  name: string;
+  location?: string;
+  phone?: string;
+  dateOfBirth?: string;
+};
 
 const ProfilePage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
@@ -32,9 +40,8 @@ const ProfilePage = () => {
       setUserProfile({
         name: response.data.name,
         location: response.data.location,
-        skills: response.data.skills,
-        experience: response.data.experiences,
-        education: response.data.education,
+        phone: response.data.phone,
+        dateOfBirth: response.data.dateOfBirth,
       });
     } catch (err) {
       console.error(err);
@@ -44,15 +51,19 @@ const ProfilePage = () => {
   const handleSave = () => {
     if (activeForm === "editProfile") {
       axios
-        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/profile`, {
-          headers: {
-            Authorization: token,
+        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/profile`,
+          {
+            name: userProfile?.name,
+            location: userProfile?.location,
+            phone: userProfile?.phone,
+            dateOfBirth: userProfile?.dateOfBirth,
           },
-          _id: user?.id,
-
-          name: userProfile?.name,
-          location: userProfile?.location,
-        })
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
         .then(() => {
           fetchUserInfo();
           closeForm();
@@ -105,11 +116,16 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📅</span>
-                  <p className="text-gray-500">Sinh nhật (be ch tra ve)</p>
+                  <p>
+                    {/* {userProfile?.dateOfBirth === ""
+                      ? "Sinh nhật"
+                      : userProfile?.dateOfBirth} */}
+                    {formatDOB(userProfile?.dateOfBirth)}
+                  </p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📍</span>
-                  <p className="text-gray-500">
+                  <p>
                     {userProfile?.location === ""
                       ? "Địa điểm"
                       : userProfile?.location}
@@ -117,7 +133,11 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📞</span>
-                  <p>0914141141 (be ch tra ve)</p>
+                  <p>
+                    {userProfile?.phone === ""
+                      ? "Số điện thoại"
+                      : userProfile?.phone}
+                  </p>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2 text-blue-500">👤</span>
@@ -261,9 +281,10 @@ const ProfilePage = () => {
                       <input
                         type="date"
                         placeholder="Nhập ngày sinh"
+                        name="dateOfBirth"
+                        value={toYYYYMMDD(formatDOB(userProfile?.dateOfBirth))}
+                        onChange={handleInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        disabled
-                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -286,10 +307,10 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         placeholder="Nhập số điện thoại"
-                        value={"0914141141"}
+                        name="phone"
+                        value={userProfile?.phone}
+                        onChange={handleInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        disabled
-                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -299,7 +320,6 @@ const ProfilePage = () => {
                       <select
                         title="Gender"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        disabled
                       >
                         <option>Nam</option>
                         <option>Nữ</option>
