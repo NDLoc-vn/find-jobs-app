@@ -5,10 +5,10 @@ import Image from "next/image";
 import Header from "../ui/user/Header";
 import { useAuth } from "../contexts/auth-context";
 import axios from "axios";
-// import { UserProfileType } from "../lib/definitions";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { formatDOB, toYYYYMMDD } from "../lib/utils";
+import SkillsForm from "../ui/user/SkillsForm";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -19,10 +19,49 @@ type UserProfileType = {
   dateOfBirth?: string;
 };
 
+type EducationType = {
+  _id: string;
+  school: string;
+  major: string;
+  duration: string;
+  description: string;
+};
+
+type SkillType = {
+  name: string;
+};
+
+type checkType = {
+  _id: string;
+  name: string;
+};
+
 const ProfilePage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [activeForm, setActiveForm] = useState<string | null>(null);
+  // temp
   const [richTextContent, setRichTextContent] = useState<string>("");
+
+  const [educations, setEducations] = useState<EducationType[]>([]);
+  const [education, setEducation] = useState<EducationType | null>(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [check, setCheck] = useState<checkType | null>(null);
+
+  // // temp skill
+  const [skills, setSkills] = useState<string[]>([]);
+  const [inputSkillValue, setInputSkillValue] = useState<string>("");
+  const handleSkillsInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputSkillValue(e.target.value);
+  };
+
+  const addSkill = (skill: string) => {
+    if (skills.includes(skill)) {
+      setSkills(skills.filter((s) => s !== skill));
+    } else {
+      setSkills([...skills, skill]);
+    }
+  };
+  // ////
 
   const { token, user } = useAuth();
 
@@ -36,13 +75,14 @@ const ProfilePage = () => {
           },
         }
       );
-      console.log(response);
       setUserProfile({
         name: response.data.name,
         location: response.data.location,
         phone: response.data.phone,
         dateOfBirth: response.data.dateOfBirth,
       });
+      setEducations(response.data.education);
+      console.log(response.data.education);
     } catch (err) {
       console.error(err);
     }
@@ -71,15 +111,76 @@ const ProfilePage = () => {
         .catch((err) => {
           console.error(err);
         });
+    } else if (activeForm === "education") {
+      axios
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/edu`,
+          {
+            "education": {
+              "school": education?.school,
+              "major": education?.major,
+              "duration": education?.duration,
+              "description": education?.description
+            }
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(() => {
+          fetchUserInfo();
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } else {
       console.log("not available");
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDelete = () => {
+    const isConfirmed = confirm("Bạn có chắc chắn muốn xoá không?");
+    if (!isConfirmed) return;
+    if (activeForm === "education") {
+      axios
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/edu`,
+          {
+            headers: {
+              Authorization: token,
+            },
+            data: {
+              eduId: check?._id,
+            }
+          }
+        )
+        .then(() => {
+          setEducations(prevList => prevList.filter(item => item._id !== check?._id));
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      console.log("delete not available");
+    }
+  }
+
+  const handleUserProfileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserProfile({ ...userProfile!, [name]: value });
   };
+
+  const handleEducationInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (isEdit) {
+      const { name, value } = e.target;
+      setEducations(prevList => prevList.map(item => item._id === check?._id ? { ...item, [name]: value } : item));
+    } else {
+      const { name, value } = e.target;
+      setEducation({ ...education!, [name]: value });
+    }
+  }
 
   useEffect(() => {
     fetchUserInfo();
@@ -90,6 +191,9 @@ const ProfilePage = () => {
   };
 
   const closeForm = () => {
+    setIsEdit(false);
+    setCheck(null);
+    setEducation(null);
     setActiveForm(null);
   };
 
@@ -117,9 +221,6 @@ const ProfilePage = () => {
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📅</span>
                   <p>
-                    {/* {userProfile?.dateOfBirth === ""
-                      ? "Sinh nhật"
-                      : userProfile?.dateOfBirth} */}
                     {formatDOB(userProfile?.dateOfBirth)}
                   </p>
                 </div>
@@ -159,7 +260,7 @@ const ProfilePage = () => {
 
         {/* Sections */}
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center border-b-2">
             <h3 className="text-lg font-bold">Học vấn</h3>
             <button onClick={() => openForm("education")} className="p-2">
               <Image
@@ -171,7 +272,43 @@ const ProfilePage = () => {
               <span className="sr-only">Add Education</span>
             </button>
           </div>
-          <p className="text-gray-500 mt-2">Share your background education</p>
+          {educations.length === 0 && (
+            <p className="text-gray-500 mt-2">No education information</p>
+          )}
+          <ul className="mt-2 space-y-2">
+            {educations.map((education: EducationType) => (
+              <li key={education._id} className="border-b pb-2 flex justify-between">
+                <div>
+                  <h4 className="font-bold">{education.school}</h4>
+                  <p>{education.major}</p>
+                  <p>
+                    {education.duration}
+                  </p>
+                  <p>{education.description}</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <button onClick={
+                    () => {
+                      setIsEdit(true);
+                      setCheck({
+                        _id: education._id,
+                        name: "education"
+                      });
+                      openForm("education");
+                    }
+                  } className="p-2">
+                    <Image
+                      src="/icon/edit-button.svg"
+                      width={20}
+                      height={20}
+                      alt="edit button"
+                    />
+                    <span className="sr-only">edit education</span>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
@@ -187,7 +324,19 @@ const ProfilePage = () => {
               <span className="sr-only">Add Skills</span>
             </button>
           </div>
-          <p className="text-gray-500 mt-2">Showcase your skills</p>
+          {skills.length === 0 && (
+            <p className="text-gray-500 mt-2">No skill information</p>
+          )}
+          <ul className="mt-2 space-y-2">
+            {skills.map((skill: string) => (
+              <span
+                key={skill}
+                className="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded-full cursor-pointer mr-2 mb-2"
+              >
+                {skill}
+              </span>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
@@ -245,7 +394,6 @@ const ProfilePage = () => {
 
               {/* Form Content*/}
               <div className="overflow-y-auto p-4 flex-1">
-                {/* Edit Profile Form */}
                 {activeForm === "editProfile" ? (
                   <form>
                     <div className="mb-4">
@@ -283,7 +431,7 @@ const ProfilePage = () => {
                         placeholder="Nhập ngày sinh"
                         name="dateOfBirth"
                         value={toYYYYMMDD(formatDOB(userProfile?.dateOfBirth))}
-                        onChange={handleInputChange}
+                        onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -296,7 +444,7 @@ const ProfilePage = () => {
                         placeholder="Nhập địa chỉ"
                         name="location"
                         value={userProfile?.location}
-                        onChange={handleInputChange}
+                        onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -309,7 +457,7 @@ const ProfilePage = () => {
                         placeholder="Nhập số điện thoại"
                         name="phone"
                         value={userProfile?.phone}
-                        onChange={handleInputChange}
+                        onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -326,6 +474,67 @@ const ProfilePage = () => {
                       </select>
                     </div>
                   </form>
+                ) : activeForm === "education" ? (
+                  <form>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Trường học
+                      </label>
+                      <input
+                        type="text"
+                        name="school"
+                        value={educations.find((item) => item._id === check?._id)?.school}
+                        onChange={handleEducationInputChange}
+                        placeholder="Nhập trường học"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Chuyên ngành
+                      </label>
+                      <input
+                        type="text"
+                        name="major"
+                        value={educations.find((item) => item._id === check?._id)?.major}
+                        onChange={handleEducationInputChange}
+                        placeholder="Nhập chuyên ngành"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Thời gian học
+                      </label>
+                      <div className="flex space-x-4">
+                        <input
+                          type="text"
+                          name="duration"
+                          value={educations.find((item) => item._id === check?._id)?.duration}
+                          onChange={handleEducationInputChange}
+                          placeholder="Nhập chuyên ngành"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Mô tả
+                      </label>
+                      <textarea
+                        name="description"
+                        value={educations.find((item) => item._id === check?._id)?.description}
+                        onChange={handleEducationInputChange}
+                        placeholder="Nhập mô tả"
+                        rows={5}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </form>
+                ) : activeForm === "skills" ? (
+
+                  <SkillsForm skills={skills} inputValue={inputSkillValue} handleSkillsInputChange={handleSkillsInputChange} addSkill={addSkill} />
+
                 ) : (
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -341,7 +550,7 @@ const ProfilePage = () => {
               </div>
 
               {/* Form Footer */}
-              <div className="p-4 border-t flex justify-end space-x-4">
+              <  div className="p-4 border-t flex justify-end space-x-4">
                 <button
                   onClick={closeForm}
                   className="px-4 py-2 bg-gray-300 rounded-md"
@@ -354,12 +563,21 @@ const ProfilePage = () => {
                 >
                   Lưu
                 </button>
+                {isEdit && (
+                  <button
+                    onClick={handleDelete}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md"
+                  >
+                    Xoá
+                  </button>
+                )}
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+        }
+      </div >
+    </div >
   );
 };
 
