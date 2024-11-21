@@ -32,7 +32,7 @@ const SortOptions: React.FC<SortOptionsProps> = ({ onChange }) => (
   </div>
 );
 
-const SearchJob: React.FC = (CategoriesProps) => {
+const SearchJob: React.FC = () => {
   const searchParams = useSearchParams();
 
   const initialSearch = searchParams.get("search") || "";
