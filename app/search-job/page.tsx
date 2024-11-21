@@ -1,31 +1,104 @@
 "use client";
 
-import Pagination from "@/app/ui/Pagination";
-import SearchBar from "@/app/ui/SearchBar";
+import SearchBar from "@/app/ui/user/SearchBar";
 import JobList from "@/app/ui/user/JobList";
-import { JobListSkeleton } from "@/app/ui/sketetons";
-import { Suspense } from "react";
 import Header from "../ui/user/Header";
-import Categories from "../ui/homepage/Categories";
+import Categories from "../ui/user/Categories";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-const SearchJob = () => {
+type SortOptionsProps = {
+  onChange: (value: string) => void;
+};
+
+const SortOptions: React.FC<SortOptionsProps> = ({ onChange }) => (
+  <div className="flex items-center space-x-4 mb-4">
+    <label>Sắp xếp theo:</label>
+    <select
+      aria-label="Loại sắp xếp"
+      onChange={(e) => onChange(e.target.value)}
+    >
+      <option value="title">Tiêu đề</option>
+      <option value="minSalary">Mức lương tối thiểu</option>
+      <option value="maxSalary">Mức lương tối đa</option>
+    </select>
+    <select
+      aria-label="Kiểu sắp xếp"
+      onChange={(e) => onChange(e.target.value)}
+    >
+      <option value="asc">Tăng dần</option>
+      <option value="desc">Giảm dần</option>
+    </select>
+  </div>
+);
+
+const SearchJob: React.FC = (CategoriesProps) => {
+  const searchParams = useSearchParams();
+
+  const initialSearch = searchParams.get("search") || "";
+  const initialLocation = searchParams.get("location") || "";
+  const initialEmployeeType = searchParams.get("employeeType") || "";
+
+  const [sortOption, setSortOption] = useState<string>("title");
+  const [order, setOrder] = useState<string>("asc");
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
+  const [location, setLocation] = useState<string>(initialLocation);
+  const [employeeType, setEmployeeType] = useState<string>(initialEmployeeType);
+  const [category, setCategory] = useState<string>("");
+
+  const handleSortChange = (value: string) => {
+    if (["title", "minSalary", "maxSalary"].includes(value)) {
+      setSortOption(value);
+    } else {
+      setOrder(value);
+    }
+  };
+
+  const handleSearch = (query: string, loc: string, empType: string) => {
+    setSearchQuery(query);
+    setLocation(loc);
+    setEmployeeType(empType);
+  };
+
+  const handleCategoryChange = (selectedCategory: string) => {
+    setCategory((prevCategory) =>
+      prevCategory === selectedCategory ? "" : selectedCategory
+    );
+  };
+
   return (
     <>
       <Header />
       <div className="container mx-auto mb-14 px-4 flex flex-col">
-        <SearchBar />
-        <Categories />
-        <h2 className="text-lg md:text-xl font-bold mt-12 mb-4">
-          Việc làm nổi bật
-        </h2>
-        <Suspense fallback={<JobListSkeleton />}>
-          <JobList />
-        </Suspense>
-        <Suspense>
-          <div className="flex justify-center">
-            <Pagination totalPages={10} />
+        <SearchBar
+          initialSearch={initialSearch}
+          initialLocation={initialLocation}
+          initialEmployeeType={initialEmployeeType}
+          onSearch={handleSearch}
+        />
+        <div className="flex mt-4">
+          <div className="w-1/4 pr-4">
+            <Categories
+              selectedCategory={category}
+              onCategoryChange={handleCategoryChange}
+            />
           </div>
-        </Suspense>
+
+          <div className="w-3/4">
+            <SortOptions onChange={handleSortChange} />
+            <h2 className="text-lg md:text-xl font-bold mt-7 mb-4">
+              Danh sách việc làm
+            </h2>
+            <JobList
+              searchQuery={searchQuery}
+              city={location}
+              employmentType={employeeType}
+              sortOption={sortOption}
+              sortOrder={order}
+              category={category}
+            />
+          </div>
+        </div>
       </div>
     </>
   );

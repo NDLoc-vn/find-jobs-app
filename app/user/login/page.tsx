@@ -44,6 +44,7 @@ const Login = () => {
       ) {
         const token = response.headers["authorization"];
         const userData = response.data.user;
+        localStorage.setItem("authToken", "123459999|RECRUITER");
         login(token, userData);
         toast.success("Đăng nhận thành công");
         router.push("/search-job");

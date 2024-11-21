@@ -3,38 +3,64 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/app/contexts/auth-context";
+import {
+  addBookmarkedJob,
+  deleteBookmarkedJob,
+} from "@/app/services/jobService";
 
 interface JobCardProps {
+  id: string;
   title: string;
   company: string;
-  salary: string;
-  location: string;
+  salaryMin: number;
+  salaryMax: number;
+  currency: string;
+  city: string;
+  address: string;
+  employmentType: string;
 }
 
 const JobCard: React.FC<JobCardProps> = ({
+  id,
   title,
   company,
-  salary,
-  location,
+  salaryMin,
+  salaryMax,
+  currency,
+  city,
+  address,
+  employmentType,
 }) => {
+  const { isLoggedIn } = useAuth();
   const [isBookmarked, setIsBookmarked] = React.useState(false);
 
-  const handleBookmarkClick = () => {
+  const handleBookmarkClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     setIsBookmarked(!isBookmarked);
+
+    if (!isBookmarked) {
+      addBookmarkedJob(id);
+    } else {
+      deleteBookmarkedJob(id);
+    }
   };
 
   return (
-    <Link href={"/search-job/1"}>
+    <Link href={`/search-job/${id}`}>
       <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <h3 className="font-bold text-lg">{title}</h3>
         <div className="flex flex-wrap items-center mt-1 gap-x-2">
           <span className="bg-green-100 text-green-600 font-semibold px-2 py-1 text-xs rounded">
-            INTERNSHIP
+            {employmentType.toUpperCase()}
           </span>
-          <p className="text-gray-400">Salary: {salary}</p>
+          <p className="text-gray-400">
+            Salary: {currency} {salaryMin}-{salaryMax}
+          </p>
         </div>
 
-        <div className="flex justify-between items-center mt-2">
+        <div className="flex justify-start items-center mt-2">
           <div className="mr-4 flex-shrink-0">
             <Image
               src="/icon/google.svg"
@@ -54,23 +80,29 @@ const JobCard: React.FC<JobCardProps> = ({
                 height={20}
                 alt="Location"
               />
-              <p className="ml-1">{location}</p>
+              <p className="ml-1">
+                {city}, {address}
+              </p>
             </div>
           </div>
 
-          <div className="flex ml-auto">
-            <Image
-              src={
-                isBookmarked
-                  ? "/icon/bookmark-filled.svg"
-                  : "/icon/bookmark.svg"
-              }
-              width={20}
-              height={20}
-              alt="Bookmark"
-              onClick={handleBookmarkClick}
-            />
-          </div>
+          {isLoggedIn ? (
+            <div className="flex ml-auto">
+              <Image
+                src={
+                  isBookmarked
+                    ? "/icon/bookmark-filled.svg"
+                    : "/icon/bookmark.svg"
+                }
+                width={20}
+                height={20}
+                alt="Bookmark"
+                onClick={handleBookmarkClick}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </Link>

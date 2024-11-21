@@ -1,11 +1,9 @@
-import SearchBar from "./ui/SearchBar";
+import SearchBar from "./ui/homepage/SearchBar";
 import Categories from "./ui/homepage/Categories";
-import { Suspense } from "react";
-import { JobListSkeleton } from "./ui/sketetons";
 import JobList from "./ui/homepage/JobList";
 import Header from "./ui/homepage/Header";
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
     <div className={`min-h-screen bg-white`}>
       <Header />
@@ -24,11 +22,18 @@ export default function Home() {
             Việc làm nổi bật
           </h2>
 
-          <Suspense fallback={<JobListSkeleton />}>
-            <JobList />
-          </Suspense>
+          <JobList
+            searchQuery=""
+            sortOption="title"
+            sortOrder="asc"
+            // category=""
+            // city=""
+            // employmentType=""
+          />
         </section>
       </div>
     </div>
   );
-}
+};
+
+export default Home;
