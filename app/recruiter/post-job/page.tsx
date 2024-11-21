@@ -1,12 +1,84 @@
 "use client";
 
+import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/recruiter/Header";
+import { useState } from "react";
 
 export default function PostJob() {
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "Graphics & Design",
+    Education: "",
+    employmentType: "Full-time",
+    city: "",
+    address: "",
+    salaryMin: "",
+    salaryMax: "",
+    dueDate: "",
+    description: "",
+    requirements: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const postData = {
+      id: null,
+      title: formData.title,
+      category: {
+        id: "123abc",
+        name: formData.category,
+      },
+      company: null,
+      postedBy: null,
+      description: formData.description,
+      Education: formData.Education,
+      requirements: formData.requirements.split("\n"),
+      salary: {
+        min: parseInt(formData.salaryMin, 10),
+        max: parseInt(formData.salaryMax, 10),
+        currency: "VND",
+      },
+      location: {
+        city: formData.city,
+        address: formData.address,
+      },
+      employmentType: formData.employmentType,
+      postDate: Date().toString(),
+      dueDate: formData.dueDate,
+      status: "open",
+    };
+
+    console.log("Sending data to server:", postData);
+
+    try {
+      await createPost(postData);
+      alert("Đăng tin tuyển dụng thành công!");
+    } catch (error) {
+      alert("Đã xảy ra lỗi khi đăng tin.");
+      console.error("Error creating job post:", error);
+    }
+  };
+
   return (
     <>
       <Header />
-      <form className="my-10 max-w-4xl mx-auto p-8 border rounded-lg shadow-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="my-10 max-w-4xl mx-auto p-8 border rounded-lg shadow-lg"
+      >
         <h2 className="text-2xl font-bold mb-6">Đăng tin tuyển dụng</h2>
 
         <div className="flex flex-col lg:flex-row gap-6">
@@ -22,6 +94,8 @@ export default function PostJob() {
                 id="title"
                 name="title"
                 type="text"
+                value={formData.title}
+                onChange={handleChange}
                 placeholder="Intern UX design, ..."
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
@@ -30,65 +104,138 @@ export default function PostJob() {
 
             <div>
               <label
-                htmlFor="employmentType"
+                htmlFor="Education"
                 className="block font-medium text-gray-700"
               >
-                Loại công việc<span className="text-red-500">*</span>
+                Trình độ<span className="text-red-500">*</span>
               </label>
               <select
-                id="employmentType"
-                name="employmentType"
+                id="Education"
+                name="Education"
+                value={formData.Education}
+                onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
+                <option value="Intern">Intern</option>
+                <option value="Junior">Junior</option>
+                <option value="Mid-level">Mid-level</option>
+                <option value="Senior">Senior</option>
+                <option value="Manager">Manager</option>
               </select>
             </div>
 
             <div>
               <label
-                htmlFor="location"
+                htmlFor="categories"
                 className="block font-medium text-gray-700"
               >
-                Địa điểm<span className="text-red-500">*</span>
+                Loại công việc<span className="text-red-500">*</span>
               </label>
-              <input
-                id="location"
-                name="location"
-                type="text"
-                placeholder="Đà Nẵng, ..."
+              <select
+                id="categories"
+                name="categories"
+                value={formData.category}
+                onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
-              />
+              >
+                <option value="Graphics & Design">Graphics & Design</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="employmentType"
+                className="block font-medium text-gray-700"
+              >
+                Loại nhân viên<span className="text-red-500">*</span>
+              </label>
+              <select
+                id="employmentType"
+                name="employmentType"
+                value={formData.employmentType}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
+              >
+                <option value="FULL-TIME">Full-time</option>
+                <option value="PART-TIME">Part-time</option>
+                <option value="CONTRACT">Contract</option>
+                <option value="INTERNSHIP">Internship</option>
+              </select>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
-                  htmlFor="minSalary"
+                  htmlFor="city"
+                  className="block font-medium text-gray-700"
+                >
+                  Thành phố<span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="city"
+                  name="city"
+                  type="text"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="Đà Nẵng, ..."
+                  required
+                  className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="address"
+                  className="block font-medium text-gray-700"
+                >
+                  Địa chỉ<span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="address"
+                  name="address"
+                  type="text"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Đà Nẵng, ..."
+                  required
+                  className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="salaryMin"
                   className="block font-medium text-gray-700"
                 >
                   Mức lương (Tối thiểu)
                 </label>
                 <input
-                  id="minSalary"
+                  id="salaryMin"
+                  name="salaryMin"
                   type="number"
+                  value={formData.salaryMin}
+                  onChange={handleChange}
                   placeholder="Tối thiểu"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
               </div>
               <div>
                 <label
-                  htmlFor="maxSalary"
+                  htmlFor="salaryMax"
                   className="block font-medium text-gray-700"
                 >
                   Mức lương (Tối đa)
                 </label>
                 <input
-                  id="maxSalary"
+                  id="salaryMax"
+                  name="salaryMax"
                   type="number"
+                  value={formData.salaryMax}
+                  onChange={handleChange}
                   placeholder="Tối đa"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
@@ -106,6 +253,8 @@ export default function PostJob() {
                 id="dueDate"
                 name="dueDate"
                 type="date"
+                value={formData.dueDate}
+                onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               />
@@ -123,6 +272,8 @@ export default function PostJob() {
               <textarea
                 id="description"
                 name="description"
+                value={formData.description}
+                onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full h-full border rounded-md focus:ring focus:ring-xanhduong-500 resize-none"
               />
@@ -138,6 +289,8 @@ export default function PostJob() {
               <textarea
                 id="requirements"
                 name="requirements"
+                value={formData.requirements}
+                onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full h-full border rounded-md focus:ring focus:ring-xanhduong-500 resize-none"
               />

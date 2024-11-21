@@ -11,6 +11,7 @@ const MainNav = () => {
   const pathname = usePathname();
 
   const handleLogout = () => {
+    localStorage.removeItem("authToken");
     logout();
     setShowDropdown(false);
   };

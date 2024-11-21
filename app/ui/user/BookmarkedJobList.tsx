@@ -1,39 +1,17 @@
 "use client";
+
 import JobCard from "./JobCart";
 import { CardJob } from "@/app/lib/definitions";
-import { getListCardJobs } from "@/app/services/jobService";
+import { getListBookmarkedJobs } from "@/app/services/jobService";
 import { useEffect, useState } from "react";
 import { JobListSkeleton } from "../sketetons";
 
-interface JobListProps {
-  searchQuery: string;
-  sortOption: string;
-  sortOrder: string;
-  category?: string;
-  city?: string;
-  employmentType?: string;
-}
-
-const JobList: React.FC<JobListProps> = ({
-  searchQuery,
-  sortOption,
-  sortOrder,
-  category,
-  city,
-  employmentType,
-}) => {
+export default function BookmarkedJobList() {
   const [jobs, setJobs] = useState<CardJob[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getListCardJobs(
-      searchQuery,
-      sortOption,
-      sortOrder,
-      category,
-      city,
-      employmentType
-    )
+    getListBookmarkedJobs()
       .then((data) => {
         setJobs(data);
       })
@@ -43,7 +21,7 @@ const JobList: React.FC<JobListProps> = ({
       .finally(() => {
         setLoading(false);
       });
-  }, [searchQuery, city, employmentType, sortOption, sortOrder, category]);
+  }, []);
 
   if (loading) {
     return <JobListSkeleton />;
@@ -67,6 +45,4 @@ const JobList: React.FC<JobListProps> = ({
       ))}
     </div>
   );
-};
-
-export default JobList;
+}
