@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { JobListSkeleton } from "../sketetons";
 
 interface JobListProps {
-  searchQuery: string;
-  sortOption: string;
-  sortOrder: "asc" | "desc";
+  searchQuery?: string;
+  sortOption?: string;
+  sortOrder?: "asc" | "desc";
   category?: string;
   city?: string;
   employmentType?: string;
@@ -56,7 +56,7 @@ const JobList: React.FC<JobListProps> = ({
           key={index}
           id={job.id}
           title={job.title}
-          company={job.company}
+          company={job.companyName}
           salaryMin={job.salary.min}
           salaryMax={job.salary.max}
           currency={job.salary.currency}

@@ -1,39 +1,17 @@
 "use client";
-import JobCard from "./JobCart";
+
 import { CardJob } from "@/app/lib/definitions";
-import { getListCardJobs } from "@/app/services/jobService";
+import JobCardOpen from "./JobCardOpen";
 import { useEffect, useState } from "react";
+import { getListOpenedJobs } from "@/app/services/jobService";
 import { JobListSkeleton } from "../sketetons";
 
-interface JobListProps {
-  searchQuery?: string;
-  sortOption?: string;
-  sortOrder?: string;
-  category?: string;
-  city?: string;
-  employmentType?: string;
-}
-
-const JobList: React.FC<JobListProps> = ({
-  searchQuery,
-  sortOption,
-  sortOrder,
-  category,
-  city,
-  employmentType,
-}) => {
+export default function OpenJobList() {
   const [jobs, setJobs] = useState<CardJob[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getListCardJobs(
-      searchQuery,
-      sortOption,
-      sortOrder,
-      category,
-      city,
-      employmentType
-    )
+    getListOpenedJobs()
       .then((data) => {
         setJobs(data);
       })
@@ -43,7 +21,7 @@ const JobList: React.FC<JobListProps> = ({
       .finally(() => {
         setLoading(false);
       });
-  }, [searchQuery, city, employmentType, sortOption, sortOrder, category]);
+  }, []);
 
   if (loading) {
     return <JobListSkeleton />;
@@ -51,9 +29,9 @@ const JobList: React.FC<JobListProps> = ({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {jobs?.length > 0 ? (
-        jobs.map((job, index) => (
-          <JobCard
+      {jobs.map((job, index) => {
+        return (
+          <JobCardOpen
             key={index}
             id={job.id}
             title={job.title}
@@ -64,13 +42,10 @@ const JobList: React.FC<JobListProps> = ({
             city={job.location.city}
             address={job.location.address}
             employmentType={job.employmentType}
+            numberApplicants={job.numberApplicants}
           />
-        ))
-      ) : (
-        <p>No jobs available</p>
-      )}
+        );
+      })}
     </div>
   );
-};
-
-export default JobList;
+}

@@ -34,7 +34,7 @@ export default function AppliedJobList() {
           key={index}
           id={job.id}
           title={job.title}
-          company={job.company}
+          company={job.companyName}
           salaryMin={job.salary.min}
           salaryMax={job.salary.max}
           currency={job.salary.currency}

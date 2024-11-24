@@ -4,14 +4,11 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  JobDetailForCandidate,
-  JobDetailForGuest,
-} from "@/app/lib/definitions";
+import { JobDetail } from "@/app/lib/definitions";
 import {
   addBookmarkedJob,
   deleteBookmarkedJob,
-  getDetailJobForCandidate,
+  getDetailJob,
   getDetailJobForGuest,
 } from "@/app/services/jobService";
 import { JobDetailSkeleton } from "@/app/ui/sketetons";
@@ -32,16 +29,14 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   const handleBack = () => {
     router.back();
   };
-  const [job, setJob] = React.useState<
-    JobDetailForCandidate | JobDetailForGuest | null
-  >(null);
+  const [job, setJob] = React.useState<JobDetail | null>(null);
 
   useEffect(() => {
     const fetchJobDetail = async () => {
       try {
         let data = null;
         if (isLoggedIn) {
-          data = await getDetailJobForCandidate(id);
+          data = await getDetailJob(id);
         } else {
           data = await getDetailJobForGuest(id);
         }
