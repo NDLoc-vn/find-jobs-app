@@ -1,10 +1,10 @@
 "use client";
 
+import CloseJobList from "@/app/ui/recruiter/CloseJobList";
 import Header from "@/app/ui/recruiter/Header";
-import JobList from "@/app/ui/recruiter/JobList";
+import OpenJobList from "@/app/ui/recruiter/OpenJobList";
 import SearchBar from "@/app/ui/SearchBar";
-import { JobListSkeleton } from "@/app/ui/sketetons";
-import { useState, Suspense, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const PostManager = () => {
   const [activeTab, setActiveTab] = useState<"openJobs" | "closeJobs">(
@@ -57,9 +57,7 @@ const PostManager = () => {
           ></div>
         </div>
 
-        <Suspense fallback={<JobListSkeleton />}>
-          <JobList activeTab={activeTab} />
-        </Suspense>
+        {activeTab === "openJobs" ? <OpenJobList /> : <CloseJobList />}
       </div>
     </>
   );

@@ -1,11 +1,5 @@
 import axios from "axios";
-import {
-  CardJob,
-  CardJobForRecruiter,
-  JobDetailForCandidate,
-  JobDetailForGuest,
-  JobDetailForRecruiter,
-} from "../lib/definitions";
+import { CardJob, JobDetail } from "../lib/definitions";
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_POSTS_API_URL,
@@ -23,9 +17,9 @@ const getAuthHeader = () => {
 };
 
 export const getListCardJobs = async (
-  search: string,
-  sortBy: string,
-  sortOrder: string,
+  search?: string,
+  sortBy?: string,
+  sortOrder?: string,
   category?: string,
   city?: string,
   employmentType?: string
@@ -41,10 +35,34 @@ export const getListCardJobs = async (
     };
 
     const response = await apiClient.get("/all-jobs", { params });
-
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
+export const getDetailJobForGuest = async (
+  postId: string
+): Promise<JobDetail> => {
+  try {
+    const response = await apiClient.get(`/job/${postId}`);
+    console.log("Guest");
+    return response.data.data as JobDetail;
+  } catch (error) {
+    console.error("Error fetching post job details:", error);
+    throw error;
+  }
+};
+
+export const getDetailJob = async (postId: string): Promise<JobDetail> => {
+  try {
+    const response = await apiClient.get(`/job/${postId}`, {
+      headers: getAuthHeader(),
+    });
+    return response.data.data as JobDetail;
+  } catch (error) {
+    console.error("Error fetching post job details:", error);
     throw error;
   }
 };
@@ -54,7 +72,19 @@ export const getListAppliedJobs = async (): Promise<CardJob[]> => {
     const response = await apiClient.get("/jobs-applied", {
       headers: getAuthHeader(),
     });
-    return response.data;
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
+export const getListBookmarkedJobs = async (): Promise<CardJob[]> => {
+  try {
+    const response = await apiClient.get("/jobs-bookmark", {
+      headers: getAuthHeader(),
+    });
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
     throw error;
@@ -85,36 +115,24 @@ export const deleteBookmarkedJob = async (postId: string): Promise<void> => {
   }
 };
 
-export const getListBookmarkedJobs = async (): Promise<CardJob[]> => {
-  try {
-    const response = await apiClient.get("/jobs-bookmark", {
-      headers: getAuthHeader(),
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching job list:", error);
-    throw error;
-  }
-};
-
-export const getListOpenedJobs = async (): Promise<CardJobForRecruiter[]> => {
+export const getListOpenedJobs = async (): Promise<CardJob[]> => {
   try {
     const response = await apiClient.get("/jobs-opened", {
       headers: getAuthHeader(),
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
     throw error;
   }
 };
 
-export const getListClosedJobs = async (): Promise<CardJobForRecruiter[]> => {
+export const getListClosedJobs = async (): Promise<CardJob[]> => {
   try {
     const response = await apiClient.get("/jobs-closed", {
       headers: getAuthHeader(),
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
     throw error;
@@ -123,12 +141,12 @@ export const getListClosedJobs = async (): Promise<CardJobForRecruiter[]> => {
 
 export const getListOpenedJobsWithId = async (
   recruiterId: string
-): Promise<CardJobForRecruiter[]> => {
+): Promise<CardJob[]> => {
   try {
     const response = await apiClient.get(`/jobs-opened/${recruiterId}`, {
       headers: getAuthHeader(),
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
     throw error;
@@ -137,57 +155,14 @@ export const getListOpenedJobsWithId = async (
 
 export const getListClosedJobsWithId = async (
   recruiterId: string
-): Promise<CardJobForRecruiter[]> => {
+): Promise<CardJob[]> => {
   try {
     const response = await apiClient.get(`/jobs-closed/${recruiterId}`, {
       headers: getAuthHeader(),
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
-    throw error;
-  }
-};
-
-export const getDetailJobForGuest = async (
-  postId: string
-): Promise<JobDetailForGuest> => {
-  try {
-    const response = await apiClient.get(`/job/${postId}`);
-    console.log("Guest");
-    return response.data as JobDetailForGuest;
-  } catch (error) {
-    console.error("Error fetching post job details:", error);
-    throw error;
-  }
-};
-
-export const getDetailJobForCandidate = async (
-  postId: string
-): Promise<JobDetailForCandidate> => {
-  try {
-    const response = await apiClient.get(`/job/${postId}`, {
-      headers: getAuthHeader(),
-    });
-    console.log("Candidate");
-    return response.data as JobDetailForCandidate;
-  } catch (error) {
-    console.error("Error fetching post job details:", error);
-    throw error;
-  }
-};
-
-export const getDetailJobForRecruiter = async (
-  postId: string
-): Promise<JobDetailForRecruiter> => {
-  try {
-    const response = await apiClient.get(`/job/${postId}`, {
-      headers: getAuthHeader(),
-    });
-    console.log("Recruiter");
-    return response.data as JobDetailForRecruiter;
-  } catch (error) {
-    console.error("Error fetching post job details:", error);
     throw error;
   }
 };
@@ -202,7 +177,7 @@ export const createPost = async (postData: {
   company: null;
   postedBy: null;
   description: string;
-  Education: string;
+  education: string;
   requirements: string[];
   salary: {
     min: number;

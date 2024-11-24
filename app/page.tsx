@@ -22,14 +22,7 @@ const Home: React.FC = () => {
             Việc làm nổi bật
           </h2>
 
-          <JobList
-            searchQuery=""
-            sortOption="title"
-            sortOrder="asc"
-            // category=""
-            // city=""
-            // employmentType=""
-          />
+          <JobList searchQuery="" sortOption="title" sortOrder="asc" />
         </section>
       </div>
     </div>

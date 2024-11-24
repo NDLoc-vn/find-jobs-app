@@ -60,11 +60,13 @@ const MobileNav = () => {
           {isLoggedIn ? (
             // {true ? (
             <>
-              <Link href="/company/" className="w-full">
+              <Link href="/company/dashboard" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/company/" ? activeClass : inactiveClass
+                    pathname === "/company/dashboard"
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Trang chủ

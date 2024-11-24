@@ -1,23 +1,52 @@
 "use client";
 
-import { createPost } from "@/app/services/jobService";
-import Header from "@/app/ui/recruiter/Header";
-import { useState } from "react";
+import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
+import Header from "@/app/ui/company/Header";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default function PostJob() {
+export default function EditJob() {
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     title: "",
-    category: "Graphics & Design",
-    Education: "Intern",
-    employmentType: "Full-time",
-    city: "",
-    address: "",
-    salaryMin: "",
-    salaryMax: "",
+    category: "",
+    employmentType: "",
+    location: {
+      city: "",
+      address: "",
+    },
+    salary: {
+      min: 0,
+      max: 0,
+    },
     dueDate: "",
     description: "",
     requirements: "",
   });
+
+  const jobId = Array.isArray(id) ? id[0] : id;
+  useEffect(() => {
+    if (jobId) {
+      getDetailJobForGuest(jobId).then((data) => {
+        setFormData({
+          title: data.title,
+          category: data.category.name,
+          employmentType: data.employmentType,
+          location: {
+            city: data.location.city,
+            address: data.location.address,
+          },
+          salary: {
+            min: data.salary.min,
+            max: data.salary.max,
+          },
+          dueDate: data.dueDate,
+          description: data.description,
+          requirements: data.requirements.join("\n"),
+        });
+      });
+    }
+  }, [jobId]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -35,40 +64,26 @@ export default function PostJob() {
     e.preventDefault();
 
     const postData = {
-      id: null,
       title: formData.title,
-      category: {
-        id: "123abc",
-        name: formData.category,
-      },
-      company: null,
-      postedBy: null,
+      category: formData.category,
       description: formData.description,
-      education: formData.Education,
       requirements: formData.requirements.split("\n"),
-      salary: {
-        min: parseInt(formData.salaryMin, 10),
-        max: parseInt(formData.salaryMax, 10),
-        currency: "VND",
-      },
-      location: {
-        city: formData.city,
-        address: formData.address,
-      },
+      salaryMin: formData.salary.min,
+      salaryMax: formData.salary.max,
+      city: formData.location.city,
+      address: formData.location.address,
       employmentType: formData.employmentType,
-      postDate: Date().toString(),
       dueDate: formData.dueDate,
-      status: "open",
     };
 
     console.log("Sending data to server:", postData);
 
     try {
-      await createPost(postData);
-      alert("Đăng tin tuyển dụng thành công!");
+      await updatePost(jobId, postData);
+      alert("Chỉnh sửa tuyển dụng thành công!");
     } catch (error) {
-      alert("Đã xảy ra lỗi khi đăng tin.");
-      console.error("Error creating job post:", error);
+      alert("Đã xảy ra lỗi khi chỉnh sửa tin.");
+      console.error("Error update job post:", error);
     }
   };
 
@@ -79,7 +94,7 @@ export default function PostJob() {
         onSubmit={handleSubmit}
         className="my-10 max-w-4xl mx-auto p-8 border rounded-lg shadow-lg"
       >
-        <h2 className="text-2xl font-bold mb-6">Đăng tin tuyển dụng</h2>
+        <h2 className="text-2xl font-bold mb-6">Chỉnh sửa tin tuyển dụng</h2>
 
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="space-y-6 flex-1">
@@ -104,29 +119,6 @@ export default function PostJob() {
 
             <div>
               <label
-                htmlFor="Education"
-                className="block font-medium text-gray-700"
-              >
-                Trình độ<span className="text-red-500">*</span>
-              </label>
-              <select
-                id="Education"
-                name="Education"
-                value={formData.Education}
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
-              >
-                <option value="Intern">Intern</option>
-                <option value="Junior">Junior</option>
-                <option value="Mid-level">Mid-level</option>
-                <option value="Senior">Senior</option>
-                <option value="Manager">Manager</option>
-              </select>
-            </div>
-
-            <div>
-              <label
                 htmlFor="categories"
                 className="block font-medium text-gray-700"
               >
@@ -140,7 +132,9 @@ export default function PostJob() {
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="Graphics & Design">Graphics & Design</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
               </select>
             </div>
 
@@ -159,10 +153,9 @@ export default function PostJob() {
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="FULL-TIME">Full-time</option>
-                <option value="PART-TIME">Part-time</option>
-                <option value="CONTRACT">Contract</option>
-                <option value="INTERNSHIP">Internship</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
               </select>
             </div>
 
@@ -178,7 +171,7 @@ export default function PostJob() {
                   id="city"
                   name="city"
                   type="text"
-                  value={formData.city}
+                  value={formData.location.city}
                   onChange={handleChange}
                   placeholder="Đà Nẵng, ..."
                   required
@@ -196,7 +189,7 @@ export default function PostJob() {
                   id="address"
                   name="address"
                   type="text"
-                  value={formData.address}
+                  value={formData.location.address}
                   onChange={handleChange}
                   placeholder="Đà Nẵng, ..."
                   required
@@ -217,7 +210,7 @@ export default function PostJob() {
                   id="salaryMin"
                   name="salaryMin"
                   type="number"
-                  value={formData.salaryMin}
+                  value={formData.salary.min}
                   onChange={handleChange}
                   placeholder="Tối thiểu"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
@@ -234,7 +227,7 @@ export default function PostJob() {
                   id="salaryMax"
                   name="salaryMax"
                   type="number"
-                  value={formData.salaryMax}
+                  value={formData.salary.max}
                   onChange={handleChange}
                   placeholder="Tối đa"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"

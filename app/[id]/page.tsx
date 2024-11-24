@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { JobDetailSkeleton } from "../ui/sketetons";
-import { JobDetailForGuest } from "../lib/definitions";
+import { JobDetail } from "../lib/definitions";
 import Header from "../ui/homepage/Header";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -21,7 +21,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   const handleBack = () => {
     router.back();
   };
-  const [job, setJob] = React.useState<JobDetailForGuest | null>(null);
+  const [job, setJob] = React.useState<JobDetail | null>(null);
 
   useEffect(() => {
     const fetchJobDetail = async () => {

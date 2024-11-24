@@ -1,7 +1,7 @@
 export type CardJob = {
   id: string;
   title: string;
-  company: string;
+  companyName: string;
   salary: {
     min: number;
     max: number;
@@ -11,27 +11,15 @@ export type CardJob = {
     city: string;
     address: string;
   };
-  employmentType: string;
-};
-
-export type CardJobForRecruiter = {
-  id: string;
-  title: string;
-  company: { name: string };
-  salary: {
-    min: number;
-    max: number;
-    currency: string;
-  };
-  location: {
-    city: string;
-    address: string;
+  category: {
+    id: string;
+    name: string;
   };
   employmentType: string;
   numberApplicants: number;
 };
 
-export type JobDetailForGuest = {
+export type JobDetail = {
   id: string;
   title: string;
   category: {
@@ -52,55 +40,6 @@ export type JobDetailForGuest = {
   };
   employmentType: string;
   postDate: string;
-  dueDate: string;
-  status: string;
-};
-
-export type JobDetailForCandidate = {
-  id: string;
-  title: string;
-  category: {
-    id: string;
-    name: string;
-  };
-  companyName: string;
-  description: string;
-  requirements: string[];
-  salary: {
-    min: number;
-    max: number;
-    currency: string;
-  };
-  location: {
-    city: string;
-    address: string;
-  };
-  employmentType: string;
-  postDate: string;
-  dueDate: string;
-  status: string;
-  bookmark: boolean;
-  messageId: string;
-};
-
-export type JobDetailForRecruiter = {
-  id: string;
-  title: string;
-  category: string;
-  company: { name: string };
-  description: string;
-  requirements: string[];
-  salary: {
-    min: number;
-    max: number;
-    currency: string;
-  };
-  location: {
-    city: string;
-    address: string;
-  };
-  employmentType: string;
-  postedDate: string;
   dueDate: string;
   status: string;
   messageId: string;

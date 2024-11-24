@@ -1,10 +1,10 @@
 "use client";
 
 import Pagination from "@/app/ui/Pagination";
-import Header from "@/app/ui/recruiter/Header";
-import JobCardOpen from "@/app/ui/recruiter/JobCardOpen";
+import Header from "@/app/ui/company/Header";
 import SearchBar from "@/app/ui/SearchBar";
 import { useRouter } from "next/navigation";
+import JobCardOpen from "@/app/ui/company/JobCardOpen";
 
 const candidates = [
   {
@@ -67,10 +67,16 @@ const CandidateManager = () => {
           ← Back
         </button>
         <JobCardOpen
+          id="abc"
           title={"Junior Graphic Designer"}
           company={"Google Inc."}
-          salary={"$20,000 - $25,000"}
-          location={"Da Nang, Viet Nam"}
+          salaryMin={20000}
+          salaryMax={20000}
+          currency="VND"
+          address="Hai Van"
+          city="Da Nang"
+          employmentType="Internship"
+          numberApplicants={12}
         />
         <h2 className="text-2xl font-semibold mt-8 mb-2">
           Danh sách ứng viên: {12}
