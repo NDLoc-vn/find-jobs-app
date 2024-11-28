@@ -78,7 +78,8 @@ const Login = () => {
         response.headers["authorization"]
       ) {
         const token = response.headers["authorization"];
-        const userData = response.data.user;
+        const userData = response.data.account;
+        console.log(response.data)
         login(token, userData);
         toast.success("Đăng nhận thành công");
         router.push("/");
