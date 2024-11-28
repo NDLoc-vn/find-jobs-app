@@ -1,5 +1,9 @@
 import axios from "axios";
 import { CardJob, JobDetail } from "../lib/definitions";
+import { useAuth } from "../contexts/auth-context";
+
+// const { token, user } = useAuth();
+// const { token } = useAuth();
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_POSTS_API_URL,
@@ -10,7 +14,12 @@ const apiClient = axios.create({
 
 const getAuthHeader = () => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("authToken");
+    // const token = localStorage.getItem("authToken");
+    const cookies = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="));
+    console.log(cookies);
+    const token = cookies ? cookies.split("=")[1] : null;
     return token ? { Authorization: `${token}` } : {};
   }
   return {};
