@@ -1,5 +1,6 @@
 "use client";
 
+import { categories } from "@/app/lib/data";
 import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/recruiter/Header";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { useState } from "react";
 export default function PostJob() {
   const [formData, setFormData] = useState({
     title: "",
-    category: "Graphics & Design",
+    categories: categories[0]?.name || "",
     Education: "Intern",
     employmentType: "Full-time",
     city: "",
@@ -37,9 +38,9 @@ export default function PostJob() {
     const postData = {
       id: null,
       title: formData.title,
-      category: {
-        id: "123abc",
-        name: formData.category,
+      category: categories.find((c) => c.name === formData.categories) || {
+        id: "",
+        name: "",
       },
       company: null,
       postedBy: null,
@@ -56,7 +57,7 @@ export default function PostJob() {
         address: formData.address,
       },
       employmentType: formData.employmentType,
-      postDate: Date().toString(),
+      postDate: new Date().toISOString().split("T")[0],
       dueDate: formData.dueDate,
       status: "open",
     };
@@ -135,12 +136,16 @@ export default function PostJob() {
               <select
                 id="categories"
                 name="categories"
-                value={formData.category}
+                value={formData.categories}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="Graphics & Design">Graphics & Design</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 
