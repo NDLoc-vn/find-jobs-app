@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, Suspense, useRef, useEffect } from "react";
-import JobList from "@/app/ui/recruiter/JobList";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import Image from "next/image";
 import Header from "@/app/ui/admin/Header";
 import CreateAccountForm from "@/app/ui/company/CreateAccountForm";
 import { useRouter } from "next/navigation";
+import OpenJobList from "@/app/ui/admin/OpenJobList";
+import CloseJobList from "@/app/ui/admin/CloseJobList";
 
 interface Company {
   id: number;
@@ -241,7 +242,11 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
                 </div>
 
                 <Suspense fallback={<JobListSkeleton />}>
-                  <JobList activeTab={activeTab} />
+                  {activeTab === "openJobs" ? (
+                    <OpenJobList />
+                  ) : (
+                    <CloseJobList />
+                  )}
                 </Suspense>
               </>
             ) : (

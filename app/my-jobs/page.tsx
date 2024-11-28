@@ -1,10 +1,10 @@
 "use client";
 
-import JobList from "@/app/ui/user/JobList";
-import { JobListSkeleton } from "@/app/ui/sketetons";
-import { useState, Suspense, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Header from "../ui/user/Header";
 import SearchBar from "../ui/SearchBar";
+import AppliedJobList from "../ui/user/AppliedJobList";
+import BookmarkedJobList from "../ui/user/BookmarkedJobList";
 
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState<"applied" | "saved">("applied");
@@ -55,9 +55,7 @@ const MyJobs = () => {
           ></div>
         </div>
 
-        <Suspense fallback={<JobListSkeleton />}>
-          <JobList />
-        </Suspense>
+        {activeTab === "applied" ? <AppliedJobList /> : <BookmarkedJobList />}
       </div>
     </>
   );

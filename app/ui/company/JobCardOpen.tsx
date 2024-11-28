@@ -19,7 +19,7 @@ interface JobCardProps {
   numberApplicants: number;
 }
 
-const JobCardClose: React.FC<JobCardProps> = ({
+const JobCardOpen: React.FC<JobCardProps> = ({
   id,
   title,
   company,
@@ -34,7 +34,7 @@ const JobCardClose: React.FC<JobCardProps> = ({
   const router = useRouter();
 
   const handleEdit = () => {
-    router.push(`/recruiter/edit-job/${id}`);
+    router.push(`/company/edit-job/${id}`);
   };
 
   const handleDelete = async () => {
@@ -54,8 +54,8 @@ const JobCardClose: React.FC<JobCardProps> = ({
   };
 
   return (
-    <Link href={`/recruiter/candidate-manager/${id}`}>
-      <div className="cursor-pointer p-4 border rounded mb-4 bg-[#b3b3b3]">
+    <Link href={`/company/candidate-manager/${id}`}>
+      <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-lg">{title}</h3>
           <div className="flex space-x-2">
@@ -127,4 +127,4 @@ const JobCardClose: React.FC<JobCardProps> = ({
   );
 };
 
-export default JobCardClose;
+export default JobCardOpen;

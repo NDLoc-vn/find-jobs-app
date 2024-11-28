@@ -1,39 +1,17 @@
 "use client";
+
 import JobCard from "./JobCart";
 import { CardJob } from "@/app/lib/definitions";
-import { getListCardJobs } from "@/app/services/jobService";
+import { getListAppliedJobs } from "@/app/services/jobService";
 import { useEffect, useState } from "react";
 import { JobListSkeleton } from "../sketetons";
 
-interface JobListProps {
-  searchQuery?: string;
-  sortOption?: string;
-  sortOrder?: "asc" | "desc";
-  category?: string;
-  city?: string;
-  employmentType?: string;
-}
-
-const JobList: React.FC<JobListProps> = ({
-  searchQuery,
-  sortOption,
-  sortOrder,
-  category,
-  city,
-  employmentType,
-}) => {
+export default function AppliedJobList() {
   const [jobs, setJobs] = useState<CardJob[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getListCardJobs(
-      searchQuery,
-      sortOption,
-      sortOrder,
-      category,
-      city,
-      employmentType
-    )
+    getListAppliedJobs()
       .then((data) => {
         setJobs(data);
       })
@@ -67,6 +45,4 @@ const JobList: React.FC<JobListProps> = ({
       ))}
     </div>
   );
-};
-
-export default JobList;
+}
