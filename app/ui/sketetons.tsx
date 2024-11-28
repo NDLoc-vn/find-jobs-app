@@ -77,3 +77,39 @@ export function JobDetailSkeleton() {
     </div>
   );
 }
+
+export function UserDetailSkeleton() {
+  return (
+    <div className="max-w-4xl mx-auto p-4 animate-pulse">
+      <div className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
+        <div className="flex items-start space-x-4">
+          <div className="w-20 h-20 bg-gray-300 rounded-full mr-4"></div>
+          <div className="flex flex-col mt-2">
+            <div className="h-8 bg-gray-300 rounded w-48 mb-3"></div>
+            <div className="h-4 bg-gray-300 rounded w-48 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-48 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-48 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-48 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-48 mb-4"></div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 bg-white shadow-md rounded-lg p-4">
+        <h3 className="text-lg font-bold border-b-2">Học vấn</h3>
+        <div className="h-4 bg-gray-300 rounded w-48 my-4"></div>
+      </div>
+      <div className="mt-4 bg-white shadow-md rounded-lg p-4">
+        <h3 className="text-lg font-bold border-b-2">Kĩ năng</h3>
+        <div className="h-4 bg-gray-300 rounded w-48 my-4"></div>
+      </div>
+      <div className="mt-4 bg-white shadow-md rounded-lg p-4">
+        <h3 className="text-lg font-bold border-b-2">Kinh nghiệm làm việc</h3>
+        <div className="h-4 bg-gray-300 rounded w-48 my-4"></div>
+      </div>
+      <div className="mt-4 bg-white shadow-md rounded-lg p-4">
+        <h3 className="text-lg font-bold border-b-2">Hồ sơ xin việc</h3>
+        <div className="h-4 bg-gray-300 rounded w-48 my-4"></div>
+      </div>
+    </div>
+  );
+}

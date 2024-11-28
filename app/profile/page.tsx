@@ -5,37 +5,104 @@ import Image from "next/image";
 import Header from "../ui/user/Header";
 import { useAuth } from "../contexts/auth-context";
 import axios from "axios";
-import { UserProfileType } from "../lib/definitions";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
+import { formatDOB, toYYYYMMDD } from "../lib/utils";
+import SkillsForm from "../ui/user/profile/SkillsForm";
+import { UserDetailSkeleton } from "../ui/sketetons";
+import { ObjectId } from "bson";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+type UserProfileType = {
+  name: string;
+  location?: string;
+  phone?: string;
+  dateOfBirth?: string;
+  gender?: string;
+};
+
+type EducationType = {
+  _id: string;
+  school: string;
+  major: string;
+  duration: string;
+  description: string;
+};
+
+type ExperienceType = {
+  _id: string;
+  company: string;
+  position: string;
+  duration: string;
+  description: string;
+};
+
+type SkillType = {
+  _id: string;
+  title: string;
+};
+
+type checkType = {
+  _id: string;
+  name: string;
+};
 
 const ProfilePage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [activeForm, setActiveForm] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // temp
   const [richTextContent, setRichTextContent] = useState<string>("");
+
+  const [educations, setEducations] = useState<EducationType[]>([]);
+  const [education, setEducation] = useState<EducationType | null>(null);
+  const [experiences, setExperiences] = useState<ExperienceType[]>([]);
+  const [experience, setExperience] = useState<ExperienceType | null>(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [check, setCheck] = useState<checkType | null>(null);
+
+  // // temp skill
+  const [skills, setSkills] = useState<string[]>([]);
+  const [fetchedSkills, setFetchedSkills] = useState<SkillType[]>([]);
+  const [inputSkillValue, setInputSkillValue] = useState<string>("");
+  const handleSkillsInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputSkillValue(e.target.value);
+  };
+
+  const addSkill = (skill: string) => {
+    if (skills.includes(skill)) {
+      setSkills(skills.filter((s) => s !== skill));
+    } else {
+      setSkills([...skills, skill]);
+    }
+  };
+  // ////
 
   const { token, user } = useAuth();
 
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_USERS_API_URL}/profile/${user?.id}`,
+        `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/profile/${user?.userId}`,
         {
           headers: {
             Authorization: token,
           },
         }
       );
-      console.log(response);
       setUserProfile({
         name: response.data.name,
         location: response.data.location,
-        skills: response.data.skills,
-        experience: response.data.experiences,
-        education: response.data.education,
+        phone: response.data.phone,
+        dateOfBirth: response.data.dateOfBirth,
+        gender: response.data.gender,
       });
+      setEducations(response.data.education);
+      setExperiences(response.data.experience);
+      setFetchedSkills(response.data.skills);
+      setSkills(response.data.skills.map((skill: SkillType) => skill.title));
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -44,15 +111,20 @@ const ProfilePage = () => {
   const handleSave = () => {
     if (activeForm === "editProfile") {
       axios
-        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/profile`, {
-          headers: {
-            Authorization: token,
+        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/profile`,
+          {
+            name: userProfile?.name,
+            location: userProfile?.location,
+            phone: userProfile?.phone,
+            dateOfBirth: userProfile?.dateOfBirth,
+            gender: userProfile?.gender,
           },
-          _id: user?.id,
-
-          name: userProfile?.name,
-          location: userProfile?.location,
-        })
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
         .then(() => {
           fetchUserInfo();
           closeForm();
@@ -60,15 +132,173 @@ const ProfilePage = () => {
         .catch((err) => {
           console.error(err);
         });
-    } else {
-      console.log("not available");
+    } else if (activeForm === "education") {
+      axios
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/edu`,
+          {
+            "education": {
+              "school": education?.school,
+              "major": education?.major,
+              "duration": education?.duration,
+              "description": education?.description
+            }
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(() => {
+          fetchUserInfo();
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else if (activeForm === "skills") {
+      const postSkills: SkillType[] = skills.map(skill => {
+        const existingSkill = fetchedSkills.find(fetchedSkill => fetchedSkill.title === skill);
+        return {
+          _id: existingSkill ? existingSkill._id : new ObjectId().toHexString(),
+          title: skill,
+        };
+      });
+
+      const skillsToDelete = fetchedSkills.filter(fetchedSkill => !skills.includes(fetchedSkill.title));
+      skillsToDelete.forEach(skill => {
+        axios
+          .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/skills`,
+            {
+              headers: {
+                Authorization: token,
+              },
+              data: {
+                skillId: skill._id,
+              }
+            }
+          )
+          .catch((err) => {
+            console.error(err);
+          });
+      });
+
+      axios
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/skills`,
+          {
+            "skills": postSkills
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(() => {
+          fetchUserInfo();
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        }
+        );
+    } else if (activeForm === "experience") {
+      axios
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/exp`,
+          {
+            "experience": {
+              "company": experience?.company,
+              "position": experience?.position,
+              "duration": experience?.duration,
+              "description": experience?.description
+            }
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(() => {
+          fetchUserInfo();
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+    closeForm();
+  }
+
+  const handleDelete = () => {
+    const isConfirmed = confirm("Bạn có chắc chắn muốn xoá không?");
+    if (!isConfirmed) return;
+    if (activeForm === "education") {
+      axios
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/edu`,
+          {
+            headers: {
+              Authorization: token,
+            },
+            data: {
+              eduId: check?._id,
+            }
+          }
+        )
+        .then(() => {
+          setEducations(prevList => prevList.filter(item => item._id !== check?._id));
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else if (activeForm === "experience") {
+      axios
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/exp`,
+          {
+            headers: {
+              Authorization: token,
+            },
+            data: {
+              expId: check?._id,
+            }
+          }
+        )
+        .then(() => {
+          setExperiences(prevList => prevList.filter(item => item._id !== check?._id));
+          closeForm();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserProfileInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setUserProfile({ ...userProfile!, [name]: value });
   };
+
+  const handleEducationInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (isEdit) {
+      const { name, value } = e.target;
+      setEducations(prevList => prevList.map(item => item._id === check?._id ? { ...item, [name]: value } : item));
+    } else {
+      const { name, value } = e.target;
+      setEducation({ ...education!, [name]: value });
+    }
+  }
+
+  const handleExperienceInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (isEdit) {
+      const { name, value } = e.target;
+      setExperiences(prevList => prevList.map(item => item._id === check?._id ? { ...item, [name]: value } : item));
+    } else {
+      const { name, value } = e.target;
+      setExperience({ ...experience!, [name]: value });
+    }
+  }
 
   useEffect(() => {
     fetchUserInfo();
@@ -79,8 +309,19 @@ const ProfilePage = () => {
   };
 
   const closeForm = () => {
+    setIsEdit(false);
+    setCheck(null);
+    setEducation(null);
+    setExperience(null);
     setActiveForm(null);
   };
+
+  if (isLoading) {
+    return <>
+      <Header />
+      <UserDetailSkeleton />
+    </>
+  }
 
   return (
     <div>
@@ -105,23 +346,34 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📅</span>
-                  <p className="text-gray-500">Sinh nhật (be ch tra ve)</p>
+                  <p>
+                    {formatDOB(userProfile?.dateOfBirth)}
+                  </p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📍</span>
-                  <p className="text-gray-500">
+                  <p>
                     {userProfile?.location === ""
-                      ? "Địa điểm"
+                      ? "Địa chỉ"
                       : userProfile?.location}
                   </p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📞</span>
-                  <p>0914141141 (be ch tra ve)</p>
+                  <p>
+                    {userProfile?.phone === ""
+                      ? "Số điện thoại"
+                      : userProfile?.phone}
+                  </p>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2 text-blue-500">👤</span>
-                  <p className="text-gray-500">Giới tính (be ch tra ve)</p>
+                  <p>
+                    {userProfile?.gender === ""
+                      ? "Giới tính"
+                      : userProfile?.gender === "male" ? "Nam" : "Nữ"
+                    }
+                  </p>
                 </div>
               </div>
             </div>
@@ -139,7 +391,7 @@ const ProfilePage = () => {
 
         {/* Sections */}
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center border-b-2">
             <h3 className="text-lg font-bold">Học vấn</h3>
             <button onClick={() => openForm("education")} className="p-2">
               <Image
@@ -151,7 +403,43 @@ const ProfilePage = () => {
               <span className="sr-only">Add Education</span>
             </button>
           </div>
-          <p className="text-gray-500 mt-2">Share your background education</p>
+          {educations.length === 0 && (
+            <p className="text-gray-500 mt-2">No education information</p>
+          )}
+          <ul className="mt-2 space-y-2">
+            {educations.map((education: EducationType) => (
+              <li key={education._id} className="border-b pb-2 flex justify-between">
+                <div>
+                  <h4 className="font-bold">{education.school}</h4>
+                  <p>{education.major}</p>
+                  <p>
+                    {education.duration}
+                  </p>
+                  <p>{education.description}</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <button onClick={
+                    () => {
+                      setIsEdit(true);
+                      setCheck({
+                        _id: education._id,
+                        name: "education"
+                      });
+                      openForm("education");
+                    }
+                  } className="p-2">
+                    <Image
+                      src="/icon/edit-button.svg"
+                      width={20}
+                      height={20}
+                      alt="edit button"
+                    />
+                    <span className="sr-only">edit education</span>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
@@ -167,7 +455,19 @@ const ProfilePage = () => {
               <span className="sr-only">Add Skills</span>
             </button>
           </div>
-          <p className="text-gray-500 mt-2">Showcase your skills</p>
+          {skills.length === 0 && (
+            <p className="text-gray-500 mt-2">No skill information</p>
+          )}
+          <ul className="mt-2 space-y-2">
+            {skills.map((skill: string) => (
+              <span
+                key={skill}
+                className="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded-full cursor-pointer mr-2 mb-2"
+              >
+                {skill}
+              </span>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
@@ -183,7 +483,48 @@ const ProfilePage = () => {
               <span className="sr-only">Add Experience</span>
             </button>
           </div>
-          <p className="text-gray-500 mt-2">Introduce your experience</p>
+
+
+          {experiences.length === 0 && (
+            <p className="text-gray-500 mt-2">No Experience</p>
+          )}
+          <ul className="mt-2 space-y-2">
+            {experiences.map((experience: ExperienceType) => (
+              <li key={experience._id} className="border-b pb-2 flex justify-between">
+                <div>
+                  <h4 className="font-bold">{experience.company}</h4>
+                  <p>{experience.position}</p>
+                  <p>
+                    {experience.duration}
+                  </p>
+                  <p>{experience.description}</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <button onClick={
+                    () => {
+                      setIsEdit(true);
+                      setCheck({
+                        _id: experience._id,
+                        name: "experience"
+                      });
+                      openForm("experience");
+                    }
+                  } className="p-2">
+                    <Image
+                      src="/icon/edit-button.svg"
+                      width={20}
+                      height={20}
+                      alt="edit button"
+                    />
+                    <span className="sr-only">edit experience</span>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+
+
         </div>
 
         <div className="mt-4 bg-white shadow-md rounded-lg p-4">
@@ -225,7 +566,6 @@ const ProfilePage = () => {
 
               {/* Form Content*/}
               <div className="overflow-y-auto p-4 flex-1">
-                {/* Edit Profile Form */}
                 {activeForm === "editProfile" ? (
                   <form>
                     <div className="mb-4">
@@ -261,9 +601,10 @@ const ProfilePage = () => {
                       <input
                         type="date"
                         placeholder="Nhập ngày sinh"
+                        name="dateOfBirth"
+                        value={toYYYYMMDD(formatDOB(userProfile?.dateOfBirth))}
+                        onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        disabled
-                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -275,7 +616,7 @@ const ProfilePage = () => {
                         placeholder="Nhập địa chỉ"
                         name="location"
                         value={userProfile?.location}
-                        onChange={handleInputChange}
+                        onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>
@@ -286,10 +627,10 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         placeholder="Nhập số điện thoại"
-                        value={"0914141141"}
+                        name="phone"
+                        value={userProfile?.phone}
+                        onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        disabled
-                        readOnly
                       />
                     </div>
                     <div className="mb-4">
@@ -299,11 +640,131 @@ const ProfilePage = () => {
                       <select
                         title="Gender"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                        disabled
+                        name="gender"
+                        value={userProfile?.gender}
+                        onChange={handleUserProfileInputChange}
                       >
-                        <option>Nam</option>
-                        <option>Nữ</option>
+                        <option value="male">Nam</option>
+                        <option value="female">Nữ</option>
                       </select>
+                    </div>
+                  </form>
+                ) : activeForm === "education" ? (
+                  <form>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Trường học
+                      </label>
+                      <input
+                        type="text"
+                        name="school"
+                        value={educations.find((item) => item._id === check?._id)?.school}
+                        onChange={handleEducationInputChange}
+                        placeholder="Nhập trường học"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Chuyên ngành
+                      </label>
+                      <input
+                        type="text"
+                        name="major"
+                        value={educations.find((item) => item._id === check?._id)?.major}
+                        onChange={handleEducationInputChange}
+                        placeholder="Nhập chuyên ngành"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Thời gian học
+                      </label>
+                      <div className="flex space-x-4">
+                        <input
+                          type="text"
+                          name="duration"
+                          value={educations.find((item) => item._id === check?._id)?.duration}
+                          onChange={handleEducationInputChange}
+                          placeholder="Nhập chuyên ngành"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Mô tả
+                      </label>
+                      <textarea
+                        name="description"
+                        value={educations.find((item) => item._id === check?._id)?.description}
+                        onChange={handleEducationInputChange}
+                        placeholder="Nhập mô tả"
+                        rows={5}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </form>
+                ) : activeForm === "skills" ? (
+
+                  <SkillsForm skills={skills} inputValue={inputSkillValue} handleSkillsInputChange={handleSkillsInputChange} addSkill={addSkill} />
+
+                ) : activeForm === "experience" ? (
+                  <form>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Công ty
+                      </label>
+                      <input
+                        type="text"
+                        name="company"
+                        value={experiences.find((item) => item._id === check?._id)?.company}
+                        onChange={handleExperienceInputChange}
+                        placeholder="Nhập công ty"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Vị trí
+                      </label>
+                      <input
+                        type="text"
+                        name="position"
+                        value={experiences.find((item) => item._id === check?._id)?.position}
+                        onChange={handleExperienceInputChange}
+                        placeholder="Nhập vị trí"
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Thời gian làm việc
+                      </label>
+                      <div className="flex space-x-4">
+                        <input
+                          type="text"
+                          name="duration"
+                          value={experiences.find((item) => item._id === check?._id)?.duration}
+                          onChange={handleExperienceInputChange}
+                          placeholder="Nhập thời gian làm việc"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Mô tả
+                      </label>
+                      <textarea
+                        name="description"
+                        value={experiences.find((item) => item._id === check?._id)?.description}
+                        onChange={handleExperienceInputChange}
+                        placeholder="Nhập mô tả"
+                        rows={5}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      />
                     </div>
                   </form>
                 ) : (
@@ -321,7 +782,7 @@ const ProfilePage = () => {
               </div>
 
               {/* Form Footer */}
-              <div className="p-4 border-t flex justify-end space-x-4">
+              <  div className="p-4 border-t flex justify-end space-x-4">
                 <button
                   onClick={closeForm}
                   className="px-4 py-2 bg-gray-300 rounded-md"
@@ -334,12 +795,21 @@ const ProfilePage = () => {
                 >
                   Lưu
                 </button>
+                {isEdit && (
+                  <button
+                    onClick={handleDelete}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md"
+                  >
+                    Xoá
+                  </button>
+                )}
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+        }
+      </div >
+    </div >
   );
 };
 
