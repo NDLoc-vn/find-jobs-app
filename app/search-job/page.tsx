@@ -18,7 +18,7 @@ const SortOptions: React.FC<SortOptionsProps> = ({ onChange }) => (
       aria-label="Loại sắp xếp"
       onChange={(e) => onChange(e.target.value)}
     >
-      <option value="title">Tiêu đề</option>
+      <option value="time">Thời gian</option>
       <option value="minSalary">Mức lương tối thiểu</option>
       <option value="maxSalary">Mức lương tối đa</option>
     </select>
@@ -39,7 +39,7 @@ const SearchJob: React.FC = () => {
   const initialLocation = searchParams.get("location") || "";
   const initialEmployeeType = searchParams.get("employeeType") || "";
 
-  const [sortOption, setSortOption] = useState<string>("title");
+  const [sortOption, setSortOption] = useState<string>("time");
   const [order, setOrder] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
   const [location, setLocation] = useState<string>(initialLocation);
@@ -47,7 +47,7 @@ const SearchJob: React.FC = () => {
   const [category, setCategory] = useState<string>("");
 
   const handleSortChange = (value: string) => {
-    if (["title", "minSalary", "maxSalary"].includes(value)) {
+    if (["time", "minSalary", "maxSalary"].includes(value)) {
       setSortOption(value);
     } else {
       setOrder(value);

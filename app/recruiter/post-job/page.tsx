@@ -15,6 +15,7 @@ export default function PostJob() {
     address: "",
     salaryMin: "",
     salaryMax: "",
+    currency: "VND",
     dueDate: "",
     description: "",
     requirements: "",
@@ -50,7 +51,7 @@ export default function PostJob() {
       salary: {
         min: parseInt(formData.salaryMin, 10),
         max: parseInt(formData.salaryMax, 10),
-        currency: "VND",
+        currency: formData.currency,
       },
       location: {
         city: formData.city,
@@ -78,7 +79,7 @@ export default function PostJob() {
       <Header />
       <form
         onSubmit={handleSubmit}
-        className="my-10 max-w-4xl mx-auto p-8 border rounded-lg shadow-lg"
+        className="my-10 max-w-5xl mx-auto p-8 border rounded-lg shadow-lg"
       >
         <h2 className="text-2xl font-bold mb-6">Đăng tin tuyển dụng</h2>
 
@@ -210,8 +211,8 @@ export default function PostJob() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+              <div className="col-span-2">
                 <label
                   htmlFor="salaryMin"
                   className="block font-medium text-gray-700"
@@ -228,7 +229,7 @@ export default function PostJob() {
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
               </div>
-              <div>
+              <div className="col-span-2">
                 <label
                   htmlFor="salaryMax"
                   className="block font-medium text-gray-700"
@@ -244,6 +245,25 @@ export default function PostJob() {
                   placeholder="Tối đa"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
+              </div>
+              <div className="col-span-1">
+                <label
+                  htmlFor="currency"
+                  className="block font-medium text-gray-700"
+                >
+                  Tiền tệ
+                </label>
+                <select
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 p-2 w-fit border rounded-md focus:ring focus:ring-xanhduong-500"
+                >
+                  <option value="VND">VND</option>
+                  <option value="$">$</option>
+                </select>
               </div>
             </div>
 

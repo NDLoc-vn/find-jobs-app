@@ -55,7 +55,7 @@ export const getDetailJobForGuest = async (
   postId: string
 ): Promise<JobDetail> => {
   try {
-    const response = await apiClient.get(`/job/${postId}`);
+    const response = await apiClient.get(`/job/detail/${postId}`);
     console.log("Guest");
     return response.data.data as JobDetail;
   } catch (error) {
@@ -66,7 +66,7 @@ export const getDetailJobForGuest = async (
 
 export const getDetailJob = async (postId: string): Promise<JobDetail> => {
   try {
-    const response = await apiClient.get(`/job/${postId}`, {
+    const response = await apiClient.get(`/job/detail/${postId}`, {
       headers: getAuthHeader(),
     });
     return response.data.data as JobDetail;
@@ -102,21 +102,28 @@ export const getListBookmarkedJobs = async (): Promise<CardJob[]> => {
 
 export const addBookmarkedJob = async (postId: string): Promise<void> => {
   try {
-    const response = await apiClient.post(`/jobs-bookmark/add/${postId}`, {
-      headers: getAuthHeader(),
-    });
-    return response.data;
+    const response = await apiClient.post(
+      `/jobs-bookmark/add`,
+      { idPost: postId },
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data.data;
   } catch (error) {
-    console.error("Error fetching job list:", error);
+    console.error("Error adding job list:", error);
     throw error;
   }
 };
 
 export const deleteBookmarkedJob = async (postId: string): Promise<void> => {
   try {
-    const response = await apiClient.delete(`/jobs-bookmark/delete/${postId}`, {
-      headers: getAuthHeader(),
-    });
+    const response = await apiClient.delete(
+      `/jobs-bookmark/delete?idPost=${postId}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching job list:", error);

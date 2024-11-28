@@ -40,6 +40,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
         } else {
           data = await getDetailJobForGuest(id);
         }
+        setIsBookmarked(data.isBookMark);
         setJob(data);
       } catch (error) {
         console.error("Error fetching job details:", error);

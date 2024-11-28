@@ -86,7 +86,7 @@ const JobCard: React.FC<JobCardProps> = ({
             </div>
           </div>
 
-          {isLoggedIn ? (
+          {/* {isLoggedIn ? (
             <div className="flex ml-auto">
               <Image
                 src={
@@ -102,7 +102,7 @@ const JobCard: React.FC<JobCardProps> = ({
             </div>
           ) : (
             <></>
-          )}
+          )} */}
         </div>
       </div>
     </Link>

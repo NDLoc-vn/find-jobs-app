@@ -43,6 +43,7 @@ export type JobDetail = {
   dueDate: string;
   status: string;
   messageId: string;
+  isBookMark: boolean;
 };
 
 export type Job = {
