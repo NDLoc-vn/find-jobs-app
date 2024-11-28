@@ -69,7 +69,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  // const [success, setSuccess] = useState("");
 
   const checkError = () => {
     if (userData.password !== confirmPassword) {
@@ -167,7 +167,7 @@ const Signup = () => {
           />
 
           {error && <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>}
-          {success && <p className="text-green-500 col-span-1 md:col-span-2">{success}</p>}
+          {/* {success && <p className="text-green-500 col-span-1 md:col-span-2">{success}</p>} */}
 
           <button className="w-full py-2 px-4 bg-xanhduong-600 text-white rounded-lg mt-4 font-semibold">
             Đăng ký
