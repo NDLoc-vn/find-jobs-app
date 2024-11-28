@@ -3,22 +3,58 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { deletePost } from "@/app/services/jobService";
+import { useRouter } from "next/router";
 
 interface JobCardProps {
+  id: string;
   title: string;
   company: string;
-  salary: string;
-  location: string;
+  salaryMin: number;
+  salaryMax: number;
+  currency: string;
+  city: string;
+  address: string;
+  employmentType: string;
+  numberApplicants: number;
 }
 
 const JobCardOpen: React.FC<JobCardProps> = ({
+  id,
   title,
   company,
-  salary,
-  location,
+  salaryMin,
+  salaryMax,
+  currency,
+  city,
+  address,
+  employmentType,
+  numberApplicants,
 }) => {
+  const router = useRouter();
+
+  const handleEdit = () => {
+    router.push(`/recruiter/edit-job/${id}`);
+  };
+
+  const handleDelete = async () => {
+    const isConfirmed = window.confirm(
+      "Bạn có chắc chắn muốn xóa công việc này không?"
+    );
+
+    if (isConfirmed) {
+      try {
+        await deletePost(id);
+        alert("Xóa công việc thành công");
+      } catch (error) {
+        console.error("Lỗi khi xóa công việc:", error);
+        alert("Xóa công việc thất bại");
+      }
+    }
+  };
+
   return (
-    <Link href={"/recruiter/candidate-manager"}>
+    <Link href={`/recruiter/candidate-manager/${id}`}>
       <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-lg">{title}</h3>
@@ -29,6 +65,7 @@ const JobCardOpen: React.FC<JobCardProps> = ({
               height={20}
               alt="Edit"
               className="mr-2 cursor-pointer"
+              onClick={handleEdit}
             />
             <Image
               src="/icon/delete-circle.svg"
@@ -36,14 +73,17 @@ const JobCardOpen: React.FC<JobCardProps> = ({
               height={20}
               alt="Delete"
               className="cursor-pointer"
+              onClick={handleDelete}
             />
           </div>
         </div>
         <div className="flex flex-wrap items-center mt-1 gap-x-2">
           <span className="bg-green-100 text-green-600 font-semibold px-2 py-1 text-xs rounded">
-            INTERNSHIP
+            {employmentType}
           </span>
-          <p className="text-gray-400">Salary: {salary}</p>
+          <p className="text-gray-400">
+            Salary: {currency} {salaryMin}-{salaryMax}
+          </p>
         </div>
 
         <div className="flex items-center mt-2">
@@ -66,15 +106,15 @@ const JobCardOpen: React.FC<JobCardProps> = ({
                 height={20}
                 alt="Location"
               />
-              <p className="ml-1">{location}</p>
+              <p className="ml-1">
+                {city}, {address}
+              </p>
             </div>
           </div>
         </div>
 
         <div className="flex justify-between items-center rounded p-2 mt-2 bg-[#d9d9d9] px-4">
-          <p>
-            Số lượng ứng tuyển: <span>12</span>
-          </p>
+          <p>Số lượng ứng tuyển: {numberApplicants}</p>
           <Image
             src="/icon/mag-glass.svg"
             width={20}

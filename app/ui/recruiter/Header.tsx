@@ -9,7 +9,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 w-full px-4 py-2 bg-white shadow z-50 mb-64">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Link href="/recruiter/">
+          <Link href="/recruiter/dashboard">
             <Image
               src="/logo.png"
               alt="Logo"

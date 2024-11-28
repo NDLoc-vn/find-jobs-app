@@ -60,11 +60,13 @@ const MobileNav = () => {
           {isLoggedIn ? (
             // {true ? (
             <>
-              <Link href="/recruiter/" className="w-full">
+              <Link href="/recruiter/dashboard" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/recruiter/" ? activeClass : inactiveClass
+                    pathname === "/recruiter/dashboard"
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Trang chủ
@@ -86,7 +88,9 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/recruiter/post-manager"
+                    pathname === "/recruiter/post-manager" ||
+                      pathname === "/recruiter/candidate-manager" ||
+                      pathname === "/recruiter/edit-post"
                       ? activeClass
                       : inactiveClass
                   )}

@@ -3,61 +3,69 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Job2 } from "@/app/lib/definitions";
+import Link from "next/link";
+import { JobDetail } from "@/app/lib/definitions";
+import {
+  addBookmarkedJob,
+  deleteBookmarkedJob,
+  getDetailJob,
+  getDetailJobForGuest,
+} from "@/app/services/jobService";
 import { JobDetailSkeleton } from "@/app/ui/sketetons";
 import Header from "@/app/ui/user/Header";
+import { useAuth } from "@/app/contexts/auth-context";
 
-const JobPage = () => {
+type JobDetailPageProps = {
+  params: { id: string };
+};
+
+const JobPage = ({ params }: JobDetailPageProps) => {
+  const { isLoggedIn } = useAuth();
+  const { id } = params;
   const [loading, setLoading] = React.useState(true);
+  const [isBookmarked, setIsBookmarked] = React.useState(false);
   const router = useRouter();
 
   const handleBack = () => {
     router.back();
   };
-  //viet definition sau
-  const [job, setJob] = React.useState<Job2 | null>(null);
+  const [job, setJob] = React.useState<JobDetail | null>(null);
 
   useEffect(() => {
-    const fetchJobData = async () => {
-      const job = {
-        title: "Senior UX Designer",
-        category: "Design",
-        company: { name: "Facebook" },
-        description:
-          "Here at Velstar, we don’t just make websites; we create exceptional digital experiences that consumers love. Our team of designers, developers, strategists, and creators work together to push brands to the next level.",
-        requirements: [
-          "3+ years of experience in back-end development.",
-          "Experience with HTML, JavaScript, CSS, PHP, Symfony, and/or Laravel.",
-          "Working regularly with APIs and Web Services (REST, GraphQL, SOAP, etc.)",
-          "Ambitious and hungry to grow your career in a fast-growing agency.",
-        ],
-        salary: {
-          min: 100000,
-          max: 120000,
-          currency: "USD",
-        },
-        location: {
-          city: "Da Nang",
-          address: "Lien Chieu",
-        },
-        employmentType: "Full-Time",
-        postedDate: "14 Jun, 2021",
-        status: "Open",
-      };
-
-      // Simulate a delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setJob(job);
-      setLoading(false);
+    const fetchJobDetail = async () => {
+      try {
+        let data = null;
+        if (isLoggedIn) {
+          data = await getDetailJob(id);
+        } else {
+          data = await getDetailJobForGuest(id);
+        }
+        setJob(data);
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchJobData();
-  }, []);
+    fetchJobDetail();
+  }, [id]);
 
   if (loading) {
     return <JobDetailSkeleton />;
   }
+
+  const handleBookmarkClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsBookmarked(!isBookmarked);
+
+    if (!isBookmarked) {
+      addBookmarkedJob(id);
+    } else {
+      deleteBookmarkedJob(id);
+    }
+  };
 
   return (
     <div className="container mx-auto h-screen p-6 mt-10 bg-white max-w-5xl">
@@ -80,7 +88,7 @@ const JobPage = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-800">{job?.title}</h1>
             <span className="text-lg text-gray-500 mr-2">
-              at {job?.company.name}
+              at {job?.companyName}
             </span>
             <span className="text-sm font-semibold bg-green-600 text-white px-2 pt-0.5 pb-1 rounded">
               {job?.employmentType}
@@ -88,18 +96,36 @@ const JobPage = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="flex-shrink-0">
-            <div className="rounded bg-blue-600 hover:bg-blue-500 p-2">
-              <Image
-                src="/icon/bookmark.svg"
-                width={20}
-                height={20}
-                alt="bookmark"
-              />
-            </div>
-          </div>
+          {isLoggedIn ? (
+            <>
+              <div className="flex-shrink-0">
+                <div className="rounded bg-green-600 hover:bg-green-500 p-2">
+                  <Image
+                    src={
+                      isBookmarked
+                        ? "/icon/bookmark-filled.svg"
+                        : "/icon/bookmark.svg"
+                    }
+                    width={20}
+                    height={20}
+                    alt="bookmark"
+                    onClick={handleBookmarkClick}
+                  />
+                </div>
+              </div>
+              <div>
+                <Link href="/message">
+                  <button className="w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+                    Contact Recruiter
+                  </button>
+                </Link>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
           <div className="flex-grow">
-            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+            <button className="w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
               Apply Now &#8594;
             </button>
           </div>
@@ -116,9 +142,13 @@ const JobPage = () => {
             Requirements
           </h2>
           <ul className="list-disc pl-6 text-gray-600">
-            {job?.requirements.map((req: string, index: number) => (
-              <li key={index}>{req}</li>
-            ))}
+            {job?.requirements?.length ? (
+              job.requirements.map((req: string, index: number) => (
+                <li key={index}>{req}</li>
+              ))
+            ) : (
+              <li>Không có yêu cầu nào</li>
+            )}
           </ul>
         </div>
         <div className="p-4">
@@ -145,7 +175,10 @@ const JobPage = () => {
             Job Overview
           </h2>
           <p className="text-gray-600">
-            <strong>Job Posted:</strong> {job?.postedDate}
+            <strong>Job Posted:</strong> {job?.postDate}
+          </p>
+          <p className="text-gray-600">
+            <strong>Due:</strong> {job?.dueDate}
           </p>
           <p className="text-gray-600">
             <strong>Status:</strong> {job?.status}

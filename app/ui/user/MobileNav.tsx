@@ -17,6 +17,7 @@ const MobileNav = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("authToken");
     logout();
   };
 
