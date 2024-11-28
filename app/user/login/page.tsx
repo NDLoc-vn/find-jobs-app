@@ -37,29 +37,62 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_USERS_API_URL}/auth`,
-        userData
-      );
-      if (
-        response.status === 200 &&
-        response.headers["authorization"]
-      ) {
+      const mockResponse = {
+        status: 200,
+        headers: {
+          "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzQ3MDBhNThmZWQzY2Q0NDEzMTQzOTMiLCJlbWFpbCI6InRlc3R1c2VyMkBnbWFpbC5jb20iLCJyb2xlIjoiY2FuZGlkYXRlIiwiaWF0IjoxNzMyNzMwMDAxfQ.HUVIOTgO7qQUgJ1oy-xJQIOuBZz0HP0k8CJnVbe2vFA"
+        },
+        data: {
+          "message": "Authentication successful",
+          "account": {
+            "_id": "674700a6d4e03d709fb7f4b1",
+            "userId": "674700a58fed3cd441314393",
+            "name": "testuser2",
+            "email": "testuser2@gmail.com",
+            "role": "candidate"
+          }
+        }
+      };
+
+      // Simulate CORS issue by using mock response
+      const response = mockResponse;
+
+      if (response.status === 200 && response.headers["authorization"]) {
         const token = response.headers["authorization"];
-        const userData = response.data.user;
+        const userData = response.data.account;
         login(token, userData);
-        toast.success("Đăng nhận thành công");
-        router.push("/");
-      } else if (response.status === 400) {
-        // bughh return wrong status code
-        setError("Đăng nhập thất bại");
-      } else if (response.status === 401) {
-        setError("Đăng nhập thất bại");
+        console.log(response.data.message);
+        toast.success("Đăng nhập thành công");
       }
     } catch (err) {
       setError("Đăng nhập thất bại");
       // toast.error("Đăng nhập thất bại");
     }
+
+    // try {
+    //   const response = await axios.post(
+    //     `${process.env.NEXT_PUBLIC_AUTH_API_URL}/auth`,
+    //     userData
+    //   );
+    //   if (
+    //     response.status === 200 &&
+    //     response.headers["authorization"]
+    //   ) {
+    //     const token = response.headers["authorization"];
+    //     const userData = response.data.user;
+    //     login(token, userData);
+    //     toast.success("Đăng nhận thành công");
+    //     router.push("/");
+    //   } else if (response.status === 400) {
+    //     // bughh return wrong status code
+    //     setError("Đăng nhập thất bại");
+    //   } else if (response.status === 401) {
+    //     setError("Đăng nhập thất bại");
+    //   }
+    // } catch (err) {
+    //   setError("Đăng nhập thất bại");
+    //   // toast.error("Đăng nhập thất bại");
+    // }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -34,12 +34,6 @@ export type Company = {
   website: string;
 }
 
-export type UserDataType = {
-  id: string;
-  email: string;
-  name: string;
-}
-
 export type UserProfileType = {
   name: string;
   location: string;
