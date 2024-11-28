@@ -100,7 +100,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/register`, userData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/register`, userData);
       if (response.status === 201) {
         toast.success("Đăng ký thành công");
         router.push("/user/login");

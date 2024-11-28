@@ -84,7 +84,7 @@ const ProfilePage = () => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/profile/${user?.userId}`,
+        `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${user?.userId}`,
         {
           headers: {
             Authorization: token,
@@ -111,7 +111,7 @@ const ProfilePage = () => {
   const handleSave = () => {
     if (activeForm === "editProfile") {
       axios
-        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/profile`,
+        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile`,
           {
             name: userProfile?.name,
             location: userProfile?.location,
@@ -134,7 +134,7 @@ const ProfilePage = () => {
         });
     } else if (activeForm === "education") {
       axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/edu`,
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu`,
           {
             "education": {
               "school": education?.school,
@@ -168,7 +168,7 @@ const ProfilePage = () => {
       const skillsToDelete = fetchedSkills.filter(fetchedSkill => !skills.includes(fetchedSkill.title));
       skillsToDelete.forEach(skill => {
         axios
-          .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/skills`,
+          .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills`,
             {
               headers: {
                 Authorization: token,
@@ -184,7 +184,7 @@ const ProfilePage = () => {
       });
 
       axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/skills`,
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills`,
           {
             "skills": postSkills
           },
@@ -204,7 +204,7 @@ const ProfilePage = () => {
         );
     } else if (activeForm === "experience") {
       axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/exp`,
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp`,
           {
             "experience": {
               "company": experience?.company,
@@ -235,7 +235,7 @@ const ProfilePage = () => {
     if (!isConfirmed) return;
     if (activeForm === "education") {
       axios
-        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/edu`,
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu`,
           {
             headers: {
               Authorization: token,
@@ -254,7 +254,7 @@ const ProfilePage = () => {
         });
     } else if (activeForm === "experience") {
       axios
-        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/users/exp`,
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp`,
           {
             headers: {
               Authorization: token,
