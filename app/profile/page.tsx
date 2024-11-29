@@ -11,6 +11,7 @@ import { formatDOB, toYYYYMMDD } from "../lib/utils";
 import SkillsForm from "../ui/user/profile/SkillsForm";
 import { UserDetailSkeleton } from "../ui/sketetons";
 import { ObjectId } from "bson";
+import { toast } from "react-toastify";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -133,29 +134,64 @@ const ProfilePage = () => {
           console.error(err);
         });
     } else if (activeForm === "education") {
-      axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu`,
-          {
-            "education": {
-              "school": education?.school,
-              "major": education?.major,
-              "duration": education?.duration,
-              "description": education?.description
-            }
-          },
-          {
-            headers: {
-              Authorization: token,
+      if (isEdit) {
+        const education = educations.find((item) => item._id === check?._id);
+        if (!education?.school || !education?.major || !education?.duration || !education?.description) {
+          toast.error("All fields are required.");
+          return;
+        }
+        axios
+          .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${check?._id}`,
+            {
+              "education": {
+                "school": education?.school,
+                "major": education?.major,
+                "duration": education?.duration,
+                "description": education?.description
+              }
             },
-          }
-        )
-        .then(() => {
-          fetchUserInfo();
-          closeForm();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .then(() => {
+            fetchUserInfo();
+            closeForm();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        if (!education?.school || !education?.major || !education?.duration || !education?.description) {
+          toast.error("All fields are required.");
+          return;
+        }
+        axios
+          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu`,
+            {
+              "education": {
+                "school": education?.school,
+                "major": education?.major,
+                "duration": education?.duration,
+                "description": education?.description
+              }
+            },
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .then(() => {
+            fetchUserInfo();
+            closeForm();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     } else if (activeForm === "skills") {
       const postSkills: SkillType[] = skills.map(skill => {
         const existingSkill = fetchedSkills.find(fetchedSkill => fetchedSkill.title === skill);
@@ -203,29 +239,60 @@ const ProfilePage = () => {
         }
         );
     } else if (activeForm === "experience") {
-      axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp`,
-          {
-            "experience": {
-              "company": experience?.company,
-              "position": experience?.position,
-              "duration": experience?.duration,
-              "description": experience?.description
-            }
-          },
-          {
-            headers: {
-              Authorization: token,
+      if (isEdit) {
+        const experience = experiences.find((item) => item._id === check?._id);
+        if (!experience?.company || !experience?.position || !experience?.duration || !experience?.description) {
+          toast.error("All fields are required.");
+          return;
+        }
+        axios
+          .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${check?._id}`,
+            {
+              "experience": {
+                "company": experience?.company,
+                "position": experience?.position,
+                "duration": experience?.duration,
+                "description": experience?.description,
+              }
             },
-          }
-        )
-        .then(() => {
-          fetchUserInfo();
-          closeForm();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .then(() => {
+            fetchUserInfo();
+            closeForm();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        axios
+          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp`,
+            {
+              "experience": {
+                "company": experience?.company,
+                "position": experience?.position,
+                "duration": experience?.duration,
+                "description": experience?.description
+              }
+            },
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .then(() => {
+            fetchUserInfo();
+            closeForm();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
     closeForm();
   }
