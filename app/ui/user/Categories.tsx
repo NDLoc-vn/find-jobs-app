@@ -1,29 +1,16 @@
+import { categories } from "@/app/lib/data";
 import React, { useState } from "react";
 
-type Category = {
-  name: string;
-};
+// type Category = {
+//   name: string;
+// };
 
 type CategoriesProps = {
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
 };
 
-const allCategories: Category[] = [
-  { name: "Graphics & Design" },
-  { name: "Code & Programming" },
-  { name: "Digital Marketing" },
-  { name: "Video & Animation" },
-  { name: "Writing & Translation" },
-  { name: "Music & Audio" },
-  { name: "Business & Finance" },
-  { name: "Lifestyle & Wellness" },
-  { name: "Photography" },
-  { name: "IT & Networking" },
-  { name: "Engineering" },
-  { name: "Education & Training" },
-  { name: "Consulting" },
-];
+const allCategories = categories;
 
 const Categories: React.FC<CategoriesProps> = ({
   selectedCategory,

@@ -1,5 +1,6 @@
 "use client";
 
+import { categories } from "@/app/lib/data";
 import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/recruiter/Header";
 import { useState } from "react";
@@ -7,13 +8,14 @@ import { useState } from "react";
 export default function PostJob() {
   const [formData, setFormData] = useState({
     title: "",
-    category: "Graphics & Design",
+    categories: categories[0]?.name || "",
     Education: "Intern",
     employmentType: "Full-time",
     city: "",
     address: "",
     salaryMin: "",
     salaryMax: "",
+    currency: "VND",
     dueDate: "",
     description: "",
     requirements: "",
@@ -37,9 +39,9 @@ export default function PostJob() {
     const postData = {
       id: null,
       title: formData.title,
-      category: {
-        id: "123abc",
-        name: formData.category,
+      category: categories.find((c) => c.name === formData.categories) || {
+        id: "",
+        name: "",
       },
       company: null,
       postedBy: null,
@@ -49,15 +51,15 @@ export default function PostJob() {
       salary: {
         min: parseInt(formData.salaryMin, 10),
         max: parseInt(formData.salaryMax, 10),
-        currency: "VND",
+        currency: formData.currency,
       },
       location: {
         city: formData.city,
         address: formData.address,
       },
       employmentType: formData.employmentType,
-      postDate: Date().toString(),
-      dueDate: formData.dueDate,
+      postDate: Math.floor(new Date().getTime()).toString(),
+      dueDate: new Date(formData.dueDate).getTime().toString(),
       status: "open",
     };
 
@@ -77,7 +79,7 @@ export default function PostJob() {
       <Header />
       <form
         onSubmit={handleSubmit}
-        className="my-10 max-w-4xl mx-auto p-8 border rounded-lg shadow-lg"
+        className="my-10 max-w-5xl mx-auto p-8 border rounded-lg shadow-lg"
       >
         <h2 className="text-2xl font-bold mb-6">Đăng tin tuyển dụng</h2>
 
@@ -135,12 +137,16 @@ export default function PostJob() {
               <select
                 id="categories"
                 name="categories"
-                value={formData.category}
+                value={formData.categories}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="Graphics & Design">Graphics & Design</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -205,8 +211,8 @@ export default function PostJob() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+              <div className="col-span-2">
                 <label
                   htmlFor="salaryMin"
                   className="block font-medium text-gray-700"
@@ -223,7 +229,7 @@ export default function PostJob() {
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
               </div>
-              <div>
+              <div className="col-span-2">
                 <label
                   htmlFor="salaryMax"
                   className="block font-medium text-gray-700"
@@ -239,6 +245,25 @@ export default function PostJob() {
                   placeholder="Tối đa"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
+              </div>
+              <div className="col-span-1">
+                <label
+                  htmlFor="currency"
+                  className="block font-medium text-gray-700"
+                >
+                  Tiền tệ
+                </label>
+                <select
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 p-2 w-fit border rounded-md focus:ring focus:ring-xanhduong-500"
+                >
+                  <option value="VND">VND</option>
+                  <option value="$">$</option>
+                </select>
               </div>
             </div>
 

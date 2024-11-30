@@ -69,9 +69,10 @@ const SearchBar = () => {
           className="border px-10 py-2 w-full rounded-md"
         >
           <option value="">Loại nhân viên</option>
-          <option value="full-time">Full-time</option>
-          <option value="part-time">Part-time</option>
-          <option value="internship">Internship</option>
+          <option value="FULL-TIME">FULL-TIME</option>
+          <option value="PART-TIME">PART-TIME</option>
+          <option value="INTERNSHIP">INTERNSHIP</option>
+          <option value="CONTRACT">CONTRACT</option>
         </select>
       </div>
 

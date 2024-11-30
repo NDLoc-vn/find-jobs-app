@@ -1,5 +1,9 @@
 import axios from "axios";
 import { CardJob, JobDetail } from "../lib/definitions";
+// import { useAuth } from "../contexts/auth-context";
+
+// const { token, user } = useAuth();
+// const { token } = useAuth();
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_POSTS_API_URL,
@@ -10,7 +14,12 @@ const apiClient = axios.create({
 
 const getAuthHeader = () => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("authToken");
+    // const token = localStorage.getItem("authToken");
+    const cookies = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="));
+    console.log(cookies);
+    const token = cookies ? cookies.split("=")[1] : null;
     return token ? { Authorization: `${token}` } : {};
   }
   return {};
@@ -46,7 +55,7 @@ export const getDetailJobForGuest = async (
   postId: string
 ): Promise<JobDetail> => {
   try {
-    const response = await apiClient.get(`/job/${postId}`);
+    const response = await apiClient.get(`/job/detail/${postId}`);
     console.log("Guest");
     return response.data.data as JobDetail;
   } catch (error) {
@@ -57,7 +66,7 @@ export const getDetailJobForGuest = async (
 
 export const getDetailJob = async (postId: string): Promise<JobDetail> => {
   try {
-    const response = await apiClient.get(`/job/${postId}`, {
+    const response = await apiClient.get(`/job/detail/${postId}`, {
       headers: getAuthHeader(),
     });
     return response.data.data as JobDetail;
@@ -93,21 +102,28 @@ export const getListBookmarkedJobs = async (): Promise<CardJob[]> => {
 
 export const addBookmarkedJob = async (postId: string): Promise<void> => {
   try {
-    const response = await apiClient.post(`/jobs-bookmark/add/${postId}`, {
-      headers: getAuthHeader(),
-    });
-    return response.data;
+    const response = await apiClient.post(
+      `/jobs-bookmark/add`,
+      { idPost: postId },
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data.data;
   } catch (error) {
-    console.error("Error fetching job list:", error);
+    console.error("Error adding job list:", error);
     throw error;
   }
 };
 
 export const deleteBookmarkedJob = async (postId: string): Promise<void> => {
   try {
-    const response = await apiClient.delete(`/jobs-bookmark/delete/${postId}`, {
-      headers: getAuthHeader(),
-    });
+    const response = await apiClient.delete(
+      `/jobs-bookmark/delete?idPost=${postId}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
@@ -117,7 +133,7 @@ export const deleteBookmarkedJob = async (postId: string): Promise<void> => {
 
 export const getListOpenedJobs = async (): Promise<CardJob[]> => {
   try {
-    const response = await apiClient.get("/jobs-opened", {
+    const response = await apiClient.get("/job/opened", {
       headers: getAuthHeader(),
     });
     return response.data.data;
@@ -129,7 +145,7 @@ export const getListOpenedJobs = async (): Promise<CardJob[]> => {
 
 export const getListClosedJobs = async (): Promise<CardJob[]> => {
   try {
-    const response = await apiClient.get("/jobs-closed", {
+    const response = await apiClient.get("/job/closed", {
       headers: getAuthHeader(),
     });
     return response.data.data;
@@ -220,7 +236,7 @@ export const updatePost = async (
   }
 ): Promise<void> => {
   try {
-    const response = await apiClient.put(`/update/${postId}`, postData, {
+    const response = await apiClient.put(`/update?idPost=${postId}`, postData, {
       headers: getAuthHeader(),
     });
     console.log("Post update successfully:", response.data);
@@ -232,7 +248,7 @@ export const updatePost = async (
 
 export const deletePost = async (postId: string): Promise<void> => {
   try {
-    const response = await apiClient.delete(`/delete/${postId}`, {
+    const response = await apiClient.delete(`/job/delete?idPost=${postId}`, {
       headers: getAuthHeader(),
     });
     return response.data;

@@ -125,10 +125,12 @@ const JobPage = ({ params }: JobDetailPageProps) => {
             Job Overview
           </h2>
           <p className="text-gray-600">
-            <strong>Job Posted:</strong> {job?.postDate}
+            <strong>Job Posted:</strong>{" "}
+            {new Date(Number(job?.postDate)).toISOString().split("T")[0]}
           </p>
           <p className="text-gray-600">
-            <strong>Due:</strong> {job?.dueDate}
+            <strong>Due:</strong>{" "}
+            {new Date(Number(job?.dueDate)).toISOString().split("T")[0]}
           </p>
           <p className="text-gray-600">
             <strong>Status:</strong> {job?.status}

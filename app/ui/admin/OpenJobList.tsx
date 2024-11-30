@@ -42,7 +42,7 @@ export default function OpenJobList() {
             city={job.location.city}
             address={job.location.address}
             employmentType={job.employmentType}
-            numberApplicants={job.numberApplicants}
+            numberApplicants={job.numberApplicant}
           />
         );
       })}

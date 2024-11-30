@@ -16,7 +16,7 @@ export type CardJob = {
     name: string;
   };
   employmentType: string;
-  numberApplicants: number;
+  numberApplicant: number;
 };
 
 export type JobDetail = {
@@ -43,6 +43,7 @@ export type JobDetail = {
   dueDate: string;
   status: string;
   messageId: string;
+  isBookMark: boolean;
 };
 
 export type Job = {
