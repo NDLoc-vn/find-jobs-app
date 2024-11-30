@@ -3,7 +3,7 @@
 import CloseJobList from "@/app/ui/recruiter/CloseJobList";
 import Header from "@/app/ui/recruiter/Header";
 import OpenJobList from "@/app/ui/recruiter/OpenJobList";
-import SearchBar from "@/app/ui/SearchBar";
+// import SearchBar from "@/app/ui/SearchBar";
 import { useState, useRef, useEffect } from "react";
 
 const PostManager = () => {

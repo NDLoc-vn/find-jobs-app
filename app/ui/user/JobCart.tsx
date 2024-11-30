@@ -3,11 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "@/app/contexts/auth-context";
-import {
-  addBookmarkedJob,
-  deleteBookmarkedJob,
-} from "@/app/services/jobService";
+// import { useAuth } from "@/app/contexts/auth-context";
+// import {
+//   addBookmarkedJob,
+//   deleteBookmarkedJob,
+// } from "@/app/services/jobService";
 
 interface JobCardProps {
   id: string;
@@ -32,20 +32,20 @@ const JobCard: React.FC<JobCardProps> = ({
   address,
   employmentType,
 }) => {
-  const { isLoggedIn } = useAuth();
-  const [isBookmarked, setIsBookmarked] = React.useState(false);
+  // const { isLoggedIn } = useAuth();
+  // const [isBookmarked, setIsBookmarked] = React.useState(false);
 
-  const handleBookmarkClick = (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsBookmarked(!isBookmarked);
+  // const handleBookmarkClick = (event: React.MouseEvent) => {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  //   setIsBookmarked(!isBookmarked);
 
-    if (!isBookmarked) {
-      addBookmarkedJob(id);
-    } else {
-      deleteBookmarkedJob(id);
-    }
-  };
+  //   if (!isBookmarked) {
+  //     addBookmarkedJob(id);
+  //   } else {
+  //     deleteBookmarkedJob(id);
+  //   }
+  // };
 
   return (
     <Link href={`/search-job/${id}`}>

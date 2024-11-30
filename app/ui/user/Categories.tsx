@@ -1,9 +1,9 @@
 import { categories } from "@/app/lib/data";
 import React, { useState } from "react";
 
-type Category = {
-  name: string;
-};
+// type Category = {
+//   name: string;
+// };
 
 type CategoriesProps = {
   selectedCategory: string;

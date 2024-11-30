@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CardJob, JobDetail } from "../lib/definitions";
-import { useAuth } from "../contexts/auth-context";
+// import { useAuth } from "../contexts/auth-context";
 
 // const { token, user } = useAuth();
 // const { token } = useAuth();

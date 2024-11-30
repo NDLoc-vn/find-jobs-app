@@ -2,7 +2,7 @@
 
 import Pagination from "@/app/ui/Pagination";
 import Header from "@/app/ui/recruiter/Header";
-import JobCardOpen from "@/app/ui/recruiter/JobCardOpen";
+import JobCardOpen from "@/app/ui/company/JobCardOpen";
 import SearchBar from "@/app/ui/SearchBar";
 import { useRouter } from "next/navigation";
 
