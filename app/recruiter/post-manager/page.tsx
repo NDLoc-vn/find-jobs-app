@@ -27,8 +27,8 @@ const PostManager = () => {
     <>
       <Header />
       <div className="container mx-auto mb-14 px-4 flex flex-col gap-8">
-        <SearchBar />
-        <div className="relative">
+        {/* <SearchBar /> */}
+        <div className="relative mt-5">
           <div className="flex justify-start gap-8 text-xl">
             <button
               ref={openJobsdRef}

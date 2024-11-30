@@ -17,6 +17,7 @@ interface JobCardProps {
   address: string;
   employmentType: string;
   numberApplicants: number;
+  onDelete: (id: string) => void;
 }
 
 const JobCardClose: React.FC<JobCardProps> = ({
@@ -30,14 +31,17 @@ const JobCardClose: React.FC<JobCardProps> = ({
   address,
   employmentType,
   numberApplicants,
+  onDelete,
 }) => {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleEdit = () => {
-    router.push(`/recruiter/edit-job/${id}`);
-  };
+  // const handleEdit = () => {
+  //   router.push(`/recruiter/edit-job/${id}`);
+  // };
 
-  const handleDelete = async () => {
+  const handleDelete = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     const isConfirmed = window.confirm(
       "Bạn có chắc chắn muốn xóa công việc này không?"
     );
@@ -46,6 +50,7 @@ const JobCardClose: React.FC<JobCardProps> = ({
       try {
         await deletePost(id);
         alert("Xóa công việc thành công");
+        onDelete(id);
       } catch (error) {
         console.error("Lỗi khi xóa công việc:", error);
         alert("Xóa công việc thất bại");
@@ -65,7 +70,7 @@ const JobCardClose: React.FC<JobCardProps> = ({
               height={20}
               alt="Edit"
               className="mr-2 cursor-pointer"
-              onClick={handleEdit}
+              // onClick={handleEdit}
             />
             <Image
               src="/icon/delete-circle.svg"

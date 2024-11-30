@@ -23,6 +23,10 @@ export default function OpenJobList() {
       });
   }, []);
 
+  const handleDeleteJob = (id: string) => {
+    setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+  };
+
   if (loading) {
     return <JobListSkeleton />;
   }
@@ -42,7 +46,8 @@ export default function OpenJobList() {
             city={job.location.city}
             address={job.location.address}
             employmentType={job.employmentType}
-            numberApplicants={job.numberApplicants}
+            numberApplicants={job.numberApplicant}
+            onDelete={handleDeleteJob}
           />
         );
       })}

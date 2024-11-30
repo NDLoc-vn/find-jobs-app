@@ -58,8 +58,8 @@ export default function PostJob() {
         address: formData.address,
       },
       employmentType: formData.employmentType,
-      postDate: new Date().toISOString().split("T")[0],
-      dueDate: formData.dueDate,
+      postDate: Math.floor(new Date().getTime()).toString(),
+      dueDate: new Date(formData.dueDate).getTime().toString(),
       status: "open",
     };
 

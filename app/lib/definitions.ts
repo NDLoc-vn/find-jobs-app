@@ -16,7 +16,7 @@ export type CardJob = {
     name: string;
   };
   employmentType: string;
-  numberApplicants: number;
+  numberApplicant: number;
 };
 
 export type JobDetail = {

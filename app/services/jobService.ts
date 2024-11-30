@@ -133,7 +133,7 @@ export const deleteBookmarkedJob = async (postId: string): Promise<void> => {
 
 export const getListOpenedJobs = async (): Promise<CardJob[]> => {
   try {
-    const response = await apiClient.get("/jobs-opened", {
+    const response = await apiClient.get("/job/opened", {
       headers: getAuthHeader(),
     });
     return response.data.data;
@@ -145,7 +145,7 @@ export const getListOpenedJobs = async (): Promise<CardJob[]> => {
 
 export const getListClosedJobs = async (): Promise<CardJob[]> => {
   try {
-    const response = await apiClient.get("/jobs-closed", {
+    const response = await apiClient.get("/job/closed", {
       headers: getAuthHeader(),
     });
     return response.data.data;
@@ -236,7 +236,7 @@ export const updatePost = async (
   }
 ): Promise<void> => {
   try {
-    const response = await apiClient.put(`/update/${postId}`, postData, {
+    const response = await apiClient.put(`/update?idPost=${postId}`, postData, {
       headers: getAuthHeader(),
     });
     console.log("Post update successfully:", response.data);
@@ -248,7 +248,7 @@ export const updatePost = async (
 
 export const deletePost = async (postId: string): Promise<void> => {
   try {
-    const response = await apiClient.delete(`/delete/${postId}`, {
+    const response = await apiClient.delete(`/job/delete?idPost=${postId}`, {
       headers: getAuthHeader(),
     });
     return response.data;
