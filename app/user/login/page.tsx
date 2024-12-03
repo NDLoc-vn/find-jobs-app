@@ -73,7 +73,10 @@ const Login = () => {
         `${process.env.NEXT_PUBLIC_AUTH_API_URL}/api/auth`,
         userData
       );
-      if (response.status === 200 && response.headers["authorization"]) {
+      if (response.status === 200 &&
+        response.headers["authorization"] &&
+        response.data.account.role === "candidate"
+      ) {
         const token = response.headers["authorization"];
         const userData = response.data.account;
         console.log(response.data);
