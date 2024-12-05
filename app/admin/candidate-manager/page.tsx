@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/app/ui/admin/Header";
 import Pagination from "@/app/ui/Pagination";
 import SearchBar from "@/app/ui/SearchBar";
 import Image from "next/image";
@@ -66,7 +65,6 @@ const accounts: CandidateAccount[] = [
 const CandidateManager = () => {
   return (
     <div className="container mx-auto p-6">
-      <Header />
       <h2 className="text-2xl font-semibold mt-8 mb-2">
         Danh sách tài khoản tìm việc: {12}
       </h2>

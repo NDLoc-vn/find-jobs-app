@@ -3,7 +3,6 @@
 import { useState, Suspense, useRef, useEffect } from "react";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import Image from "next/image";
-import Header from "@/app/ui/admin/Header";
 import CreateAccountForm from "@/app/ui/company/CreateAccountForm";
 import { useRouter } from "next/navigation";
 import OpenJobList from "@/app/ui/admin/OpenJobList";
@@ -102,8 +101,6 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
 
   return (
     <div>
-      <Header />
-
       <div className="container mx-auto p-6">
         <button
           onClick={handleBack}
@@ -161,9 +158,8 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
               <div
                 key={account.id}
                 onClick={() => handleAccountClick(account.id)}
-                className={`border p-4 rounded-lg shadow-md cursor-pointer ${
-                  activeAccount === account.id ? "border-blue-500" : ""
-                }`}
+                className={`border p-4 rounded-lg shadow-md cursor-pointer ${activeAccount === account.id ? "border-blue-500" : ""
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -208,22 +204,20 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
                   <div className="flex justify-start gap-8 text-xl">
                     <button
                       ref={openJobsRef}
-                      className={`py-2 text-xl ${
-                        activeTab === "openJobs"
+                      className={`py-2 text-xl ${activeTab === "openJobs"
                           ? "text-blue-500"
                           : "text-gray-500"
-                      }`}
+                        }`}
                       onClick={() => setActiveTab("openJobs")}
                     >
                       Đang tuyển
                     </button>
                     <button
                       ref={closeJobsRef}
-                      className={`py-2 text-xl ${
-                        activeTab === "closeJobs"
+                      className={`py-2 text-xl ${activeTab === "closeJobs"
                           ? "text-blue-500"
                           : "text-gray-500"
-                      }`}
+                        }`}
                       onClick={() => setActiveTab("closeJobs")}
                     >
                       Đã đóng
