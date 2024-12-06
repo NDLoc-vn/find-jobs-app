@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { deletePost } from "@/app/services/jobService";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface JobCardProps {
   id: string;
@@ -33,11 +33,13 @@ const JobCardOpen: React.FC<JobCardProps> = ({
   numberApplicants,
   onDelete,
 }) => {
-  // const router = useRouter();
+  const router = useRouter();
 
-  // const handleEdit = () => {
-  //   router.push(`/recruiter/edit-job/${id}`);
-  // };
+  const handleEdit = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    router.push(`/recruiter/edit-post/${id}`);
+  };
 
   const handleDelete = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -70,7 +72,7 @@ const JobCardOpen: React.FC<JobCardProps> = ({
               height={20}
               alt="Edit"
               className="mr-2 cursor-pointer"
-              // onClick={handleEdit}
+              onClick={handleEdit}
             />
             <Image
               src="/icon/delete-circle.svg"

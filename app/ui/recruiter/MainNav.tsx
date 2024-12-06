@@ -19,7 +19,8 @@ const MainNav = () => {
     setShowDropdown((prev) => !prev);
   };
 
-  const isActive = (route: string) => pathname === route;
+  // const isActive = (route: string) => pathname === route;
+  const isActive = (route: string) => pathname.startsWith(route);
 
   return (
     <div className="flex items-center space-x-4">
