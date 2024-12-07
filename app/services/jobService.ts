@@ -220,23 +220,44 @@ export const createPost = async (postData: {
   }
 };
 
-export const updatePost = async (
-  postId: string,
-  postData: {
-    title?: string;
-    category?: string;
-    description?: string;
-    requirements?: string[];
-    salaryMin?: number;
-    salaryMax?: number;
-    city?: string;
-    address?: string;
-    employmentType?: string;
-    dueDate?: string;
-  }
-): Promise<void> => {
+export const updatePost = async (postData: {
+  // title?: string;
+  // category?: string;
+  // description?: string;
+  // requirements?: string[];
+  // salaryMin?: number;
+  // salaryMax?: number;
+  // city?: string;
+  // address?: string;
+  // employmentType?: string;
+  // dueDate?: string;
+  id: string;
+  title: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  company: string;
+  postedBy: null;
+  description: string;
+  education: string;
+  requirements: string[];
+  salary: {
+    min: number;
+    max: number;
+    currency: string;
+  };
+  location: {
+    city: string;
+    address: string;
+  };
+  employmentType: string;
+  postDate: string;
+  dueDate: string;
+  status: string;
+}): Promise<void> => {
   try {
-    const response = await apiClient.put(`/update?idPost=${postId}`, postData, {
+    const response = await apiClient.put(`/job/update`, postData, {
       headers: getAuthHeader(),
     });
     console.log("Post update successfully:", response.data);

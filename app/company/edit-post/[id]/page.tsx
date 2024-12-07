@@ -1,6 +1,7 @@
 "use client";
 
-import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
+// import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
+import { getDetailJobForGuest } from "@/app/services/jobService";
 import Header from "@/app/ui/company/Header";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -79,7 +80,7 @@ export default function EditJob() {
     console.log("Sending data to server:", postData);
 
     try {
-      await updatePost(jobId, postData);
+      // await updatePost(jobId, postData);
       alert("Chỉnh sửa tuyển dụng thành công!");
     } catch (error) {
       alert("Đã xảy ra lỗi khi chỉnh sửa tin.");

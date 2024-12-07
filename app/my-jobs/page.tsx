@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Header from "../ui/user/Header";
-import SearchBar from "../ui/SearchBar";
 import AppliedJobList from "../ui/user/AppliedJobList";
 import BookmarkedJobList from "../ui/user/BookmarkedJobList";
+import SearchBar from "../ui/homepage/SearchBar";
 
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState<"applied" | "saved">("applied");

@@ -36,7 +36,8 @@ const JobCard: React.FC<JobCardProps> = ({
             {employmentType.toUpperCase()}
           </span>
           <p className="text-gray-400">
-            Salary: {currency} {salaryMin}-{salaryMax}
+            Salary: {currency} {salaryMin.toLocaleString()}-
+            {salaryMax.toLocaleString()}
           </p>
         </div>
 

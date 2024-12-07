@@ -2,9 +2,13 @@
 
 import Pagination from "@/app/ui/Pagination";
 import Header from "@/app/ui/recruiter/Header";
-import JobCardOpen from "@/app/ui/company/JobCardOpen";
+import JobCardOpen from "@/app/ui/recruiter/JobCardOpen";
 import SearchBar from "@/app/ui/SearchBar";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { useEffect } from "react";
+import React from "react";
+import { JobDetail } from "@/app/lib/definitions";
+import { getDetailJobForGuest } from "@/app/services/jobService";
 
 const candidates = [
   {
@@ -51,9 +55,31 @@ const candidates = [
 
 const CandidateManager = () => {
   const router = useRouter();
+  const [job, setJob] = React.useState<JobDetail | null>(null);
+  const { id } = useParams();
+  const jobId = Array.isArray(id) ? id[0] : id;
 
   const handleBack = () => {
     router.back();
+  };
+
+  useEffect(() => {
+    const fetchJobDetail = async () => {
+      try {
+        const data = await getDetailJobForGuest(jobId);
+        setJob(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+
+    fetchJobDetail();
+  }, [id]);
+
+  const handleDeleteJob = (id: string) => {
+    id;
+    router.push(`/recruiter/post-manager`);
   };
 
   return (
@@ -67,16 +93,17 @@ const CandidateManager = () => {
           ← Back
         </button>
         <JobCardOpen
-          id="abc"
-          title={"Junior Graphic Designer"}
-          company={"Google Inc."}
-          salaryMin={20000}
-          salaryMax={20000}
-          currency="VND"
-          address="Hai Van"
-          city="Da Nang"
-          employmentType="Internship"
+          id={job?.id || ""}
+          title={job?.title || ""}
+          company={job?.companyName || ""}
+          salaryMin={job?.salary.min || 0}
+          salaryMax={job?.salary.max || 0}
+          currency={job?.salary.currency || ""}
+          address={job?.location.address || ""}
+          city={job?.location.city || ""}
+          employmentType={job?.employmentType || ""}
           numberApplicants={12}
+          onDelete={handleDeleteJob}
         />
         <h2 className="text-2xl font-semibold mt-8 mb-2">
           Danh sách ứng viên: {12}

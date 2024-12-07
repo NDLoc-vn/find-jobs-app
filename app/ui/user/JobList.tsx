@@ -54,7 +54,8 @@ const JobList: React.FC<JobListProps> = ({
     return <JobListSkeleton />;
   }
 
-  const totalPages = Math.ceil(jobs?.length / jobsPerPage);
+  // const totalPages = Math.ceil(jobs?.length / jobsPerPage);
+  const totalPages = jobs?.length ? Math.ceil(jobs.length / jobsPerPage) : 0;
   const startIndex = (currentPage - 1) * jobsPerPage;
   const currentJobs = jobs?.slice(startIndex, startIndex + jobsPerPage);
 

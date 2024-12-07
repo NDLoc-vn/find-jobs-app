@@ -13,7 +13,7 @@ const Categories = () => {
     <div className="mt-12">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Danh mục phổ biến</h2>
-        <Link className="text-xanhduong-600 hover:underline" href="#">
+        <Link className="text-xanhduong-600 hover:underline" href="/search-job">
           Xem tất cả &#8594;
         </Link>
       </div>

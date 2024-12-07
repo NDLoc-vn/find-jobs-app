@@ -19,7 +19,8 @@ const MainNav = () => {
     setShowDropdown((prev) => !prev);
   };
 
-  const isActive = (route: string) => pathname === route;
+  // const isActive = (route: string) => pathname === route;
+  const isActive = (route: string) => pathname.startsWith(route);
 
   return (
     <div className="flex items-center space-x-4">
@@ -51,7 +52,8 @@ const MainNav = () => {
             className={`text-lg px-3 py-2 rounded-lg ${
               isActive("/recruiter/post-manager") ||
               isActive("/recruiter/candidate-manager") ||
-              isActive("/recruiter/edit-post")
+              isActive("/recruiter/edit-post") ||
+              isActive("/search-job")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}

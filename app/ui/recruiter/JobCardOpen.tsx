@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { deletePost } from "@/app/services/jobService";
-// import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 
 interface JobCardProps {
   id: string;
@@ -33,11 +33,14 @@ const JobCardOpen: React.FC<JobCardProps> = ({
   numberApplicants,
   onDelete,
 }) => {
-  // const router = useRouter();
+  const router = useRouter();
+  const path = usePathname();
 
-  // const handleEdit = () => {
-  //   router.push(`/recruiter/edit-job/${id}`);
-  // };
+  const handleEdit = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    router.push(`/recruiter/edit-post/${id}`);
+  };
 
   const handleDelete = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -58,8 +61,14 @@ const JobCardOpen: React.FC<JobCardProps> = ({
     }
   };
 
+  const handleSeeCandidate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/recruiter/candidate-manager/${id}`);
+  };
+
   return (
-    <Link href={`/recruiter/candidate-manager/${id}`}>
+    <Link href={`/search-job/${id}`}>
       <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-lg">{title}</h3>
@@ -70,7 +79,7 @@ const JobCardOpen: React.FC<JobCardProps> = ({
               height={20}
               alt="Edit"
               className="mr-2 cursor-pointer"
-              // onClick={handleEdit}
+              onClick={handleEdit}
             />
             <Image
               src="/icon/delete-circle.svg"
@@ -87,7 +96,8 @@ const JobCardOpen: React.FC<JobCardProps> = ({
             {employmentType}
           </span>
           <p className="text-gray-400">
-            Salary: {currency} {salaryMin}-{salaryMax}
+            Salary: {currency} {salaryMin.toLocaleString()}-
+            {salaryMax.toLocaleString()}
           </p>
         </div>
 
@@ -118,15 +128,22 @@ const JobCardOpen: React.FC<JobCardProps> = ({
           </div>
         </div>
 
-        <div className="flex justify-between items-center rounded p-2 mt-2 bg-[#d9d9d9] px-4">
-          <p>Số lượng ứng tuyển: {numberApplicants}</p>
-          <Image
-            src="/icon/mag-glass.svg"
-            width={20}
-            height={20}
-            alt="Search icon"
-          />
-        </div>
+        {path.startsWith("/recruiter/candidate-manager") ? (
+          <div></div>
+        ) : (
+          <div
+            className="flex justify-between items-center rounded p-2 mt-2 bg-[#d9d9d9] px-4"
+            onClick={handleSeeCandidate}
+          >
+            <p>Số lượng ứng tuyển: {numberApplicants}</p>
+            <Image
+              src="/icon/mag-glass.svg"
+              width={20}
+              height={20}
+              alt="Search icon"
+            />
+          </div>
+        )}
       </div>
     </Link>
   );
