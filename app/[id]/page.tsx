@@ -4,10 +4,12 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { JobDetailSkeleton } from "../ui/sketetons";
 import { JobDetail } from "../lib/definitions";
-import Header from "../ui/homepage/Header";
+import UserHeader from "../ui/homepage/Header";
+import RecruiterHeader from "../ui/recruiter/Header";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getDetailJobForGuest } from "../services/jobService";
+import { useAuth } from "../contexts/auth-context";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -16,6 +18,7 @@ type JobDetailPageProps = {
 const JobPage = ({ params }: JobDetailPageProps) => {
   const { id } = params;
   const [loading, setLoading] = React.useState(true);
+  const { user } = useAuth();
   const router = useRouter();
 
   const handleBack = () => {
@@ -45,7 +48,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
 
   return (
     <div className="container mx-auto h-screen p-6 mt-10 bg-white max-w-5xl">
-      <Header />
+      {user?.role === "candidate" ? <UserHeader /> : <RecruiterHeader />}
       <button
         onClick={handleBack}
         className="text-blue-600 hover:text-blue-800 mb-4"
@@ -71,15 +74,19 @@ const JobPage = ({ params }: JobDetailPageProps) => {
             </span>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <Link href={"/user/login"}>
-            <div className="flex-grow">
-              <button className="w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
-                Apply Now &#8594;
-              </button>
-            </div>
-          </Link>
-        </div>
+        {user?.role === "candidate" ? (
+          <div className="flex items-center space-x-4">
+            <Link href={"/user/login"}>
+              <div className="flex-grow">
+                <button className="w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+                  Apply Now &#8594;
+                </button>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

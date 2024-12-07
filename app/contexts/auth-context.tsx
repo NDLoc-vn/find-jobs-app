@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 type UserDataType = {
   _id: string;
@@ -10,7 +16,7 @@ type UserDataType = {
   name: string;
   email: string;
   role: string;
-}
+};
 
 interface AuthContextType {
   token: string | null;
@@ -30,8 +36,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken = Cookies.get('token');
-    const storedUser = Cookies.get('user');
+    const storedToken = Cookies.get("token");
+    const storedUser = Cookies.get("user");
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
@@ -42,17 +48,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (newToken: string, newUser: UserDataType) => {
     setToken(newToken);
     setUser(newUser);
-    Cookies.set('token', newToken, { expires: 7 });
-    Cookies.set('user', JSON.stringify(newUser), { expires: 7 });
-    router.push('/');
+    Cookies.set("token", newToken, { expires: 7 });
+    Cookies.set("user", JSON.stringify(newUser), { expires: 7 });
+    router.push("/");
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    Cookies.remove('token');
-    Cookies.remove('user');
-    router.push('/');
+    Cookies.remove("token");
+    Cookies.remove("user");
+    router.push("/");
   };
 
   if (loading) {
@@ -69,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

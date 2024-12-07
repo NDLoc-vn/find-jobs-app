@@ -152,7 +152,14 @@ const Dashboard = () => {
         <div className="flex flex-row gap-x-4">
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Total Candidate</CardTitle>
+              <CardTitle>Số lượng bài đăng</CardTitle>
+            </CardHeader>
+            <CardContent></CardContent>
+            <CardFooter></CardFooter>
+          </Card>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Ứng viên ứng tuyển</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-4xl">12345</p>
@@ -168,7 +175,7 @@ const Dashboard = () => {
 
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Total Company</CardTitle>
+              <CardTitle>Nhà tuyển dụng</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-4xl">30</p>
@@ -180,14 +187,6 @@ const Dashboard = () => {
                 </button>
               </Link>
             </CardFooter>
-          </Card>
-
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle></CardTitle>
-            </CardHeader>
-            <CardContent></CardContent>
-            <CardFooter></CardFooter>
           </Card>
         </div>
 

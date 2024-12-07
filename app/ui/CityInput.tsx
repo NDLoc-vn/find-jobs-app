@@ -8,12 +8,18 @@ interface CityInputProps {
   className?: string;
 }
 
-export default function CityInput({onCityInput, changeCityValid, className}: CityInputProps) {
-  const [suggestions, setSuggestions] = useState<{ name: string; code: number }[]>([]);
+export default function CityInput({
+  onCityInput,
+  changeCityValid,
+  className,
+}: CityInputProps) {
+  const [suggestions, setSuggestions] = useState<
+    { name: string; code: number }[]
+  >([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [cityNames, setCityNames] = useState<string[]>([]);
   const [isValidCity, setIsValidCity] = useState<boolean>(false);
-  const excludeCity = ['Thành phố Hồ Chí Minh'];
+  const excludeCity = ["Thành phố Hồ Chí Minh"];
 
   useEffect(() => {
     document.addEventListener("click", () => {
@@ -24,22 +30,24 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
 
   useEffect(() => {
     changeCityValid(isValidCity);
-  }, [isValidCity])
+  }, [isValidCity]);
 
   const fetchAllCity = async () => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION_ALL}`);
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_LOCATION_ALL}`
+      );
       const cityNames = data.map((city: { name: string; code: number }) => {
         if (excludeCity.includes(city.name)) {
           return city.name;
         }
-        city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+        city.name.replace(/(Thành phố) |(Tỉnh) /g, "");
       });
       setCityNames(cityNames);
     } catch (err) {
       console.error("Error fetching city names: ", err);
     }
-  }
+  };
 
   const fetchSuggestions = async (searchQuery: string): Promise<void> => {
     if (searchQuery.length < 2) {
@@ -48,12 +56,14 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
     }
 
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_LOCATION}${searchQuery}`);
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_LOCATION}${searchQuery}`
+      );
       data.map((city: { name: string; code: number }) => {
         if (!excludeCity.includes(city.name)) {
-          city.name = city.name.replace(/(Thành phố) |(Tỉnh) /g, '');
+          city.name = city.name.replace(/(Thành phố) |(Tỉnh) /g, "");
         }
-      })
+      });
       setSuggestions(data);
     } catch (error) {
       console.error("Error fetching city suggestions: ", error);
@@ -71,7 +81,7 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
     }
     fetchSuggestions(searchQuery);
     onCityInput(e);
-  }
+  };
 
   const handleSuggestionClick = (city: { name: string; code: number }) => {
     setSearchQuery(city.name);
@@ -84,19 +94,25 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
       <input
         type="text"
         className={clsx(
-          className ? className : "w-full p-2 border border-gray-300 rounded-lg",
-          !isValidCity && searchQuery !== "" ? "text-red-300" : "text-black",
+          className
+            ? className
+            : "w-full p-2 border border-gray-300 rounded-lg",
+          !isValidCity && searchQuery !== "" ? "text-red-300" : "text-black"
         )}
         name="city"
         value={searchQuery}
-        onChange={handleInputChange} 
-        placeholder="Thành phố"
+        onChange={handleInputChange}
+        placeholder="Tỉnh thành"
         autoComplete="off"
       />
       {suggestions.length > 0 && (
         <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto shadow-lg">
           {suggestions.map((city, index) => (
-            <li key={index} onClick={() => handleSuggestionClick(city)} className="p-2 hover:bg-gray-200 cursor-pointer">
+            <li
+              key={index}
+              onClick={() => handleSuggestionClick(city)}
+              className="p-2 hover:bg-gray-200 cursor-pointer"
+            >
               {city.name}
             </li>
           ))}
@@ -110,4 +126,3 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
     </>
   );
 }
-
