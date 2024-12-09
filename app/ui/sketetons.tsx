@@ -116,7 +116,7 @@ export function UserDetailSkeleton() {
 
 export function AdminDashboardSkeleton() {
   return (
-    <div className="flex flex-col container mx-auto gap-y-4 mt-4">
+    <div className={`flex flex-col animate-pulse container mx-auto gap-y-4 mt-4`}>
       <div className="flex flex-row gap-x-4">
         <div className="w-full">
           <div className="bg-white border rounded-xl pl-6 py-5 space-y-8 shadow">

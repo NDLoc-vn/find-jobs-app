@@ -6,6 +6,7 @@ import Footer from "./ui/Footer";
 import { AuthProvider } from "./contexts/auth-context";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import QueryClientProviderWrapper from "./hooks/QueryClientProviderWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,21 +39,24 @@ export default function RootLayout({
       <body
         className={`${lexend.className} ${geistSans.variable} ${geistMono.variable} pt-20 antialiased`}
       >
-        <AuthProvider>
-          {children}
-          <ToastContainer
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </AuthProvider>
+        <QueryClientProviderWrapper>
+          <AuthProvider>
+            {children}
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </AuthProvider>
+        </QueryClientProviderWrapper>
+
         <Footer />
       </body>
     </html>

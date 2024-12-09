@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import axios from "axios"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { useAuth } from "@/app/contexts/auth-context";
 import {
@@ -20,48 +19,22 @@ import {
 } from "@/components/ui/chart"
 import Link from "next/link"
 import { AdminDashboardSkeleton } from "@/app/ui/sketetons";
-
-type MonthlyData = {
-  month: number;
-  year: number;
-  count: number;
-};
-
-type UserData = {
-  totalUsers: number;
-  usersCreatedToday: number;
-  usersCreatedEachMonth: MonthlyData[];
-};
-
-type RecruiterData = {
-  totalRecruiters: number;
-  recruitersCreatedToday: number;
-  recruitersCreatedEachMonth: MonthlyData[];
-};
-
-type GrowthData = {
-  users: UserData;
-  recruiters: RecruiterData;
-};
+import { useAdminDashboardData } from "@/app/hooks/useAdminDashboardData";
 
 const Dashboard = () => {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("candidate")
-  const [data, setData] = React.useState<GrowthData | null>(null)
   const { token } = useAuth();
+  const { data, isLoading } = useAdminDashboardData(token ?? "");
 
-  React.useEffect(() => {
-    axios.get("https://user-service-job-system.onrender.com/api/statistics/growth/", {
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then((response) => setData(response.data))
-      .catch((error) => console.error("Error fetching data:", error))
-  }, [token])
+  if (isLoading) {
+    return (
+      <AdminDashboardSkeleton />
+    )
+  }
 
   if (!data) {
     return (
-      <AdminDashboardSkeleton />
+      <div>no data</div>
     )
   }
 

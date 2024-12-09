@@ -141,10 +141,10 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
           </div>
         </div>
 
-        <h1 className="text-2xl font-semibold mt-8 mb-2">
+        {/* <h1 className="text-2xl font-semibold mt-8 mb-2">
           Tạo tài khoản tuyển dụng:
         </h1>
-        <CreateAccountForm />
+        <CreateAccountForm /> */}
 
         <h1 className="text-2xl font-semibold mt-8 mb-2">
           Danh sách tài khoản tuyển dụng: {accounts.length}
@@ -205,8 +205,8 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
                     <button
                       ref={openJobsRef}
                       className={`py-2 text-xl ${activeTab === "openJobs"
-                          ? "text-blue-500"
-                          : "text-gray-500"
+                        ? "text-blue-500"
+                        : "text-gray-500"
                         }`}
                       onClick={() => setActiveTab("openJobs")}
                     >
@@ -215,8 +215,8 @@ const RecruiterManager = ({ params }: { params: { id: number } }) => {
                     <button
                       ref={closeJobsRef}
                       className={`py-2 text-xl ${activeTab === "closeJobs"
-                          ? "text-blue-500"
-                          : "text-gray-500"
+                        ? "text-blue-500"
+                        : "text-gray-500"
                         }`}
                       onClick={() => setActiveTab("closeJobs")}
                     >

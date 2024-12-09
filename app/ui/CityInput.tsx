@@ -8,7 +8,7 @@ interface CityInputProps {
   className?: string;
 }
 
-export default function CityInput({onCityInput, changeCityValid, className}: CityInputProps) {
+export default function CityInput({ onCityInput, changeCityValid, className }: CityInputProps) {
   const [suggestions, setSuggestions] = useState<{ name: string; code: number }[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [cityNames, setCityNames] = useState<string[]>([]);
@@ -89,7 +89,7 @@ export default function CityInput({onCityInput, changeCityValid, className}: Cit
         )}
         name="city"
         value={searchQuery}
-        onChange={handleInputChange} 
+        onChange={handleInputChange}
         placeholder="Thành phố"
         autoComplete="off"
       />
