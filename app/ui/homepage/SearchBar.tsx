@@ -23,6 +23,12 @@ const SearchBar = () => {
     router.push(`/search-job?${queryString}`);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="flex flex-nowrap flex-col md:flex-row justify-center mt-8">
       <div className="relative md:w-1/3 w-full mb-2 md:mb-0 mr-2">
@@ -40,6 +46,7 @@ const SearchBar = () => {
           className="border px-10 py-2 w-full rounded-md"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
 
@@ -58,6 +65,7 @@ const SearchBar = () => {
           className="border px-10 py-2 w-full rounded-md"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
 

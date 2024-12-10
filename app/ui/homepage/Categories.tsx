@@ -1,14 +1,53 @@
-import React from "react";
-import Link from "next/link";
+"use client";
 
-const categories = [
-  { name: "Graphics & Design", positions: 357 },
-  { name: "Code & Programming", positions: 312 },
-  { name: "Digital Marketing", positions: 287 },
-  { name: "Video & Animation", positions: 247 },
-];
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { getListCardJobs } from "@/app/services/jobService";
+import { useRouter } from "next/navigation";
+
+// const categories = [
+//   { name: "Graphics & Design", positions: 357 },
+//   { name: "Code & Programming", positions: 312 },
+//   { name: "Digital Marketing", positions: 287 },
+//   { name: "Video & Animation", positions: 247 },
+// ];
 
 const Categories = () => {
+  const router = useRouter();
+  const [categories, setCategories] = useState<
+    { name: string; positions: number }[]
+  >([]);
+
+  useEffect(() => {
+    getListCardJobs()
+      .then((jobs) => {
+        const categoryCounts = jobs.reduce(
+          (acc: Record<string, number>, job) => {
+            const categoryName = job.category.name;
+            if (!acc[categoryName]) {
+              acc[categoryName] = 0;
+            }
+            acc[categoryName]++;
+            return acc;
+          },
+          {}
+        );
+
+        const sortedCategories = Object.entries(categoryCounts)
+          .map(([name, positions]) => ({ name, positions }))
+          .sort((a, b) => b.positions - a.positions);
+
+        setCategories(sortedCategories.slice(0, 4));
+      })
+      .catch((err) => {
+        console.log("Error fetching jobs:", err);
+      });
+  }, []);
+
+  const handleCategoryClick = (categoryName: string) => {
+    router.push(`/search-job?category=${encodeURIComponent(categoryName)}`);
+  };
+
   return (
     <div className="mt-12">
       <div className="flex items-center justify-between mb-4">
@@ -23,6 +62,7 @@ const Categories = () => {
           <div
             key={index}
             className="cursor-pointer p-4 border rounded text-center gradient-hover"
+            onClick={() => handleCategoryClick(category.name)}
           >
             <p className="font-semibold text-sm sm:text-base lg:text-lg">
               {category.name}

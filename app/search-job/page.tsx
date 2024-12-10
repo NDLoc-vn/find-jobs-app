@@ -4,7 +4,7 @@ import SearchBar from "@/app/ui/user/SearchBar";
 import JobList from "@/app/ui/user/JobList";
 import Header from "../ui/user/Header";
 import Categories from "../ui/user/Categories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type SortOptionsProps = {
@@ -38,13 +38,21 @@ const SearchJob: React.FC = () => {
   const initialSearch = searchParams.get("search") || "";
   const initialLocation = searchParams.get("location") || "";
   const initialEmployeeType = searchParams.get("employeeType") || "";
+  const initialCategory = decodeURIComponent(
+    searchParams.get("category") || ""
+  );
 
   const [sortOption, setSortOption] = useState<string>("time");
   const [order, setOrder] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
   const [location, setLocation] = useState<string>(initialLocation);
   const [employeeType, setEmployeeType] = useState<string>(initialEmployeeType);
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState<string>(initialCategory);
+
+  useEffect(() => {
+    console.log(initialCategory);
+    setCategory(initialCategory);
+  }, [initialCategory]);
 
   const handleSortChange = (value: string) => {
     if (["time", "minSalary", "maxSalary"].includes(value)) {
