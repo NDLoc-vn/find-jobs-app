@@ -12,6 +12,7 @@ import {
   getDetailJob,
   getDetailJobForGuest,
   getListCardJobs,
+  updatePost,
 } from "@/app/services/jobService";
 import { JobDetailSkeleton } from "@/app/ui/sketetons";
 import Header from "@/app/ui/user/Header";
@@ -126,7 +127,7 @@ const ApplyFormPopup = ({
 };
 
 const JobPage = ({ params }: JobDetailPageProps) => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const { id } = params;
   const [loading, setLoading] = React.useState(true);
   const [isBookmarked, setIsBookmarked] = React.useState(false);
@@ -200,6 +201,36 @@ const JobPage = ({ params }: JobDetailPageProps) => {
     }
   };
 
+  const handleCloseJobClick = async () => {
+    if (job) {
+      const updatedData = {
+        id: job?.id,
+        title: job?.title,
+        category: job?.category,
+        company: job?.companyName,
+        postedBy: null,
+        description: job?.description,
+        education: "Intern",
+        requirements: job?.requirements,
+        salary: job?.salary,
+        location: job?.location,
+        employmentType: job?.employmentType,
+        postDate: job?.postDate,
+        dueDate: job?.postDate,
+        status: "close",
+      };
+
+      try {
+        await updatePost(updatedData); // Gọi API cập nhật
+        alert("Đóng tuyển dụng thành công");
+        router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
+      } catch (error) {
+        alert("Đã xảy ra lỗi khi đóng tuyển dụng.");
+        console.error("Error updating job:", error);
+      }
+    }
+  };
+
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
 
@@ -236,54 +267,74 @@ const JobPage = ({ params }: JobDetailPageProps) => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              {isLoggedIn ? (
-                <>
-                  <div className="flex-shrink-0">
-                    <div className="rounded bg-green-600 hover:bg-green-500 p-2">
-                      <Image
-                        src={
-                          isBookmarked
-                            ? "/icon/bookmark-filled.svg"
-                            : "/icon/bookmark.svg"
+              {(() => {
+                if (isLoggedIn && user?.role === "candidate") {
+                  return (
+                    <>
+                      <div className="flex-shrink-0">
+                        <div className="rounded bg-green-600 hover:bg-green-500 p-2">
+                          <Image
+                            src={
+                              isBookmarked
+                                ? "/icon/bookmark-filled.svg"
+                                : "/icon/bookmark.svg"
+                            }
+                            width={20}
+                            height={20}
+                            alt="bookmark"
+                            onClick={handleBookmarkClick}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Link href="/message">
+                          <button className="w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
+                            Contact Recruiter
+                          </button>
+                        </Link>
+                      </div>
+                      <div className="flex-grow">
+                        <button
+                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${
+                            job?.isApplied ? "cursor-not-allowed" : ""
+                          }`}
+                          onClick={() => {
+                            if (!job?.isApplied) {
+                              openPopup();
+                            }
+                          }}
+                          disabled={job?.isApplied}
+                        >
+                          {job?.isApplied ? "Applied !" : "Apply Now →"}
+                        </button>
+                        <ApplyFormPopup
+                          idPost={id}
+                          isOpen={isPopupOpen}
+                          onClose={closePopup}
+                        />
+                      </div>
+                    </>
+                  );
+                } else if (
+                  isLoggedIn &&
+                  (user?.role === "recruiter" || user?.role === "company")
+                ) {
+                  return (
+                    <div className="flex-grow">
+                      <button
+                        className={
+                          "w-full bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap"
                         }
-                        width={20}
-                        height={20}
-                        alt="bookmark"
-                        onClick={handleBookmarkClick}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Link href="/message">
-                      <button className="w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
-                        Contact Recruiter
+                        onClick={handleCloseJobClick}
+                      >
+                        Đóng tuyển dụng !
                       </button>
-                    </Link>
-                  </div>
-                  <div className="flex-grow">
-                    <button
-                      className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${
-                        job?.isApplied ? "cursor-not-allowed" : ""
-                      }`}
-                      onClick={() => {
-                        if (!job?.isApplied) {
-                          openPopup();
-                        }
-                      }}
-                      disabled={job?.isApplied}
-                    >
-                      {job?.isApplied ? "Applied !" : "Apply Now →"}
-                    </button>
-                    <ApplyFormPopup
-                      idPost={id}
-                      isOpen={isPopupOpen}
-                      onClose={closePopup}
-                    />
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
+              })()}
             </div>
           </div>
 
