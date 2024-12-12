@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CardJob, JobDetail } from "../lib/definitions";
+import { CardCandidateApplied, CardJob, JobDetail } from "../lib/definitions";
 // import { useAuth } from "../contexts/auth-context";
 
 // const { token, user } = useAuth();
@@ -95,6 +95,23 @@ export const appliedJob = async (formData: FormData): Promise<void> => {
     return response.data.data;
   } catch (error) {
     console.error("Error adding job list:", error);
+    throw error;
+  }
+};
+
+export const getListCandidateAppliedJobs = async (
+  idPost: string
+): Promise<CardCandidateApplied[]> => {
+  try {
+    const response = await apiClient.get(
+      `/candidate-applied?idPost=${idPost}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching job list:", error);
     throw error;
   }
 };

@@ -47,6 +47,16 @@ export type JobDetail = {
   isApplied: boolean;
 };
 
+export type CardCandidateApplied = {
+  id: string;
+  name: string;
+  email: string;
+  resumeLink: string;
+  coverLetter: string;
+  status: string;
+  dateSubmit: string;
+};
+
 export type Job = {
   title: string;
   company: string;

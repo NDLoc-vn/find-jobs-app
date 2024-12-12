@@ -1,61 +1,67 @@
 "use client";
 
-import Pagination from "@/app/ui/Pagination";
+// import Pagination from "@/app/ui/Pagination";
 import Header from "@/app/ui/recruiter/Header";
 import JobCardOpen from "@/app/ui/recruiter/JobCardOpen";
 import SearchBar from "@/app/ui/SearchBar";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 import React from "react";
-import { JobDetail } from "@/app/lib/definitions";
-import { getDetailJobForGuest } from "@/app/services/jobService";
+import { CardCandidateApplied, JobDetail } from "@/app/lib/definitions";
+import {
+  getDetailJobForGuest,
+  getListCandidateAppliedJobs,
+} from "@/app/services/jobService";
 
-const candidates = [
-  {
-    id: 1,
-    name: "Trần Lê Huy Hoàng",
-    date: "23/12/2023",
-    status: "Chưa duyệt",
-    statusColor: "bg-yellow-300",
-    cvLink: "#",
-  },
-  {
-    id: 2,
-    name: "Trần Lê Huy Hoàng",
-    date: "23/12/2023",
-    status: "Từ chối",
-    statusColor: "bg-red-300",
-    cvLink: "#",
-  },
-  {
-    id: 3,
-    name: "Trần Lê Huy Hoàng",
-    date: "23/12/2023",
-    status: "Đã duyệt",
-    statusColor: "bg-green-300",
-    cvLink: "#",
-  },
-  {
-    id: 4,
-    name: "Trần Lê Huy Hoàng",
-    date: "23/12/2023",
-    status: "Đã duyệt",
-    statusColor: "bg-green-300",
-    cvLink: "#",
-  },
-  {
-    id: 5,
-    name: "Trần Lê Huy Hoàng",
-    date: "23/12/2023",
-    status: "Đã duyệt",
-    statusColor: "bg-green-300",
-    cvLink: "#",
-  },
-];
+// const candidates = [
+//   {
+//     id: 1,
+//     name: "Trần Lê Huy Hoàng",
+//     date: "23/12/2023",
+//     status: "Chưa duyệt",
+//     statusColor: "bg-yellow-300",
+//     cvLink: "#",
+//   },
+//   {
+//     id: 2,
+//     name: "Trần Lê Huy Hoàng",
+//     date: "23/12/2023",
+//     status: "Từ chối",
+//     statusColor: "bg-red-300",
+//     cvLink: "#",
+//   },
+//   {
+//     id: 3,
+//     name: "Trần Lê Huy Hoàng",
+//     date: "23/12/2023",
+//     status: "Đã duyệt",
+//     statusColor: "bg-green-300",
+//     cvLink: "#",
+//   },
+//   {
+//     id: 4,
+//     name: "Trần Lê Huy Hoàng",
+//     date: "23/12/2023",
+//     status: "Đã duyệt",
+//     statusColor: "bg-green-300",
+//     cvLink: "#",
+//   },
+//   {
+//     id: 5,
+//     name: "Trần Lê Huy Hoàng",
+//     date: "23/12/2023",
+//     status: "Đã duyệt",
+//     statusColor: "bg-green-300",
+//     cvLink: "#",
+//   },
+// ];
 
 const CandidateManager = () => {
   const router = useRouter();
   const [job, setJob] = React.useState<JobDetail | null>(null);
+  const [candidates, setCandidates] = React.useState<CardCandidateApplied[]>(
+    []
+  );
   const { id } = useParams();
   const jobId = Array.isArray(id) ? id[0] : id;
 
@@ -68,13 +74,23 @@ const CandidateManager = () => {
       try {
         const data = await getDetailJobForGuest(jobId);
         setJob(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching job details:", error);
       }
     };
 
+    const fetchCandidateList = async () => {
+      try {
+        const data = await getListCandidateAppliedJobs(jobId);
+        setCandidates(data);
+        console.log(data);
+      } catch (error) {
+        console.log("Error fetching list applied candidate:", error);
+      }
+    };
+
     fetchJobDetail();
+    fetchCandidateList();
   }, [id]);
 
   const handleDeleteJob = (id: string) => {
@@ -126,24 +142,25 @@ const CandidateManager = () => {
                     {candidate.name}
                   </h3>
                   <p className="text-center sm:text-left">
-                    Ngày nộp: {candidate.date}
+                    Ngày nộp: {candidate.dateSubmit}
                   </p>
                 </div>
               </div>
               <div
-                className={`px-4 py-1 rounded-full text-white text-center ${candidate.statusColor}`}
+                // className={`px-4 py-1 rounded-full text-white text-center ${candidate.statusColor}`}
+                className={`px-4 py-1 rounded-full text-white text-center bg-yellow-300`}
               >
                 {candidate.status}
               </div>
               <div className="flex space-x-2 justify-center">
                 <a
-                  href={candidate.cvLink}
+                  href={candidate.resumeLink}
                   className="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
                 >
                   Xem CV
                 </a>
                 <a
-                  href={candidate.cvLink}
+                  href="#"
                   className="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
                 >
                   Nhắn tin
@@ -152,9 +169,9 @@ const CandidateManager = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <Pagination totalPages={10} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
