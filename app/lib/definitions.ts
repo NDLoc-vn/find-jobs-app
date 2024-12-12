@@ -44,6 +44,7 @@ export type JobDetail = {
   status: string;
   messageId: string;
   isBookMark: boolean;
+  isApplied: boolean;
 };
 
 export type Job = {
