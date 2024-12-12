@@ -148,7 +148,7 @@ export default function EditJob() {
               />
             </div>
 
-            <div>
+            {/* <div>
               <label
                 htmlFor="Education"
                 className="block font-medium text-gray-700"
@@ -169,7 +169,7 @@ export default function EditJob() {
                 <option value="Senior">Senior</option>
                 <option value="Manager">Manager</option>
               </select>
-            </div>
+            </div> */}
 
             <div>
               <label

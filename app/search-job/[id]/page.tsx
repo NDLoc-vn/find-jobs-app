@@ -7,6 +7,7 @@ import Link from "next/link";
 import { CardJob, JobDetail } from "@/app/lib/definitions";
 import {
   addBookmarkedJob,
+  appliedJob,
   deleteBookmarkedJob,
   getDetailJob,
   getDetailJobForGuest,
@@ -19,6 +20,109 @@ import JobCard from "@/app/ui/homepage/JobCart";
 
 type JobDetailPageProps = {
   params: { id: string };
+};
+
+const ApplyFormPopup = ({
+  idPost,
+  isOpen,
+  onClose,
+}: {
+  idPost: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  // const [fullName, setFullName] = React.useState("");
+  // const [cv, setCv] = React.useState<File | null>(null);
+  const [cv, setCv] = React.useState<File | null>(null);
+  const [coverLetter, setCoverLetter] = React.useState("");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setCv(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!cv) {
+      alert("Vui lòng điền đầy đủ thông tin và tải lên CV!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("resume", cv);
+    formData.append("coverLetter", coverLetter);
+    formData.append("idPost", idPost);
+
+    appliedJob(formData);
+    onClose();
+  };
+
+  return (
+    <div
+      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${
+        isOpen ? "block" : "hidden"
+      }`}
+    >
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Ứng tuyển công việc</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Họ và Tên <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              required
+              placeholder="Enter your full name"
+            />
+          </div> */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              CV (PDF) <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={handleFileChange}
+              className="w-full"
+              required
+              title="Upload your CV in PDF format"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Cover Letter <span className="text-gray-400">(Optional)</span>
+            </label>
+            <textarea
+              value={coverLetter}
+              onChange={(e) => setCoverLetter(e.target.value)}
+              className="w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Write a cover letter (optional)"
+            />
+          </div>
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100"
+            >
+              Hủy
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-500"
+            >
+              Ứng tuyển
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 const JobPage = ({ params }: JobDetailPageProps) => {
@@ -34,6 +138,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   const [job, setJob] = React.useState<JobDetail | null>(null);
   const [relatedJobs, setRelatedJobs] = React.useState<CardJob[]>([]);
   const [copied, setCopied] = React.useState(false);
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
 
   useEffect(() => {
     const fetchJobDetail = async () => {
@@ -95,6 +200,9 @@ const JobPage = ({ params }: JobDetailPageProps) => {
     }
   };
 
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
+
   return (
     <div className="container mx-auto p-6 mt-5 bg-white max-w-8xl">
       <Header />
@@ -152,15 +260,30 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                       </button>
                     </Link>
                   </div>
+                  <div className="flex-grow">
+                    <button
+                      className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${
+                        job?.isApplied ? "cursor-not-allowed" : ""
+                      }`}
+                      onClick={() => {
+                        if (!job?.isApplied) {
+                          openPopup();
+                        }
+                      }}
+                      disabled={job?.isApplied}
+                    >
+                      {job?.isApplied ? "Applied !" : "Apply Now →"}
+                    </button>
+                    <ApplyFormPopup
+                      idPost={id}
+                      isOpen={isPopupOpen}
+                      onClose={closePopup}
+                    />
+                  </div>
                 </>
               ) : (
                 <></>
               )}
-              <div className="flex-grow">
-                <button className="w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
-                  Apply Now &#8594;
-                </button>
-              </div>
             </div>
           </div>
 

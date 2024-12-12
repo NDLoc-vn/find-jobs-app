@@ -18,7 +18,6 @@ const getAuthHeader = () => {
     const cookies = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="));
-    console.log(cookies);
     const token = cookies ? cookies.split("=")[1] : null;
     return token ? { Authorization: `${token}` } : {};
   }
@@ -84,6 +83,18 @@ export const getListAppliedJobs = async (): Promise<CardJob[]> => {
     return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
+export const appliedJob = async (formData: FormData): Promise<void> => {
+  try {
+    const response = await apiClient.post(`/jobs-applied/apply`, formData, {
+      headers: { ...getAuthHeader(), "Content-Type": "multipart/form-data" },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error adding job list:", error);
     throw error;
   }
 };
