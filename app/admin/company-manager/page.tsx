@@ -65,8 +65,8 @@ const CompanyManager = () => {
   const startIndex = (currentPage - 1) * companyPerPage;
   const currentData = filteredData.slice(startIndex, startIndex + companyPerPage);
 
-  const handleCompany = (id: string) => {
-    router.push(`/admin/company-manager/${id}`);
+  const handleCompany = (company: Company) => {
+    router.push(`/admin/company-manager/${company._id}?name=${company.name}&email=${company.email}&city=${company.city}&field=${company.field}`);
   };
 
   return (
@@ -97,7 +97,7 @@ const CompanyManager = () => {
         </div>
         <div className="grid grid-cols-1">
           {currentData.map((company: Company) => (
-            <CompanyCard company={company} onClick={handleCompany} />
+            <CompanyCard key={company._id} company={company} onClick={() => handleCompany(company)} />
           ))}
         </div>
       </div>

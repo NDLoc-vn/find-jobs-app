@@ -64,7 +64,7 @@ const Dashboard = () => {
 
   const total = {
     candidate: data.users.totalUsers,
-    company: 0,
+    company: 5,
     recruiter: data.recruiters.totalRecruiters,
   }
 

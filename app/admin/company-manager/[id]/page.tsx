@@ -4,7 +4,7 @@ import { useState, Suspense, useRef, useEffect } from "react";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import Image from "next/image";
 import CreateAccountForm from "@/app/ui/company/CreateAccountForm";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import OpenJobList from "@/app/ui/admin/OpenJobList";
 import CloseJobList from "@/app/ui/admin/CloseJobList";
 
@@ -63,12 +63,13 @@ const accounts: RecruiterAccount[] = [
 ];
 
 const RecruiterManager = ({ params }: { params: { id: number } }) => {
+  const searchParams = useSearchParams();
   const company: Company = {
     id: params.id,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
+    name: searchParams.get("name") || "Unknown",
+    avatar: "/icon/office.svg",
+    email: searchParams.get("email") || "Unknown",
+    website: "",
   };
 
   const [activeAccount, setActiveAccount] = useState<number | null>(null);

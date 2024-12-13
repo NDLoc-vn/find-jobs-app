@@ -37,7 +37,7 @@ const VerticalHeader = () => {
                 width={24}
                 height={24}
                 style={{
-                  filter: pathname.endsWith("/admin/dashboard") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
+                  filter: pathname.includes("/admin/dashboard") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
                 }}
                 className="mr-2"
               />
@@ -59,7 +59,7 @@ const VerticalHeader = () => {
                 width={24}
                 height={24}
                 style={{
-                  filter: pathname.endsWith("/admin/company-manager") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
+                  filter: pathname.includes("/admin/company-manager") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
                 }}
                 className="mr-2"
               />
@@ -80,7 +80,7 @@ const VerticalHeader = () => {
                 width={24}
                 height={24}
                 style={{
-                  filter: pathname.endsWith("/admin/grant-accounts") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
+                  filter: pathname.includes("/admin/grant-accounts") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
                 }}
                 className="mr-2"
               />
@@ -101,7 +101,7 @@ const VerticalHeader = () => {
                 width={24}
                 height={24}
                 style={{
-                  filter: pathname.endsWith("/admin/post-manager") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
+                  filter: pathname.includes("/admin/post-manager") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
                 }}
                 className="mr-2"
               />
@@ -124,7 +124,7 @@ const VerticalHeader = () => {
                 width={24}
                 height={24}
                 style={{
-                  filter: pathname.endsWith("/admin/candidate-manager") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
+                  filter: pathname.includes("/admin/candidate-manager") ? `invert(0%) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)` : `invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)`
                 }}
                 className="mr-2"
               />

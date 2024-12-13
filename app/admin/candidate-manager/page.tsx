@@ -64,7 +64,8 @@ const CandidateManager = () => {
   const startIndex = (currentPage - 1) * candidatePerPage;
   const currentData = filteredData.slice(startIndex, startIndex + candidatePerPage);
 
-  const handleCandidate = () => {
+  const handleCandidate = (candidateId: string) => {
+    router.push(`/admin/candidate-manager/${candidateId}`);
   }
 
   return (
