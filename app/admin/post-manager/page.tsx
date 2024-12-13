@@ -25,7 +25,6 @@ const PostManager = () => {
   return (
     <>
       <div className="container mx-auto mb-14 px-4 flex flex-col gap-8">
-        <SearchBar />
         <div className="relative">
           <div className="flex justify-start gap-8 text-xl">
             <button
