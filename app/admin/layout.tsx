@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../ui/admin/Header";
+import VerticalHeader from "../ui/admin/VerticalHeader";
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -7,9 +7,11 @@ interface UserLayoutProps {
 
 const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
   return (
-    <div>
-      <Header />
-      {children}
+    <div className="flex">
+      <VerticalHeader />
+      <div className="flex-1">
+        {children}
+      </div>
     </div>
   );
 };

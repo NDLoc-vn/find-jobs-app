@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import Header from "@/app/ui/admin/Header";
 import Pagination from "@/app/ui/Pagination";
 import SearchBar from "@/app/ui/admin/SearchBar";
 import { useAdminCompanyManager } from "@/app/hooks/useAdminCompanyManager";
@@ -72,7 +71,6 @@ const CompanyManager = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <Header />
       <h2 className="text-2xl font-semibold mt-8 mb-2">
         Số lượng công ty: {data.length}
       </h2>
