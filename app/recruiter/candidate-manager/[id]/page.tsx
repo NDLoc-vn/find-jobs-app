@@ -142,7 +142,10 @@ const CandidateManager = () => {
                     {candidate.name}
                   </h3>
                   <p className="text-center sm:text-left">
-                    Ngày nộp: {candidate.dateSubmit}
+                    Ngày nộp:{" "}
+                    {new Date(Number(candidate.dateSubmit)).toLocaleDateString(
+                      "en-GB"
+                    )}
                   </p>
                 </div>
               </div>
