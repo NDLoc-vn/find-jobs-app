@@ -18,6 +18,7 @@ import { JobDetailSkeleton } from "@/app/ui/sketetons";
 import Header from "@/app/ui/user/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import JobCard from "@/app/ui/homepage/JobCart";
+import { toast } from "react-toastify";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -27,10 +28,12 @@ const ApplyFormPopup = ({
   idPost,
   isOpen,
   onClose,
+  onApplySuccess,
 }: {
   idPost: string;
   isOpen: boolean;
   onClose: () => void;
+  onApplySuccess: () => void;
 }) => {
   // const [fullName, setFullName] = React.useState("");
   // const [cv, setCv] = React.useState<File | null>(null);
@@ -55,8 +58,11 @@ const ApplyFormPopup = ({
     formData.append("coverLetter", coverLetter);
     formData.append("idPost", idPost);
 
-    appliedJob(formData);
-    onClose();
+    appliedJob(formData).then(() => {
+      onApplySuccess();
+      onClose();
+      toast.success("Ứng tuyển thành công!");
+    });
   };
 
   return (
@@ -234,6 +240,15 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
 
+  const handleApplySuccess = () => {
+    setJob((prevJob) => {
+      if (prevJob) {
+        return { ...prevJob, isApplied: true }; // Update the job state to reflect the application
+      }
+      return prevJob;
+    });
+  };
+
   return (
     <div className="container mx-auto p-6 mt-5 bg-white max-w-8xl">
       <Header />
@@ -311,6 +326,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                           idPost={id}
                           isOpen={isPopupOpen}
                           onClose={closePopup}
+                          onApplySuccess={handleApplySuccess}
                         />
                       </div>
                     </>
