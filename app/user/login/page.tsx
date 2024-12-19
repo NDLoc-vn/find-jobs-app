@@ -74,10 +74,12 @@ const Login = () => {
         userData
       );
       if (response.status === 200 &&
-        response.headers["authorization"] &&
+        // response.headers["authorization"] &&
+        response.data.token &&
         response.data.account.role === "candidate"
       ) {
-        const token = response.headers["authorization"];
+        // const token = response.headers["authorization"];
+        const token = response.data.token;
         const userData = response.data.account;
         console.log(response.data);
         login(token, userData);

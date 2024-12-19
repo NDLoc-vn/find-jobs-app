@@ -57,7 +57,7 @@ export default function RootLayout({
           </AuthProvider>
         </QueryClientProviderWrapper>
 
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   );
