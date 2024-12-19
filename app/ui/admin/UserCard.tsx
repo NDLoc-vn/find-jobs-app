@@ -13,7 +13,7 @@ interface UserCardProps {
   userData: userData;
 }
 
-const UserCard: FC<UserCardProps> = ({ key, handleEditUser, handleDeleteUser, userData }) => {
+const UserCard: FC<UserCardProps> = ({ key, userData }) => {
   return (
     <div
       key={key}

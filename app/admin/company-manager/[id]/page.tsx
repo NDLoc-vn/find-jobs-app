@@ -3,7 +3,6 @@
 import { useState, Suspense, useRef, useEffect } from "react";
 import { JobListSkeleton } from "@/app/ui/sketetons";
 import Image from "next/image";
-import CreateAccountForm from "@/app/ui/company/CreateAccountForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import OpenJobList from "@/app/ui/admin/OpenJobList";
 import CloseJobList from "@/app/ui/admin/CloseJobList";

@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { companyField } from "@/app/lib/data";
-import CityInput from "../CityInput";
 import ProvinceInput from "../ProvinceInput";
 import CompanyFieldInput from "./CompanyFieldInput";
 

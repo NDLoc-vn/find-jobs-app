@@ -31,12 +31,13 @@ const CompanyManager = () => {
   const [location, setLocation] = useState<string>(initialLocation);
   const [field, setField] = useState<string>(initialField);
 
+  const { data, isLoading } = useAdminCompanyManager(token || "");
+
   if (!token) {
     router.push("/admin/login");
     return;
   }
 
-  const { data, isLoading } = useAdminCompanyManager(token);
   if (isLoading) {
     return (
       <AdminDashboardListSkeleton />
@@ -54,6 +55,9 @@ const CompanyManager = () => {
   };
 
   const filteredData = data.filter((company: Company) => {
+    if (field === "") {
+      console.log("field is empty");
+    }
     return (
       company.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
       company.city.toLowerCase().includes(location.toLowerCase())

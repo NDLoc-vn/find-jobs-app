@@ -2,7 +2,6 @@
 
 import CloseJobList from "@/app/ui/admin/CloseJobList";
 import OpenJobList from "@/app/ui/admin/OpenJobList";
-import SearchBar from "@/app/ui/SearchBar";
 import { useState, useRef, useEffect } from "react";
 
 const PostManager = () => {

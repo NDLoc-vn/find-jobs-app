@@ -22,6 +22,11 @@ import { AdminDashboardSkeleton } from "@/app/ui/sketetons";
 import { useAdminDashboardData } from "@/app/hooks/useAdminDashboardData";
 import { useUserLocations } from "@/app/hooks/useUserLocations";
 
+interface LocationData {
+  location: string;
+  count: number;
+}
+
 const Dashboard = () => {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("candidate")
   const { token } = useAuth();
@@ -211,7 +216,7 @@ const Dashboard = () => {
               <p>Loading...</p>
             ) : (
               <ul>
-                {locations.map((location: any) => (
+                {locations.map((location: LocationData) => (
                   <li key={location.location}>
                     {location.location}: {location.count}
                   </li>

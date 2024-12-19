@@ -5,8 +5,6 @@ import { useAdminCandidateManager } from "@/app/hooks/useAdminCandidateManager";
 import CandidateCard from "@/app/ui/admin/CandidateCard";
 import { AdminDashboardListSkeleton } from "@/app/ui/AdminSkeletons";
 import Pagination from "@/app/ui/Pagination";
-import SearchBar from "@/app/ui/SearchBar";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import CandidateSearchBar from "@/app/ui/admin/CandidateSearchBar";
@@ -31,11 +29,13 @@ const CandidateManager = () => {
 
   const { token } = useAuth();
   const router = useRouter();
+
+  const { data: candidates, isLoading } = useAdminCandidateManager(token || "");
+
   if (!token) {
     router.push("/admin/login");
     return;
   };
-  const { data: candidates, isLoading } = useAdminCandidateManager(token);
   if (isLoading) {
     return (
       <AdminDashboardListSkeleton />
@@ -95,7 +95,7 @@ const CandidateManager = () => {
         </div>
         <div className="grid grid-cols-1">
           {currentData.map((candidate: Candidate) => (
-            <CandidateCard candidate={candidate} onClick={handleCandidate} />
+            <CandidateCard key={candidate._id} candidate={candidate} onClick={handleCandidate} />
           ))}
         </div>
       </div>

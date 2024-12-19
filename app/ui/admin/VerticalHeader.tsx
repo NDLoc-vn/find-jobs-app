@@ -15,9 +15,6 @@ const VerticalHeader = () => {
   const containerClass = "pt-4 w-64 h-screen bg-xanhduong-500 shadow-md flex flex-col justify-between fixed";
   const withIconClass = "flex flex-row justify-start space-x-2";
 
-  const activeIconColor = "#000000";
-  const inactiveIconColor = "#FFFFFF";
-
   return (
     <div className={containerClass}>
       <div>

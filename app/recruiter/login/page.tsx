@@ -259,7 +259,7 @@ const Login = () => {
         const userData = response.data.account;
         console.log(response.data);
         login(token, userData);
-        toast.success("Đăng nhận thành công");
+        toast.success("Đăng nhập thành công");
         router.push("/recruiter/dashboard");
       } else if (response.status === 400) {
         // bughh return wrong status code

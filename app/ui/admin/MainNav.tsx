@@ -1,6 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/app/contexts/auth-context";
 
@@ -8,7 +7,7 @@ const MainNav = () => {
   const { isLoggedIn, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
@@ -19,7 +18,7 @@ const MainNav = () => {
     setShowDropdown((prev) => !prev);
   };
 
-  const isActive = (route: string) => pathname.startsWith(route);
+  // const isActive = (route: string) => pathname.startsWith(route);
 
   return (
     <div className="flex items-center space-x-4">

@@ -376,10 +376,6 @@ const ProfilePage = () => {
     fetchUserInfo();
   }, []);
 
-  const openForm = (formName: string) => {
-    setActiveForm(formName);
-  };
-
   const closeForm = () => {
     setIsEdit(false);
     setCheck(null);
