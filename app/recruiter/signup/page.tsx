@@ -107,19 +107,6 @@ export default function CompanySignup() {
                 onChange={handleInputChange}
                 placeholder="Email"
               />
-
-              <label className="block mb-1 text-sm font-medium text-gray-700">
-                <strong>Lĩnh vực</strong>
-                <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded-lg mb-8"
-                name="industry"
-                // value={companyData.industry}
-                onChange={handleInputChange}
-                placeholder="Lĩnh vực"
-              />
             </div>
 
             <div>
@@ -136,12 +123,27 @@ export default function CompanySignup() {
                 placeholder="Địa chỉ"
               />
               <label className="block mb-1 text-sm font-medium text-gray-700">
-                <strong>Thành phố</strong>
+                <strong>Tỉnh thành</strong>
                 <span className="text-red-500">*</span>
               </label>
               <CityInput
                 onCityInput={handleInputChange}
                 changeCityValid={handleCityValidChange}
+              />
+            </div>
+
+            <div className="col-span-1 md:col-span-2 mt-8 md:mt-0">
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                <strong>Lĩnh vực</strong>
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-8"
+                name="industry"
+                // value={companyData.industry}
+                onChange={handleInputChange}
+                placeholder="Lĩnh vực"
               />
             </div>
 

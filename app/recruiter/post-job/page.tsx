@@ -3,6 +3,7 @@
 import { categories } from "@/app/lib/data";
 import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/recruiter/Header";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function PostJob() {
@@ -20,6 +21,8 @@ export default function PostJob() {
     description: "",
     requirements: "",
   });
+
+  const router = useRouter();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -68,6 +71,7 @@ export default function PostJob() {
     try {
       await createPost(postData);
       alert("Đăng tin tuyển dụng thành công!");
+      router.push("/recruiter/post-manager");
     } catch (error) {
       alert("Đã xảy ra lỗi khi đăng tin.");
       console.error("Error creating job post:", error);
@@ -104,7 +108,7 @@ export default function PostJob() {
               />
             </div>
 
-            <div>
+            {/* <div>
               <label
                 htmlFor="Education"
                 className="block font-medium text-gray-700"
@@ -125,7 +129,7 @@ export default function PostJob() {
                 <option value="Senior">Senior</option>
                 <option value="Manager">Manager</option>
               </select>
-            </div>
+            </div> */}
 
             <div>
               <label
@@ -262,7 +266,7 @@ export default function PostJob() {
                   className="mt-1 p-2 w-fit border rounded-md focus:ring focus:ring-xanhduong-500"
                 >
                   <option value="VND">VND</option>
-                  <option value="$">$</option>
+                  <option value="USD">USD</option>
                 </select>
               </div>
             </div>

@@ -24,6 +24,10 @@ const Categories: React.FC<CategoriesProps> = ({
 
   const handleCategorySelect = (categoryName: string) => {
     onCategoryChange(categoryName);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (

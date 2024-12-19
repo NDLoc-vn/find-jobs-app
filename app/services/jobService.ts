@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CardJob, JobDetail } from "../lib/definitions";
+import { CardCandidateApplied, CardJob, JobDetail } from "../lib/definitions";
 // import { useAuth } from "../contexts/auth-context";
 
 // const { token, user } = useAuth();
@@ -18,7 +18,6 @@ const getAuthHeader = () => {
     const cookies = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="));
-    console.log(cookies);
     const token = cookies ? cookies.split("=")[1] : null;
     return token ? { Authorization: `${token}` } : {};
   }
@@ -81,6 +80,35 @@ export const getListAppliedJobs = async (): Promise<CardJob[]> => {
     const response = await apiClient.get("/jobs-applied", {
       headers: getAuthHeader(),
     });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
+export const appliedJob = async (formData: FormData): Promise<void> => {
+  try {
+    const response = await apiClient.post(`/jobs-applied/apply`, formData, {
+      headers: { ...getAuthHeader(), "Content-Type": "multipart/form-data" },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error adding job list:", error);
+    throw error;
+  }
+};
+
+export const getListCandidateAppliedJobs = async (
+  idPost: string
+): Promise<CardCandidateApplied[]> => {
+  try {
+    const response = await apiClient.get(
+      `/candidate-applied?idPost=${idPost}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
     return response.data.data;
   } catch (error) {
     console.error("Error fetching job list:", error);
@@ -220,23 +248,44 @@ export const createPost = async (postData: {
   }
 };
 
-export const updatePost = async (
-  postId: string,
-  postData: {
-    title?: string;
-    category?: string;
-    description?: string;
-    requirements?: string[];
-    salaryMin?: number;
-    salaryMax?: number;
-    city?: string;
-    address?: string;
-    employmentType?: string;
-    dueDate?: string;
-  }
-): Promise<void> => {
+export const updatePost = async (postData: {
+  // title?: string;
+  // category?: string;
+  // description?: string;
+  // requirements?: string[];
+  // salaryMin?: number;
+  // salaryMax?: number;
+  // city?: string;
+  // address?: string;
+  // employmentType?: string;
+  // dueDate?: string;
+  id: string;
+  title: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  company: string;
+  postedBy: null;
+  description: string;
+  education: string;
+  requirements: string[];
+  salary: {
+    min: number;
+    max: number;
+    currency: string;
+  };
+  location: {
+    city: string;
+    address: string;
+  };
+  employmentType: string;
+  postDate: string;
+  dueDate: string;
+  status: string;
+}): Promise<void> => {
   try {
-    const response = await apiClient.put(`/update?idPost=${postId}`, postData, {
+    const response = await apiClient.put(`/job/update`, postData, {
       headers: getAuthHeader(),
     });
     console.log("Post update successfully:", response.data);
