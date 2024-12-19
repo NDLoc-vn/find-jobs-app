@@ -80,7 +80,7 @@ export function JobDetailSkeleton() {
 
 export function UserDetailSkeleton() {
   return (
-    <div className="max-w-4xl mx-auto p-4 animate-pulse">
+    <div className="max-w-4xl mx-auto p-4 animate-pulse gy-4">
       <div className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
         <div className="flex items-start space-x-4">
           <div className="w-20 h-20 bg-gray-300 rounded-full mr-4"></div>
@@ -109,6 +109,41 @@ export function UserDetailSkeleton() {
       <div className="mt-4 bg-white shadow-md rounded-lg p-4">
         <h3 className="text-lg font-bold border-b-2">Hồ sơ xin việc</h3>
         <div className="h-4 bg-gray-300 rounded w-48 my-4"></div>
+      </div>
+    </div>
+  );
+}
+
+export function AdminDashboardSkeleton() {
+  return (
+    <div className={`flex flex-col animate-pulse container mx-auto gap-y-4 mt-4`}>
+      <div className="flex flex-row gap-x-4">
+        <div className="w-full">
+          <div className="bg-white border rounded-xl pl-6 py-5 space-y-8 shadow">
+            <h3 className="text-base font-bold">Người xin việc</h3>
+            <div className="bg-gray-300 rounded w-12 h-8 my-2"></div>
+            <div className="bg-gray-300 rounded w-16 h-8 my-2"></div>
+          </div>
+        </div>
+        <div className="w-full">
+          <div className="bg-white border rounded-xl pl-6 py-5 space-y-8 shadow">
+            <h3 className="text-base font-bold">Người xin việc</h3>
+            <div className="bg-gray-300 rounded w-12 h-8 my-2"></div>
+            <div className="bg-gray-300 rounded w-16 h-8 my-2"></div>
+          </div>
+        </div>
+        <div className="w-full">
+          <div className="bg-white border rounded-xl pl-6 py-5 space-y-8 shadow">
+            <h3 className="text-base font-bold">Người xin việc</h3>
+            <div className="bg-gray-300 rounded w-12 h-8 my-2"></div>
+            <div className="bg-gray-300 rounded w-16 h-8 my-2"></div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mb-4">
+        <div className="h-96 bg-white border rounded-xl p-4 space-y-8 shadow">
+          <div className="bg-gray-300 rounded w-28 h-4 my-4"></div>
+        </div>
       </div>
     </div>
   );

@@ -249,12 +249,17 @@ const Login = () => {
         `${process.env.NEXT_PUBLIC_AUTH_API_URL}/api/auth`,
         userData
       );
-      if (response.status === 200 && response.headers["authorization"]) {
-        const token = response.headers["authorization"];
+      if (response.status === 200 &&
+        // response.headers["authorization"] &&
+        response.data.token &&
+        response.data.account.role === "recruiter"
+      ) {
+        // const token = response.headers["authorization"];
+        const token = response.data.token;
         const userData = response.data.account;
         console.log(response.data);
         login(token, userData);
-        toast.success("Đăng nhận thành công");
+        toast.success("Đăng nhập thành công");
         router.push("/recruiter/dashboard");
       } else if (response.status === 400) {
         // bughh return wrong status code

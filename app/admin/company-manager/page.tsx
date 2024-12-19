@@ -1,164 +1,112 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Header from "@/app/ui/admin/Header";
+import { useRouter, useSearchParams } from "next/navigation";
 import Pagination from "@/app/ui/Pagination";
-import SearchBar from "@/app/ui/SearchBar";
-import Image from "next/image";
+import SearchBar from "@/app/ui/admin/SearchBar";
+import { useAdminCompanyManager } from "@/app/hooks/useAdminCompanyManager";
+import { useAuth } from "@/app/contexts/auth-context";
+import CompanyCard from "@/app/ui/admin/CompanyCard";
+import { AdminDashboardListSkeleton } from "@/app/ui/AdminSkeletons";
+import { useState } from "react";
 
-interface Company {
-  id: number;
+type Company = {
+  _id: string;
   name: string;
-  avatar: string;
   email: string;
-  website: string;
+  city: string;
+  field: string;
 }
 
-const companies: Company[] = [
-  {
-    id: 1,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 2,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 3,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 4,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 5,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 6,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 7,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 8,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 9,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 10,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 11,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-  {
-    id: 12,
-    name: "Facebook",
-    avatar: "/icon/facebook.svg",
-    email: "abc@gmail.com",
-    website: "facebook.com",
-  },
-];
-
 const CompanyManager = () => {
+  const searchParams = useSearchParams();
+  const companyPerPage = 10;
+  const currentPage = Number(searchParams.get("page")) || 1;
   const router = useRouter();
+  const { token } = useAuth();
 
-  const handleCompany = (id: number) => {
-    router.push(`/admin/company-manager/${id}`);
+  const initialSearch = searchParams.get("search") || "";
+  const initialLocation = searchParams.get("location") || "";
+  const initialField = searchParams.get("field") || "";
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
+  const [location, setLocation] = useState<string>(initialLocation);
+  const [field, setField] = useState<string>(initialField);
+
+  const { data, isLoading } = useAdminCompanyManager(token || "");
+
+  if (!token) {
+    router.push("/admin/login");
+    return;
+  }
+
+  if (isLoading) {
+    return (
+      <AdminDashboardListSkeleton />
+    )
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
+
+  const handleSearch = (query: string, loc: string, field: string) => {
+    setSearchQuery(query);
+    setLocation(loc);
+    setField(field);
+    router.push(`/admin/company-manager?search=${query}&location=${loc}&field=${field}`);
+  };
+
+  const filteredData = data.filter((company: Company) => {
+    if (field === "") {
+      console.log("field is empty");
+    }
+    return (
+      company.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      company.city.toLowerCase().includes(location.toLowerCase())
+      // company.field.toLowerCase().includes(field.toLowerCase())
+    );
+  });
+
+  const totalPages = Math.ceil(filteredData.length / companyPerPage) || 1;
+  const startIndex = (currentPage - 1) * companyPerPage;
+  const currentData = filteredData.slice(startIndex, startIndex + companyPerPage);
+
+  const handleCompany = (company: Company) => {
+    router.push(`/admin/company-manager/${company._id}?name=${company.name}&email=${company.email}&city=${company.city}&field=${company.field}`);
   };
 
   return (
     <div className="container mx-auto p-6">
-      <Header />
       <h2 className="text-2xl font-semibold mt-8 mb-2">
-        Danh sách công ty: {companies.length}
+        Số lượng công ty: {data.length}
       </h2>
-      <SearchBar />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {companies.map((company) => (
-          <div
-            key={company.id}
-            className={"border p-4 rounded-lg shadow-md cursor-pointer"}
-            onClick={() => handleCompany(company.id)}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Image
-                  src={company.avatar}
-                  width={55}
-                  height={55}
-                  alt="Avatar"
-                  className="rounded-full mr-4"
-                />
-                <div>
-                  <p className="font-bold">{company.name}</p>
-                  <p>Email: {company.email}</p>
-                  <p>Website: {company.website}</p>
-                </div>
-              </div>
-              <div className="flex space-x-2">
-                <Image
-                  src="/icon/edit-button.svg"
-                  width={20}
-                  height={20}
-                  alt="Edit"
-                  className="mr-2 cursor-pointer"
-                />
-                <Image
-                  src="/icon/delete-circle.svg"
-                  width={20}
-                  height={20}
-                  alt="Delete"
-                  className="cursor-pointer"
-                />
-              </div>
-            </div>
+      <SearchBar
+        initialSearch={initialSearch}
+        initialLocation={initialLocation}
+        initialField={initialField}
+        onSearch={handleSearch}
+      />
+      <div className="my-5">
+        <div className="grid grid-cols-4 py-1 px-6 cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out">
+          <div>
+            <h3 className="text-gray-600">Tên công ty</h3>
           </div>
-        ))}
+          <div>
+            <p className="text-gray-600">Email</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Thành phố</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Lĩnh vực</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1">
+          {currentData.map((company: Company) => (
+            <CompanyCard key={company._id} company={company} onClick={() => handleCompany(company)} />
+          ))}
+        </div>
       </div>
       <div className="flex justify-center">
-        <Pagination totalPages={10} />
+        <Pagination totalPages={totalPages} />
       </div>
     </div>
   );

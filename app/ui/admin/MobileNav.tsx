@@ -131,22 +131,6 @@ const MobileNav = () => {
           ) : (
             <>
               {/* Guest navigation */}
-              <Link href="/user/login" className="w-full">
-                <button className="h-12 w-full px-4 py-2 bg-xanhduong-600 text-white rounded-lg font-semibold">
-                  Đăng nhập
-                </button>
-              </Link>
-              <Link href="/user/signup" className="w-full">
-                <button className="w-full h-12 px-4 py-2 border border-blue-500 text-blue-500 rounded-lg gradient-hover">
-                  Đăng ký
-                </button>
-              </Link>
-              <Link
-                href="/recruiter/login"
-                className="text-sm text-blue-600 hover:underline"
-              >
-                Đăng nhập với tư cách nhà tuyển dụng ?
-              </Link>
             </>
           )}
         </nav>

@@ -1,118 +1,106 @@
 "use client";
 
-import Header from "@/app/ui/admin/Header";
+import { useAuth } from "@/app/contexts/auth-context";
+import { useAdminCandidateManager } from "@/app/hooks/useAdminCandidateManager";
+import CandidateCard from "@/app/ui/admin/CandidateCard";
+import { AdminDashboardListSkeleton } from "@/app/ui/AdminSkeletons";
 import Pagination from "@/app/ui/Pagination";
-import SearchBar from "@/app/ui/SearchBar";
-import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import CandidateSearchBar from "@/app/ui/admin/CandidateSearchBar";
 
-interface CandidateAccount {
-  id: number;
+type Candidate = {
+  _id: string;
   name: string;
   email: string;
-  avatar: string;
+  gender: string;
+  location: string;
 }
 
-const accounts: CandidateAccount[] = [
-  {
-    id: 1,
-    name: "Trần Lê Huy Hoàng",
-    email: "abc@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 2,
-    name: "Nguyễn Văn B",
-    email: "nguyenb@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 3,
-    name: "Lê Thị Cẩm Tú",
-    email: "camtu@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 4,
-    name: "Phạm Minh Quân",
-    email: "phamquan@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 5,
-    name: "Đỗ Hồng Sơn",
-    email: "dongson@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 6,
-    name: "Nguyễn Thanh Hoa",
-    email: "nguyenhoa@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 7,
-    name: "Nguyễn Anh Tuấn",
-    email: "tuan@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-  {
-    id: 8,
-    name: "Trần Thị Thu Hà",
-    email: "thuha@gmail.com",
-    avatar: "/avatar_temp.jpg",
-  },
-];
-
 const CandidateManager = () => {
+  const searchParams = useSearchParams();
+  const candidatePerPage = 10;
+  const currentPage = Number(searchParams.get("page")) || 1;
+
+  const initialSearch = searchParams.get("search") || "";
+  const initialLocation = searchParams.get("location") || "";
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
+  const [location, setLocation] = useState<string>(initialLocation);
+
+  const { token } = useAuth();
+  const router = useRouter();
+
+  const { data: candidates, isLoading } = useAdminCandidateManager(token || "");
+
+  if (!token) {
+    router.push("/admin/login");
+    return;
+  };
+  if (isLoading) {
+    return (
+      <AdminDashboardListSkeleton />
+    )
+  }
+  if (!candidates) {
+    return <div>No data</div>;
+  }
+
+  const filteredData = candidates.filter((candidate: Candidate) => {
+    return (
+      (candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        candidate.email.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      candidate.location.toLowerCase().includes(location.toLowerCase()) &&
+      candidate.name !== "admin1"
+    );
+  });
+
+  const handleSearch = (query: string, loc: string) => {
+    setSearchQuery(query);
+    setLocation(loc);
+    router.push(`/admin/candidate-manager?search=${query}&location=${loc}`);
+  };
+
+  const totalPages = Math.ceil(candidates.length / candidatePerPage) || 1;
+  const startIndex = (currentPage - 1) * candidatePerPage;
+  const currentData = filteredData.slice(startIndex, startIndex + candidatePerPage);
+
+  const handleCandidate = (candidateId: string) => {
+    router.push(`/admin/candidate-manager/${candidateId}`);
+  }
+
   return (
     <div className="container mx-auto p-6">
-      <Header />
       <h2 className="text-2xl font-semibold mt-8 mb-2">
-        Danh sách tài khoản tìm việc: {12}
+        Số lượng công ty: {candidates.length}
       </h2>
-      <SearchBar />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {accounts.map((account) => (
-          <div
-            key={account.id}
-            className={"border p-4 rounded-lg shadow-md cursor-pointer"}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Image
-                  src={account.avatar}
-                  width={55}
-                  height={55}
-                  alt="Avatar"
-                  className="rounded-full mr-4"
-                />
-                <div>
-                  <p className="font-bold">{account.name}</p>
-                  <p>Email: {account.email}</p>
-                </div>
-              </div>
-              <div className="flex space-x-2">
-                <Image
-                  src="/icon/edit-button.svg"
-                  width={20}
-                  height={20}
-                  alt="Edit"
-                  className="mr-2 cursor-pointer"
-                />
-                <Image
-                  src="/icon/delete-circle.svg"
-                  width={20}
-                  height={20}
-                  alt="Delete"
-                  className="cursor-pointer"
-                />
-              </div>
-            </div>
+      <CandidateSearchBar
+        onSearch={handleSearch}
+        initialSearch={initialSearch}
+        initialLocation={initialLocation}
+      />
+      <div className="my-5">
+        <div className="grid grid-cols-4 py-1 px-6 cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out">
+          <div>
+            <h3 className="text-gray-600">Tên</h3>
           </div>
-        ))}
+          <div>
+            <p className="text-gray-600">Email</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Giới tính</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Địa chỉ</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1">
+          {currentData.map((candidate: Candidate) => (
+            <CandidateCard key={candidate._id} candidate={candidate} onClick={handleCandidate} />
+          ))}
+        </div>
       </div>
       <div className="flex justify-center">
-        <Pagination totalPages={10} />
+        <Pagination totalPages={totalPages} />
       </div>
     </div>
   );
