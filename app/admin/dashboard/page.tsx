@@ -20,11 +20,13 @@ import {
 import Link from "next/link"
 import { AdminDashboardSkeleton } from "@/app/ui/sketetons";
 import { useAdminDashboardData } from "@/app/hooks/useAdminDashboardData";
+import { useUserLocations } from "@/app/hooks/useUserLocations";
 
 const Dashboard = () => {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("candidate")
   const { token } = useAuth();
   const { data, isLoading } = useAdminDashboardData(token ?? "");
+  const { locations, isLoading: isLoadingLocations } = useUserLocations(token ?? ""); // Use the new hook
 
   if (isLoading) {
     return (
@@ -174,7 +176,7 @@ const Dashboard = () => {
                     const date = new Date(value)
                     return date.toLocaleDateString("en-US", {
                       month: "short",
-                      day: "numeric",
+                      year: "numeric",
                     })
                   }}
                 />
@@ -197,6 +199,25 @@ const Dashboard = () => {
                 <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
               </BarChart>
             </ChartContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Vị trí người dùng</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoadingLocations ? (
+              <p>Loading...</p>
+            ) : (
+              <ul>
+                {locations.map((location: any) => (
+                  <li key={location.location}>
+                    {location.location}: {location.count}
+                  </li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
       </div>

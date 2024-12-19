@@ -12,7 +12,7 @@ const VerticalHeader = () => {
   const inactiveClass = "text-gray-700 hover:bg-white text-white hover:text-black";
   const buttonClass = "w-full px-4 py-2 font-semibold pl-10";
   const headerClass = "text-lg font-bold text-white px-4 py-2 border-t-1 border-white";
-  const containerClass = "w-64 h-screen bg-xanhduong-500 shadow-md flex flex-col justify-between";
+  const containerClass = "pt-4 w-64 h-screen bg-xanhduong-500 shadow-md flex flex-col justify-between fixed";
   const withIconClass = "flex flex-row justify-start space-x-2";
 
   const activeIconColor = "#000000";

@@ -26,7 +26,7 @@ const MainNav = () => {
       {isLoggedIn ? (
         // {true ? (
         <>
-          <Link
+          {/* <Link
             href="/admin/dashboard"
             className={`text-lg px-3 py-2 rounded-lg ${isActive("/admin/dashboard")
               ? "bg-xanhduong-600 text-white"
@@ -34,8 +34,8 @@ const MainNav = () => {
               } hover:bg-xanhduong-500 hover:text-white`}
           >
             Số liệu
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/grant-accounts"
             className={`text-lg px-3 py-2 rounded-lg ${isActive("/admin/grant-accounts")
               ? "bg-xanhduong-600 text-white"
@@ -43,8 +43,8 @@ const MainNav = () => {
               } hover:bg-xanhduong-500 hover:text-white`}
           >
             Cấp TK
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/post-manager"
             className={`text-lg px-3 py-2 rounded-lg ${isActive("/admin/post-manager")
               ? "bg-xanhduong-600 text-white"
@@ -52,8 +52,8 @@ const MainNav = () => {
               } hover:bg-xanhduong-500 hover:text-white`}
           >
             Bài đăng
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/company-manager"
             className={`text-lg px-3 py-2 rounded-lg ${isActive("/admin/company-manager")
               ? "bg-xanhduong-600 text-white"
@@ -61,8 +61,8 @@ const MainNav = () => {
               } hover:bg-xanhduong-500 hover:text-white`}
           >
             Nhà tuyển dụng
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/admin/candidate-manager"
             className={`text-lg px-3 py-2 rounded-lg ${isActive("/admin/candidate-manager")
               ? "bg-xanhduong-600 text-white"
@@ -70,7 +70,7 @@ const MainNav = () => {
               } hover:bg-xanhduong-500 hover:text-white`}
           >
             Người ứng tuyển
-          </Link>
+          </Link> */}
 
           <div className="relative">
             <button
