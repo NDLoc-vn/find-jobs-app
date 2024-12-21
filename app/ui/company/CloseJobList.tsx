@@ -2,16 +2,19 @@
 
 import { CardJob } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
-import { getListClosedJobs } from "@/app/services/jobService";
+import { getListJobsWithCompany } from "@/app/services/jobService";
 import { JobListSkeleton } from "../sketetons";
-import JobCardClose from "./JobCardClose";
+import JobCardClose from "../recruiter/JobCardClose";
+import { useAuth } from "@/app/contexts/auth-context";
 
 export default function CloseJobList() {
   const [jobs, setJobs] = useState<CardJob[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    getListClosedJobs()
+    getListJobsWithCompany(user?._id || "", "close")
       .then((data) => {
         setJobs(data);
       })
@@ -22,6 +25,10 @@ export default function CloseJobList() {
         setLoading(false);
       });
   }, []);
+
+  const handleDeleteJob = (id: string) => {
+    setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+  };
 
   if (loading) {
     return <JobListSkeleton />;
@@ -43,6 +50,7 @@ export default function CloseJobList() {
             address={job.location.address}
             employmentType={job.employmentType}
             numberApplicants={job.numberApplicant}
+            onDelete={handleDeleteJob}
           />
         );
       })}

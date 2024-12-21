@@ -251,7 +251,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
 
   return (
     <div className="container mx-auto p-6 mt-5 bg-white max-w-8xl">
-      <Header />
+      {user?.role === "candidate" ? <Header /> : <></>}
       <button
         onClick={handleBack}
         className="text-blue-600 hover:text-blue-800 mb-4"

@@ -1,17 +1,20 @@
 "use client";
 
 import { CardJob } from "@/app/lib/definitions";
-import JobCardOpen from "./JobCardOpen";
+import JobCardOpen from "../recruiter/JobCardOpen";
 import { useEffect, useState } from "react";
-import { getListOpenedJobs } from "@/app/services/jobService";
+import { getListJobsWithCompany } from "@/app/services/jobService";
 import { JobListSkeleton } from "../sketetons";
+import { useAuth } from "@/app/contexts/auth-context";
 
 export default function OpenJobList() {
   const [jobs, setJobs] = useState<CardJob[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    getListOpenedJobs()
+    getListJobsWithCompany(user?._id || "", "open")
       .then((data) => {
         setJobs(data);
       })
@@ -22,6 +25,10 @@ export default function OpenJobList() {
         setLoading(false);
       });
   }, []);
+
+  const handleDeleteJob = (id: string) => {
+    setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+  };
 
   if (loading) {
     return <JobListSkeleton />;
@@ -43,6 +50,7 @@ export default function OpenJobList() {
             address={job.location.address}
             employmentType={job.employmentType}
             numberApplicants={job.numberApplicant}
+            onDelete={handleDeleteJob}
           />
         );
       })}

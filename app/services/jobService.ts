@@ -183,6 +183,24 @@ export const getListClosedJobs = async (): Promise<CardJob[]> => {
   }
 };
 
+export const getListJobsWithCompany = async (
+  idCompany: string,
+  status: string
+): Promise<CardJob[]> => {
+  try {
+    const response = await apiClient.get(
+      `/jobs-by-company/${idCompany}?status=${status}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
 export const getListOpenedJobsWithId = async (
   recruiterId: string
 ): Promise<CardJob[]> => {

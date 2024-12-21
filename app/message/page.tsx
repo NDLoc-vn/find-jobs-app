@@ -130,7 +130,7 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
-import Header from "@/app/ui/recruiter/Header";
+import Header from "@/app/ui/user/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 
 interface Message {

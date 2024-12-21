@@ -122,7 +122,7 @@ const CandidateManager = () => {
           onDelete={handleDeleteJob}
         />
         <h2 className="text-2xl font-semibold mt-8 mb-2">
-          Danh sách ứng viên: {12}
+          Danh sách ứng viên: {candidates.length}
         </h2>
         <SearchBar />
         <div className="mt-4 mb-8">
