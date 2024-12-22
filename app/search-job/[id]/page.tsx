@@ -67,9 +67,8 @@ const ApplyFormPopup = ({
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${
-        isOpen ? "block" : "hidden"
-      }`}
+      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${isOpen ? "block" : "hidden"
+        }`}
     >
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">Ứng tuyển công việc</h2>
@@ -156,6 +155,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
         } else {
           data = await getDetailJobForGuest(id);
         }
+        console.log(data);
         setIsBookmarked(data.isBookMark);
         setJob(data);
         if (data?.category.name) {
@@ -302,17 +302,17 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                         </div>
                       </div>
                       <div>
-                        <Link href="/message">
+                        {/* <Link href={`/mess-firebase/${id}`}> */}
+                        <Link href={`/mess-firebase/6753f041e3f7f7cc1a7e3106`} passHref>
                           <button className="w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
-                            Contact Recruiter
+                            Contact Recruiter test
                           </button>
                         </Link>
                       </div>
                       <div className="flex-grow">
                         <button
-                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${
-                            job?.isApplied ? "cursor-not-allowed" : ""
-                          }`}
+                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${job?.isApplied ? "cursor-not-allowed" : ""
+                            }`}
                           onClick={() => {
                             if (!job?.isApplied) {
                               openPopup();
@@ -381,14 +381,14 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   </h3>
                   <p className="font-semibold text-lg text-green-500 text-center whitespace-nowrap">
                     {job?.salary?.min !== undefined &&
-                    job?.salary?.max !== undefined
+                      job?.salary?.max !== undefined
                       ? job.salary.min > 0 && job.salary.max > 0
                         ? `${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}`
                         : job.salary.min > 0
-                        ? `${job.salary.min.toLocaleString()}`
-                        : job.salary.max > 0
-                        ? `${job.salary.max.toLocaleString()}`
-                        : "Negotiable"
+                          ? `${job.salary.min.toLocaleString()}`
+                          : job.salary.max > 0
+                            ? `${job.salary.max.toLocaleString()}`
+                            : "Negotiable"
                       : "Salary information unavailable"}
                   </p>
                 </div>

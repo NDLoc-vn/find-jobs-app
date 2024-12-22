@@ -134,7 +134,7 @@ import Header from "@/app/ui/recruiter/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 
 interface Message {
-  id: number;
+  id: string;
   message: string;
   sender: "user" | "recruiter";
   avatar: string;
@@ -261,11 +261,10 @@ const MessagesPage: React.FC = () => {
             <div
               key={user.id}
               onClick={() => handleUserSelection(user)}
-              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${
-                selectedUser?.id === user.id
+              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${selectedUser?.id === user.id
                   ? "bg-gray-200"
                   : "hover:bg-gray-100"
-              }`}
+                }`}
             >
               <img
                 src={user.avatar}
