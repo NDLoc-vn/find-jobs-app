@@ -8,16 +8,12 @@ import MessageInput from "@/app/ui/message/MessageInput";
 import Header from "@/app/ui/recruiter/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams } from "next/navigation";
-import { useRecruiterDetail } from "@/app/hooks/useRecruiterDetail";
-import { useRouter } from "next/router";
-import { useCandidateDetail } from "@/app/hooks/useCandidateDetail";
+import { useRouter } from "next/navigation";
 
 interface Message {
   id: string;
   text: string;
-  // sender: "user" | "recruiter";
   senderId: string;
-  currentUserId: string;
   timestamp: number;
 }
 
@@ -39,36 +35,35 @@ const MessagesPage: React.FC = () => {
   };
   const { id: receiverId } = useParams<{ id: string }>();
 
-  // let receiverName: string = "username";
-  // if (currentUser.role === "candidate") {
-  //   const { data } = useRecruiterDetail(token, receiverId);
-  //   data && (receiverName = data.name);
-  // } else {
-  //   const { data } = useCandidateDetail(token, receiverId);
-  //   data && (receiverName = data.name);
-  // }
-
-
-  const [users] = useState<User[]>([
-    {
-      id: receiverId,
-      name: receiverId,
-    },
-  ]);
-
+  const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(users[0]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [message, setMessage] = useState<string>("");
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const userMessagesRef = ref(database, `messages`);
+    onValue(userMessagesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const userThreads = Object.keys(data).filter((key) =>
+          key.includes(currentUser.userId)
+        );
+        const userList = userThreads.map((thread) => {
+          const [userId1, userId2] = thread.split("_");
+          const otherUserId = userId1 === currentUser.userId ? userId2 : userId1;
+          return { id: otherUserId, name: otherUserId }; // Replace with actual user name fetching logic
+        });
+        setUsers(userList);
+      }
+    });
+  }, [currentUser]);
 
   useEffect(() => {
     if (!selectedUser) return;
 
-    let chatId;
-    if (currentUser.role === "recruiter") {
-      chatId = generateChatId(currentUser.userId, selectedUser.id);
-    } else {
-      chatId = generateChatId(selectedUser.id, currentUser.userId);
-    }
+    const chatId = generateChatId(currentUser.userId, selectedUser.id);
     const messagesRef = ref(database, `messages/${chatId}`);
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
@@ -85,12 +80,7 @@ const MessagesPage: React.FC = () => {
   const sendMessage = () => {
     if (!selectedUser || !message) return;
 
-    let chatId;
-    if (currentUser.role === "recruiter") {
-      chatId = generateChatId(currentUser.userId, selectedUser.id);
-    } else {
-      chatId = generateChatId(selectedUser.id, currentUser.userId);
-    }
+    const chatId = generateChatId(currentUser.userId, selectedUser.id);
     const messagesRef = ref(database, `messages/${chatId}`);
     const newMessageRef = push(messagesRef);
     set(newMessageRef, {
@@ -101,6 +91,10 @@ const MessagesPage: React.FC = () => {
     setMessage("");
   };
 
+  const handleUserSelection = (user: User) => {
+    setSelectedUser(user);
+  };
+
   return (
     <div className="flex flex-col">
       <Header />
@@ -109,11 +103,10 @@ const MessagesPage: React.FC = () => {
           {users.map((user) => (
             <div
               key={user.id}
-              // onClick={() => handleUserSelection(user)}
-              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${selectedUser?.id === user.id
-                ? "bg-gray-200"
-                : "hover:bg-gray-100"
-                }`}
+              onClick={() => handleUserSelection(user)}
+              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${
+                selectedUser?.id === user.id ? "bg-gray-200" : "hover:bg-gray-100"
+              }`}
             >
               <img
                 src="/avatar_temp.jpg"
@@ -122,9 +115,6 @@ const MessagesPage: React.FC = () => {
               />
               <div>
                 <p className="font-semibold">{user.name}</p>
-                <p className="text-sm text-gray-600 truncate">
-                  Chỗ để last message
-                </p>
               </div>
             </div>
           ))}
