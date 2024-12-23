@@ -10,6 +10,7 @@ import { useAuth } from "@/app/contexts/auth-context";
 import { useParams } from "next/navigation";
 import { useRecruiterDetail } from "@/app/hooks/useRecruiterDetail";
 import { useRouter } from "next/router";
+import { useCandidateDetail } from "@/app/hooks/useCandidateDetail";
 
 interface Message {
   id: string;
@@ -26,18 +27,27 @@ interface User {
 }
 
 const generateChatId = (userId1: string, userId2: string) => {
-  return [userId1, userId2].sort().join("_");
+  return [userId1, userId2].join("_");
 };
 
 const MessagesPage: React.FC = () => {
   const { user: currentUser, token } = useAuth();
-  if (!currentUser) {
+  if (!currentUser || !token) {
     const router = useRouter();
     router.push("/");
     return;
   };
   const { id: receiverId } = useParams<{ id: string }>();
-  const { data } = useRecruiterDetail(token || "", receiverId);
+
+  // let receiverName: string = "username";
+  // if (currentUser.role === "candidate") {
+  //   const { data } = useRecruiterDetail(token, receiverId);
+  //   data && (receiverName = data.name);
+  // } else {
+  //   const { data } = useCandidateDetail(token, receiverId);
+  //   data && (receiverName = data.name);
+  // }
+
 
   const [users] = useState<User[]>([
     {
@@ -75,7 +85,12 @@ const MessagesPage: React.FC = () => {
   const sendMessage = () => {
     if (!selectedUser || !message) return;
 
-    const chatId = generateChatId(currentUser.userId, selectedUser.id);
+    let chatId;
+    if (currentUser.role === "recruiter") {
+      chatId = generateChatId(currentUser.userId, selectedUser.id);
+    } else {
+      chatId = generateChatId(selectedUser.id, currentUser.userId);
+    }
     const messagesRef = ref(database, `messages/${chatId}`);
     const newMessageRef = push(messagesRef);
     set(newMessageRef, {
