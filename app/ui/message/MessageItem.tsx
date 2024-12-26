@@ -9,7 +9,6 @@ interface MessageItemProps {
 }
 
 const MessageItem: React.FC<MessageItemProps> = ({ message, senderId, currentUserId, avatar }) => {
-  console.log(senderId, currentUserId)
   return (
     <div className={`flex ${senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-4`}>
       {senderId !== currentUserId && <img src={avatar} alt="avatar" className="w-10 h-10 rounded-full mr-2" />}
