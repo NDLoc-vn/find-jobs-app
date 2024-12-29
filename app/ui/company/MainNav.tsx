@@ -36,7 +36,7 @@ const MainNav = () => {
           >
             Trang chủ
           </Link>
-          <Link
+          {/* <Link
             href="/company/post-job"
             className={`text-lg px-3 py-2 rounded-lg ${
               isActive("/company/post-job")
@@ -45,7 +45,7 @@ const MainNav = () => {
             } hover:bg-xanhduong-500 hover:text-white`}
           >
             Đăng tuyển
-          </Link>
+          </Link> */}
           <Link
             href="/company/recruiter-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
@@ -66,7 +66,7 @@ const MainNav = () => {
           >
             Bài đăng
           </Link>
-          <Link
+          {/* <Link
             href="/company/message"
             className={`text-lg px-3 py-2 rounded-lg ${
               isActive("/company/message")
@@ -75,7 +75,7 @@ const MainNav = () => {
             } hover:bg-xanhduong-500 hover:text-white`}
           >
             Nhắn tin
-          </Link>
+          </Link> */}
 
           <div className="relative">
             <button

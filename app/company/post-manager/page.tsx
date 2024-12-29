@@ -3,7 +3,7 @@
 import CloseJobList from "@/app/ui/company/CloseJobList";
 import Header from "@/app/ui/company/Header";
 import OpenJobList from "@/app/ui/company/OpenJobList";
-import SearchBar from "@/app/ui/SearchBar";
+// import SearchBar from "@/app/ui/SearchBar";
 import { useState, useRef, useEffect } from "react";
 
 const PostManager = () => {
@@ -27,8 +27,8 @@ const PostManager = () => {
     <>
       <Header />
       <div className="container mx-auto mb-14 px-4 flex flex-col gap-8">
-        <SearchBar />
-        <div className="relative">
+        {/* <SearchBar /> */}
+        <div className="relative mt-5">
           <div className="flex justify-start gap-8 text-xl">
             <button
               ref={openJobsdRef}
@@ -57,7 +57,11 @@ const PostManager = () => {
           ></div>
         </div>
 
-        {activeTab === "openJobs" ? <OpenJobList /> : <CloseJobList />}
+        {activeTab === "openJobs" ? (
+          <OpenJobList recruiterId="" />
+        ) : (
+          <CloseJobList recruiterId="" />
+        )}
       </div>
     </>
   );

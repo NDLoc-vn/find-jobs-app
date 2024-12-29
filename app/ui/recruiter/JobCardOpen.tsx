@@ -56,7 +56,7 @@ const JobCardOpen: React.FC<JobCardProps> = ({
         onDelete(id);
       } catch (error) {
         console.error("Lỗi khi xóa công việc:", error);
-        alert("Xóa công việc thất bại");
+        // alert("Xóa công việc thất bại");
       }
     }
   };

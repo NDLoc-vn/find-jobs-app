@@ -64,7 +64,9 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/search-job" ? activeClass : inactiveClass
+                    pathname.startsWith("/search-job")
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Tìm việc
@@ -84,7 +86,9 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/message" ? activeClass : inactiveClass
+                    pathname.startsWith("/message")
+                      ? activeClass
+                      : inactiveClass
                   )}
                 >
                   Nhắn tin
