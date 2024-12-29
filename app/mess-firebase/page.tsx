@@ -77,7 +77,7 @@ const MessagesPage: React.FC = () => {
             otherUsername = metadataSnapshot?.recruiterName;
           }
           if (otherUserId === receiverId) {
-            setSelectedUser({ id: otherUserId, name: otherUsername });
+            // setSelectedUser({ id: otherUserId, name: otherUsername });
           }
           return {
             id: otherUserId,

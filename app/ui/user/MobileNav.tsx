@@ -80,11 +80,11 @@ const MobileNav = () => {
                   Công việc
                 </button>
               </Link>
-              <Link href="/message" className="w-full">
+              <Link href="/mess-firebase" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/message" ? activeClass : inactiveClass
+                    pathname === "/mess-firebase" ? activeClass : inactiveClass
                   )}
                 >
                   Nhắn tin

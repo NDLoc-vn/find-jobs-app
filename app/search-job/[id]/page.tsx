@@ -301,14 +301,13 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                           />
                         </div>
                       </div>
-                      <div>
-                        {/* <Link href={`/mess-firebase/${id}`}> */}
+                      {/* <div>
                         <Link href={`/mess-firebase/6753f041e3f7f7cc1a7e3106`} passHref>
                           <button className="w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap">
-                            Contact Recruiter test
+                            Contact Recruiter
                           </button>
                         </Link>
-                      </div>
+                      </div> */}
                       <div className="flex-grow">
                         <button
                           className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${job?.isApplied ? "cursor-not-allowed" : ""

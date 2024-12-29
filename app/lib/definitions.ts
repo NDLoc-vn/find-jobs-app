@@ -49,6 +49,7 @@ export type JobDetail = {
 
 export type CardCandidateApplied = {
   id: string;
+  idUser: string;
   name: string;
   email: string;
   resumeLink: string;
