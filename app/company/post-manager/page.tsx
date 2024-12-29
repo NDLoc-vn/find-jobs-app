@@ -57,7 +57,11 @@ const PostManager = () => {
           ></div>
         </div>
 
-        {activeTab === "openJobs" ? <OpenJobList /> : <CloseJobList />}
+        {activeTab === "openJobs" ? (
+          <OpenJobList recruiterId="" />
+        ) : (
+          <CloseJobList recruiterId="" />
+        )}
       </div>
     </>
   );

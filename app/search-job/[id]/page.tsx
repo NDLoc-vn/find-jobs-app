@@ -173,8 +173,17 @@ const JobPage = ({ params }: JobDetailPageProps) => {
           );
           setRelatedJobs(finalJobs);
         }
-      } catch (error) {
-        console.error("Error fetching job details:", error);
+      } catch (error: unknown) {
+        console.log("Error fetching job detail:", error);
+
+        if (
+          typeof error === "object" &&
+          error !== null &&
+          "response" in error &&
+          (error as { response: { status?: number } }).response?.status === 403
+        ) {
+          router.push("/error");
+        }
       } finally {
         setLoading(false);
       }
@@ -230,9 +239,17 @@ const JobPage = ({ params }: JobDetailPageProps) => {
         await updatePost(updatedData); // Gọi API cập nhật
         alert("Đóng tuyển dụng thành công");
         router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
-      } catch (error) {
-        alert("Đã xảy ra lỗi khi đóng tuyển dụng.");
-        console.error("Error updating job:", error);
+      } catch (error: unknown) {
+        console.log("Error updating job:", error);
+
+        if (
+          typeof error === "object" &&
+          error !== null &&
+          "response" in error &&
+          (error as { response: { status?: number } }).response?.status === 403
+        ) {
+          router.push("/error");
+        }
       }
     }
   };
@@ -396,7 +413,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">
                     Location
                   </h3>
-                  <p className="text-gray-600 text-center whitespace-nowrap">
+                  <p className="text-gray-600 text-center break-words">
                     {job?.location.city}, {job?.location.address}
                   </p>
                 </div>

@@ -3,7 +3,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
-const CreateAccountForm = () => {
+interface CreateAccountFormProps {
+  onAccountCreated: () => void;
+}
+
+const CreateAccountForm = ({ onAccountCreated }: CreateAccountFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,14 +64,17 @@ const CreateAccountForm = () => {
         setName("");
         setEmail("");
         setPassword("");
+        onAccountCreated();
       } else if (response.status === 400) {
         setError("Tài khoản đã tồn tại");
       } else {
         setError("Đăng ký thất bại");
       }
-    } catch (error: any) {
-      if (error.response) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
         alert(`Có lỗi xảy ra: ${error.response.data.message}`);
+      } else if (error instanceof Error) {
+        alert(`Có lỗi xảy ra: ${error.message}`);
       } else {
         alert("Có lỗi xảy ra trong khi tạo tài khoản!");
       }

@@ -2,29 +2,49 @@
 
 import { CardJob } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
-import { getListJobsWithCompany } from "@/app/services/jobService";
+import {
+  getListJobsWithCompany,
+  getListJobsWithRecruiter,
+} from "@/app/services/jobService";
 import { JobListSkeleton } from "../sketetons";
 import JobCardClose from "../recruiter/JobCardClose";
 import { useAuth } from "@/app/contexts/auth-context";
 
-export default function CloseJobList() {
+type CloseJobListProps = {
+  recruiterId: string;
+};
+
+export default function CloseJobList({ recruiterId }: CloseJobListProps) {
   const [jobs, setJobs] = useState<CardJob[]>([]);
   const [loading, setLoading] = useState(true);
 
   const { user } = useAuth();
 
   useEffect(() => {
-    getListJobsWithCompany(user?._id || "", "close")
-      .then((data) => {
-        setJobs(data);
-      })
-      .catch((err) => {
-        console.log("Error fetching jobs:", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    if (recruiterId === "") {
+      getListJobsWithCompany(user?.userId || "", "CLOSE")
+        .then((data) => {
+          setJobs(data);
+        })
+        .catch((err) => {
+          console.log("Error fetching jobs:", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      getListJobsWithRecruiter(recruiterId, "CLOSE")
+        .then((data) => {
+          setJobs(data);
+        })
+        .catch((err) => {
+          console.log("Error fetching jobs:", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [recruiterId]);
 
   const handleDeleteJob = (id: string) => {
     setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
@@ -35,7 +55,7 @@ export default function CloseJobList() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-3 gap-4">
       {jobs.map((job, index) => {
         return (
           <JobCardClose
