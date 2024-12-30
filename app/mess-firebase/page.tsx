@@ -52,8 +52,8 @@ const MessagesPage: React.FC = () => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  setSelectedUser(null);
+  // const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const selectedUser = null;
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
@@ -98,8 +98,7 @@ const MessagesPage: React.FC = () => {
   useEffect(() => {
     if (!currentUser) return;
     if (!selectedUser) return;
-
-    const chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
+    const chatId = "none";
     const messagesRef = ref(database, `messages/${chatId}/messages`);
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
@@ -114,13 +113,14 @@ const MessagesPage: React.FC = () => {
   }, [selectedUser]);
 
   const sendMessage = async () => {
-    if (!currentUser) return;
-    let chatId: string;
-    if (!selectedUser || !message) {
-      chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${receiverId}` : `${receiverId}_${currentUser.userId}`;
-    } else {
-      chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
-    }
+    if (!currentUser || !message) return;
+    // if (!selectedUser || !message) {
+    // if (!message) {
+    const chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${receiverId}` : `${receiverId}_${currentUser.userId}`;
+    // }
+    // else {
+    //   chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
+    // }
 
     if (message.trim() === "") return;
 
@@ -133,8 +133,8 @@ const MessagesPage: React.FC = () => {
       }, { onlyOnce: true });
     });
 
-    let candidateName = currentUser.role === "candidate" ? currentUser.name : selectedUser?.name;
-    let recruiterName = currentUser.role === "recruiter" ? currentUser.name : selectedUser?.name;
+    let candidateName = currentUser.role === "candidate" ? currentUser.name : "recruiter";
+    let recruiterName = currentUser.role === "recruiter" ? currentUser.name : "candidate";
 
     if (!metadataSnapshot) {
       if (currentUser.role === "recruiter") {
@@ -183,8 +183,7 @@ const MessagesPage: React.FC = () => {
               onClick={() => {
                 handleUserSelection(user)
               }}
-              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${selectedUser?.id === user.id ? "bg-gray-200" : "hover:bg-gray-100"
-                }`}
+              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg`}
             >
               <img
                 src="/avatar_temp.jpg"
@@ -206,7 +205,6 @@ const MessagesPage: React.FC = () => {
               alt="avatar"
               className="w-10 h-10 rounded-full mr-2"
             />
-            <p className="font-semibold">{selectedUser?.name}</p>
           </div>
           <MessageList messages={messages} currentUserId={currentUser.userId} />
           <MessageInput

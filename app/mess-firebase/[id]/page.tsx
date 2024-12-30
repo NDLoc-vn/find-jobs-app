@@ -116,9 +116,9 @@ const MessagesPage: React.FC = () => {
   }, [selectedUser]);
 
   const sendMessage = async () => {
-    if (!currentUser) return;
+    if (!currentUser || !message) return;
     let chatId: string;
-    if (!selectedUser || !message) {
+    if (!selectedUser) {
       chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${receiverId}` : `${receiverId}_${currentUser.userId}`;
     } else {
       chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
