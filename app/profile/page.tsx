@@ -112,7 +112,7 @@ const ProfilePage = () => {
   const handleSave = () => {
     if (activeForm === "editProfile") {
       axios
-        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile`,
+        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${user?.userId}`,
           {
             name: userProfile?.name,
             location: userProfile?.location,
@@ -169,7 +169,7 @@ const ProfilePage = () => {
           return;
         }
         axios
-          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu`,
+          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?.userId}`,
             {
               "education": {
                 "school": education?.school,
@@ -204,7 +204,7 @@ const ProfilePage = () => {
       const skillsToDelete = fetchedSkills.filter(fetchedSkill => !skills.includes(fetchedSkill.title));
       skillsToDelete.forEach(skill => {
         axios
-          .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills`,
+          .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills/${user?.userId}`,
             {
               headers: {
                 Authorization: token,
@@ -220,7 +220,7 @@ const ProfilePage = () => {
       });
 
       axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills`,
+        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills/${user?.userId}`,
           {
             "skills": postSkills
           },
@@ -270,7 +270,7 @@ const ProfilePage = () => {
           });
       } else {
         axios
-          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp`,
+          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?.userId}`,
             {
               "experience": {
                 "company": experience?.company,
@@ -302,7 +302,7 @@ const ProfilePage = () => {
     if (!isConfirmed) return;
     if (activeForm === "education") {
       axios
-        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu`,
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?._id}`,
           {
             headers: {
               Authorization: token,
@@ -321,7 +321,7 @@ const ProfilePage = () => {
         });
     } else if (activeForm === "experience") {
       axios
-        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp`,
+        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?._id}`,
           {
             headers: {
               Authorization: token,
@@ -594,7 +594,7 @@ const ProfilePage = () => {
 
         </div>
 
-        <div className="mt-4 bg-white shadow-md rounded-lg p-4">
+        {/* <div className="mt-4 bg-white shadow-md rounded-lg p-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-bold">Hồ sơ xin việc</h3>
             <button onClick={() => openForm("application")} className="p-2">
@@ -608,7 +608,7 @@ const ProfilePage = () => {
             </button>
           </div>
           <p className="text-gray-500 mt-2">Upload your CV</p>
-        </div>
+        </div> */}
 
         {/* Pop-up Form */}
         {activeForm && (
