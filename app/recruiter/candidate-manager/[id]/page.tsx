@@ -152,6 +152,7 @@ const CandidateManager = () => {
               </div> */}
               <div>
                 <select
+                  aria-label="Resume Status"
                   value={candidate.status}
                   onChange={(e) =>
                     handleChangeStatus(
