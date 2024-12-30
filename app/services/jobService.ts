@@ -183,6 +183,42 @@ export const getListClosedJobs = async (): Promise<CardJob[]> => {
   }
 };
 
+export const getListJobsWithCompany = async (
+  idCompany: string,
+  status: string
+): Promise<CardJob[]> => {
+  try {
+    const response = await apiClient.get(
+      `/jobs-by-company?idCompany=${idCompany}&status=${status}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
+export const getListJobsWithRecruiter = async (
+  idRecruiter: string,
+  status: string
+): Promise<CardJob[]> => {
+  try {
+    const response = await apiClient.get(
+      `/jobs-by-recruiter?idRecruiter=${idRecruiter}&status=${status}`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching job list:", error);
+    throw error;
+  }
+};
+
 export const getListOpenedJobsWithId = async (
   recruiterId: string
 ): Promise<CardJob[]> => {
@@ -303,6 +339,26 @@ export const deletePost = async (postId: string): Promise<void> => {
     return response.data;
   } catch (error) {
     console.error("Error fetching post job details:", error);
+    throw error;
+  }
+};
+
+export const editStatusCv = async (
+  idPost: string,
+  status: string,
+  idCandidate: string
+): Promise<void> => {
+  try {
+    const response = await apiClient.post(
+      `/jobs-applied/editStatus`,
+      { idPost, status, idCandidate },
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error update status cv:", error);
     throw error;
   }
 };

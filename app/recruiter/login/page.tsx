@@ -249,10 +249,12 @@ const Login = () => {
         `${process.env.NEXT_PUBLIC_AUTH_API_URL}/api/auth`,
         userData
       );
-      if (response.status === 200 &&
-        // response.headers["authorization"] &&
-        response.data.token &&
-        response.data.account.role === "recruiter"
+      if (
+        (response.status === 200 &&
+          // response.headers["authorization"] &&
+          response.data.token &&
+          response.data.account.role === "recruiter") ||
+        response.data.account.role === "company"
       ) {
         // const token = response.headers["authorization"];
         const token = response.data.token;
@@ -260,7 +262,9 @@ const Login = () => {
         console.log(response.data);
         login(token, userData);
         toast.success("Đăng nhập thành công");
-        router.push("/recruiter/dashboard");
+        if (response.data.account.role === "recruiter")
+          router.push("/recruiter/dashboard");
+        else router.push("/company/dashboard");
       } else if (response.status === 400) {
         // bughh return wrong status code
         setError("Đăng nhập thất bại");

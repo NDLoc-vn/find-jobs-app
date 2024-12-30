@@ -54,14 +54,14 @@ const JobList: React.FC<JobListProps> = ({
     return <JobListSkeleton />;
   }
 
-  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+  const totalPages = Math.ceil(jobs?.length / jobsPerPage);
   const startIndex = (currentPage - 1) * jobsPerPage;
-  const currentJobs = jobs.slice(startIndex, startIndex + jobsPerPage);
+  const currentJobs = jobs?.slice(startIndex, startIndex + jobsPerPage);
 
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {currentJobs.map((job, index) => (
+        {currentJobs?.map((job, index) => (
           <JobCard
             key={index}
             id={job.id}

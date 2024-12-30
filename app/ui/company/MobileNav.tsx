@@ -72,7 +72,7 @@ const MobileNav = () => {
                   Trang chủ
                 </button>
               </Link>
-              <Link href="/company/post-job" className="w-full">
+              {/* <Link href="/company/post-job" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
@@ -83,7 +83,7 @@ const MobileNav = () => {
                 >
                   Đăng tuyển
                 </button>
-              </Link>
+              </Link> */}
               <Link href="/company/recruiter-manager" className="w-full">
                 <button
                   className={clsx(
@@ -108,7 +108,7 @@ const MobileNav = () => {
                   Bài đăng
                 </button>
               </Link>
-              <Link href="/company/message" className="w-full">
+              {/* <Link href="/company/message" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
@@ -119,7 +119,7 @@ const MobileNav = () => {
                 >
                   Nhắn tin
                 </button>
-              </Link>
+              </Link> */}
 
               <button
                 onClick={handleLogout}
