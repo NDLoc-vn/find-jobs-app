@@ -34,6 +34,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isMessagePage = typeof window !== "undefined" && window.location.pathname.includes("/mess-firebase");
   return (
     <html lang="en">
       <body
@@ -57,7 +58,7 @@ export default function RootLayout({
           </AuthProvider>
         </QueryClientProviderWrapper>
 
-        <Footer />
+        {isMessagePage && <Footer />}
       </body>
     </html>
   );

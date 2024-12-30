@@ -1,19 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import MessageItem from './MessageItem';
-
-// interface Message {
-//   id: string;
-//   message: string;
-//   sender: 'user' | 'recruiter';
-//   avatar: string;
-// }
 
 interface Message {
   id: string;
   text: string;
-  // sender: 'user' | 'recruiter';
   senderId: string;
-  // currentUserId: string;
   timestamp: number;
 }
 
@@ -23,6 +14,14 @@ interface MessageListProps {
 }
 
 const MessageList: React.FC<MessageListProps> = ({ messages, currentUserId }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   return (
     <div className="flex-1 overflow-y-scroll p-4">
       {messages.map((msg) => (
@@ -31,10 +30,11 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentUserId }) =>
           message={msg.text}
           senderId={msg.senderId}
           currentUserId={currentUserId}
-          // avatar={msg.avatar}
           avatar="/avatar_temp.jpg"
+          timestamp={msg.timestamp}
         />
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
