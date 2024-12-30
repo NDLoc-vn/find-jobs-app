@@ -24,6 +24,13 @@ interface User {
   lastMessageTimestamp?: number;
 }
 
+interface Metadata {
+  lastMessage: string;
+  lastMessageTimestamp: number;
+  recruiterName: string;
+  candidateName: string;
+}
+
 // const generateChatId = (userId1: string, userId2: string) => {
 //   return [userId1, userId2].join("_");
 // };
@@ -34,22 +41,19 @@ const fetchUserName = async (userId: string): Promise<string> => {
     return response.data.name;
   } catch (error) {
     console.error("Error fetching user name:", error);
-    return userId; // Fallback to userId if there's an error
+    return userId;
   }
 };
 
 const MessagesPage: React.FC = () => {
   const { user: currentUser, token } = useAuth();
   const router = useRouter();
-  if (!currentUser || !token) {
-    router.push("/");
-    return;
-  };
   const { id: receiverId } = useParams<{ id: string }>();
 
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  setSelectedUser(null);
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
@@ -65,7 +69,7 @@ const MessagesPage: React.FC = () => {
           const [userId1, userId2] = thread.split("_");
           const otherUserId = userId1 === currentUser.userId ? userId2 : userId1;
           const metadataRef = ref(database, `messages/${thread}/metadata`);
-          const metadataSnapshot = await new Promise<any>((resolve) => {
+          const metadataSnapshot = await new Promise<Metadata>((resolve) => {
             onValue(metadataRef, (snapshot) => {
               resolve(snapshot.val());
             }, { onlyOnce: true });
@@ -92,9 +96,10 @@ const MessagesPage: React.FC = () => {
   }, [currentUser]);
 
   useEffect(() => {
+    if (!currentUser) return;
     if (!selectedUser) return;
 
-    let chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
+    const chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
     const messagesRef = ref(database, `messages/${chatId}/messages`);
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
@@ -109,6 +114,7 @@ const MessagesPage: React.FC = () => {
   }, [selectedUser]);
 
   const sendMessage = async () => {
+    if (!currentUser) return;
     let chatId: string;
     if (!selectedUser || !message) {
       chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${receiverId}` : `${receiverId}_${currentUser.userId}`;
@@ -121,7 +127,7 @@ const MessagesPage: React.FC = () => {
     const messagesRef = ref(database, `messages/${chatId}/messages`);
     const metadataRef = ref(database, `messages/${chatId}/metadata`);
 
-    const metadataSnapshot = await new Promise<any>((resolve) => {
+    const metadataSnapshot = await new Promise<Metadata | null>((resolve) => {
       onValue(metadataRef, (snapshot) => {
         resolve(snapshot.val());
       }, { onlyOnce: true });
@@ -159,6 +165,11 @@ const MessagesPage: React.FC = () => {
 
   const handleUserSelection = (user: User) => {
     router.push(`/mess-firebase/${user.id}`);
+  };
+
+  if (!currentUser || !token) {
+    router.push("/");
+    return;
   };
 
   return (
