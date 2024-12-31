@@ -39,6 +39,28 @@ export default function PostJob() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Kiểm tra mức lương
+    const salaryMin = parseInt(formData.salaryMin, 10);
+    const salaryMax = parseInt(formData.salaryMax, 10);
+    if (salaryMin < 0) {
+      alert("Mức lương tối thiểu phải lớn hơn hoặc bằng 0.");
+      return;
+    }
+    if (salaryMax !== 0 && salaryMax < salaryMin) {
+      alert(
+        "Mức lương tối đa phải lớn hơn hoặc bằng mức lương tối thiểu hoặc bằng 0."
+      );
+      return;
+    }
+
+    // Kiểm tra ngày hết hạn
+    const currentDate = new Date();
+    const dueDate = new Date(formData.dueDate);
+    if (dueDate <= currentDate) {
+      alert("Ngày hạn phải lớn hơn ngày hiện tại.");
+      return;
+    }
+
     const postData = {
       id: null,
       title: formData.title,

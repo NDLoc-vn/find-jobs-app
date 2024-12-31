@@ -1,52 +1,65 @@
 "use client";
 
-// import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
-import { getDetailJobForGuest } from "@/app/services/jobService";
-import Header from "@/app/ui/company/Header";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation"; // Nếu sử dụng App Router
+import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
+import { categories } from "@/app/lib/data";
+import Header from "@/app/ui/company/Header";
 
 export default function EditJob() {
-  const { id } = useParams();
   const [formData, setFormData] = useState({
     title: "",
-    category: "",
-    employmentType: "",
-    location: {
-      city: "",
-      address: "",
-    },
-    salary: {
-      min: 0,
-      max: 0,
-    },
+    categories: categories[0]?.name || "",
+    Education: "Intern",
+    employmentType: "Full-time",
+    city: "",
+    address: "",
+    salaryMin: "",
+    salaryMax: "",
+    currency: "VND",
     dueDate: "",
     description: "",
     requirements: "",
+    company: "",
+    postDate: "",
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const { id } = useParams();
   const jobId = Array.isArray(id) ? id[0] : id;
+
   useEffect(() => {
-    if (jobId) {
-      getDetailJobForGuest(jobId).then((data) => {
+    const fetchJob = async () => {
+      try {
+        if (!jobId) return;
+
+        const job = await getDetailJobForGuest(jobId); // Gọi API để lấy dữ liệu
         setFormData({
-          title: data.title,
-          category: data.category.name,
-          employmentType: data.employmentType,
-          location: {
-            city: data.location.city,
-            address: data.location.address,
-          },
-          salary: {
-            min: data.salary.min,
-            max: data.salary.max,
-          },
-          dueDate: data.dueDate,
-          description: data.description,
-          requirements: data.requirements.join("\n"),
+          title: job.title || "",
+          categories: job.category?.name || categories[0]?.name,
+          Education: "Intern",
+          employmentType: job.employmentType || "Full-time",
+          city: job.location?.city || "",
+          address: job.location?.address || "",
+          salaryMin: job.salary?.min?.toString() || "",
+          salaryMax: job.salary?.max?.toString() || "",
+          currency: job.salary?.currency || "VND",
+          dueDate: new Date(parseInt(job.dueDate, 10))
+            .toISOString()
+            .slice(0, 10),
+          description: job.description || "",
+          requirements: job.requirements?.join("\n") || "",
+          company: job.companyName,
+          postDate: job.postDate,
         });
-      });
-    }
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching job data:", error);
+      }
+    };
+
+    fetchJob();
   }, [jobId]);
 
   const handleChange = (
@@ -64,38 +77,77 @@ export default function EditJob() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const postData = {
+    // Kiểm tra mức lương
+    const salaryMin = parseInt(formData.salaryMin, 10);
+    const salaryMax = parseInt(formData.salaryMax, 10);
+    if (salaryMin < 0) {
+      alert("Mức lương tối thiểu phải lớn hơn hoặc bằng 0.");
+      return;
+    }
+    if (salaryMax !== 0 && salaryMax < salaryMin) {
+      alert(
+        "Mức lương tối đa phải lớn hơn hoặc bằng mức lương tối thiểu hoặc bằng 0."
+      );
+      return;
+    }
+
+    // Kiểm tra ngày hết hạn
+    const currentDate = new Date();
+    const dueDate = new Date(formData.dueDate);
+    if (dueDate <= currentDate) {
+      alert("Ngày hạn phải lớn hơn ngày hiện tại.");
+      return;
+    }
+
+    const updatedData = {
+      id: jobId,
       title: formData.title,
-      category: formData.category,
+      category: categories.find((c) => c.name === formData.categories) || {
+        id: "",
+        name: "",
+      },
+      company: formData.company,
+      postedBy: null,
       description: formData.description,
+      education: formData.Education,
       requirements: formData.requirements.split("\n"),
-      salaryMin: formData.salary.min,
-      salaryMax: formData.salary.max,
-      city: formData.location.city,
-      address: formData.location.address,
+      salary: {
+        min: parseInt(formData.salaryMin, 10),
+        max: parseInt(formData.salaryMax, 10),
+        currency: formData.currency,
+      },
+      location: {
+        city: formData.city,
+        address: formData.address,
+      },
       employmentType: formData.employmentType,
-      dueDate: formData.dueDate,
+      postDate: formData.postDate,
+      dueDate: new Date(formData.dueDate).getTime().toString(),
+      status: "open",
     };
 
-    console.log("Sending data to server:", postData);
-
     try {
-      // await updatePost(jobId, postData);
-      alert("Chỉnh sửa tuyển dụng thành công!");
+      await updatePost(updatedData); // Gọi API cập nhật
+      alert("Cập nhật công việc thành công!");
+      router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
     } catch (error) {
-      alert("Đã xảy ra lỗi khi chỉnh sửa tin.");
-      console.error("Error update job post:", error);
+      alert("Đã xảy ra lỗi khi cập nhật công việc.");
+      console.error("Error updating job:", error);
     }
   };
+
+  if (isLoading) {
+    return <div>Đang tải dữ liệu...</div>;
+  }
 
   return (
     <>
       <Header />
       <form
         onSubmit={handleSubmit}
-        className="my-10 max-w-4xl mx-auto p-8 border rounded-lg shadow-lg"
+        className="my-10 max-w-5xl mx-auto p-8 border rounded-lg shadow-lg"
       >
-        <h2 className="text-2xl font-bold mb-6">Chỉnh sửa tin tuyển dụng</h2>
+        <h2 className="text-2xl font-bold mb-6">Chỉnh sửa công việc</h2>
 
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="space-y-6 flex-1">
@@ -118,6 +170,29 @@ export default function EditJob() {
               />
             </div>
 
+            {/* <div>
+              <label
+                htmlFor="Education"
+                className="block font-medium text-gray-700"
+              >
+                Trình độ<span className="text-red-500">*</span>
+              </label>
+              <select
+                id="Education"
+                name="Education"
+                value={formData.Education}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
+              >
+                <option value="Intern">Intern</option>
+                <option value="Junior">Junior</option>
+                <option value="Mid-level">Mid-level</option>
+                <option value="Senior">Senior</option>
+                <option value="Manager">Manager</option>
+              </select>
+            </div> */}
+
             <div>
               <label
                 htmlFor="categories"
@@ -128,14 +203,16 @@ export default function EditJob() {
               <select
                 id="categories"
                 name="categories"
-                value={formData.category}
+                value={formData.categories}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -154,9 +231,10 @@ export default function EditJob() {
                 required
                 className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
               >
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
+                <option value="FULL-TIME">Full-time</option>
+                <option value="PART-TIME">Part-time</option>
+                <option value="CONTRACT">Contract</option>
+                <option value="INTERNSHIP">Internship</option>
               </select>
             </div>
 
@@ -172,7 +250,7 @@ export default function EditJob() {
                   id="city"
                   name="city"
                   type="text"
-                  value={formData.location.city}
+                  value={formData.city}
                   onChange={handleChange}
                   placeholder="Đà Nẵng, ..."
                   required
@@ -190,7 +268,7 @@ export default function EditJob() {
                   id="address"
                   name="address"
                   type="text"
-                  value={formData.location.address}
+                  value={formData.address}
                   onChange={handleChange}
                   placeholder="Đà Nẵng, ..."
                   required
@@ -199,8 +277,8 @@ export default function EditJob() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+              <div className="col-span-2">
                 <label
                   htmlFor="salaryMin"
                   className="block font-medium text-gray-700"
@@ -211,13 +289,13 @@ export default function EditJob() {
                   id="salaryMin"
                   name="salaryMin"
                   type="number"
-                  value={formData.salary.min}
+                  value={formData.salaryMin}
                   onChange={handleChange}
                   placeholder="Tối thiểu"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
               </div>
-              <div>
+              <div className="col-span-2">
                 <label
                   htmlFor="salaryMax"
                   className="block font-medium text-gray-700"
@@ -228,11 +306,30 @@ export default function EditJob() {
                   id="salaryMax"
                   name="salaryMax"
                   type="number"
-                  value={formData.salary.max}
+                  value={formData.salaryMax}
                   onChange={handleChange}
                   placeholder="Tối đa"
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
                 />
+              </div>
+              <div className="col-span-1">
+                <label
+                  htmlFor="currency"
+                  className="block font-medium text-gray-700"
+                >
+                  Tiền tệ
+                </label>
+                <select
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 p-2 w-fit border rounded-md focus:ring focus:ring-xanhduong-500"
+                >
+                  <option value="VND">VND</option>
+                  <option value="$">$</option>
+                </select>
               </div>
             </div>
 
