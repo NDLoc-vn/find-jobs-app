@@ -4,7 +4,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { deletePost } from "@/app/services/jobService";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface JobCardProps {
   id: string;
@@ -17,6 +18,7 @@ interface JobCardProps {
   address: string;
   employmentType: string;
   numberApplicants: number;
+  onDelete: (id: string) => void;
 }
 
 const JobCardOpen: React.FC<JobCardProps> = ({
@@ -30,14 +32,20 @@ const JobCardOpen: React.FC<JobCardProps> = ({
   address,
   employmentType,
   numberApplicants,
+  onDelete,
 }) => {
   const router = useRouter();
+  const path = usePathname();
 
-  const handleEdit = () => {
-    router.push(`/company/edit-job/${id}`);
+  const handleEdit = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    router.push(`/company/edit-post/${id}`);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     const isConfirmed = window.confirm(
       "Bạn có chắc chắn muốn xóa công việc này không?"
     );
@@ -45,16 +53,23 @@ const JobCardOpen: React.FC<JobCardProps> = ({
     if (isConfirmed) {
       try {
         await deletePost(id);
-        alert("Xóa công việc thành công");
+        toast.success("Xóa công việc thành công");
+        onDelete(id);
       } catch (error) {
         console.error("Lỗi khi xóa công việc:", error);
-        alert("Xóa công việc thất bại");
+        toast.error("Xóa công việc thất bại");
       }
     }
   };
 
+  const handleSeeCandidate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/company/candidate-manager/${id}`);
+  };
+
   return (
-    <Link href={`/company/candidate-manager/${id}`}>
+    <Link href={`/search-job/${id}`}>
       <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-bold text-lg">{title}</h3>
@@ -82,7 +97,8 @@ const JobCardOpen: React.FC<JobCardProps> = ({
             {employmentType}
           </span>
           <p className="text-gray-400">
-            Salary: {currency} {salaryMin}-{salaryMax}
+            Salary: {currency} {salaryMin.toLocaleString()}-
+            {salaryMax.toLocaleString()}
           </p>
         </div>
 
@@ -113,15 +129,22 @@ const JobCardOpen: React.FC<JobCardProps> = ({
           </div>
         </div>
 
-        <div className="flex justify-between items-center rounded p-2 mt-2 bg-[#d9d9d9] px-4">
-          <p>Số lượng ứng tuyển: {numberApplicants}</p>
-          <Image
-            src="/icon/mag-glass.svg"
-            width={20}
-            height={20}
-            alt="Search icon"
-          />
-        </div>
+        {path.startsWith("/company/candidate-manager") ? (
+          <div></div>
+        ) : (
+          <div
+            className="flex justify-between items-center rounded p-2 mt-2 bg-[#d9d9d9] px-4"
+            onClick={handleSeeCandidate}
+          >
+            <p>Số lượng ứng tuyển: {numberApplicants}</p>
+            <Image
+              src="/icon/mag-glass.svg"
+              width={20}
+              height={20}
+              alt="Search icon"
+            />
+          </div>
+        )}
       </div>
     </Link>
   );

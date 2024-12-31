@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation"; // Nếu sử dụng App
 import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
 import { categories } from "@/app/lib/data";
 import Header from "@/app/ui/recruiter/Header";
+import { toast } from "react-toastify";
 
 export default function EditJob() {
   const [formData, setFormData] = useState({
@@ -77,6 +78,28 @@ export default function EditJob() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Kiểm tra mức lương
+    const salaryMin = parseInt(formData.salaryMin, 10);
+    const salaryMax = parseInt(formData.salaryMax, 10);
+    if (salaryMin < 0) {
+      alert("Mức lương tối thiểu phải lớn hơn hoặc bằng 0.");
+      return;
+    }
+    if (salaryMax !== 0 && salaryMax < salaryMin) {
+      alert(
+        "Mức lương tối đa phải lớn hơn hoặc bằng mức lương tối thiểu hoặc bằng 0."
+      );
+      return;
+    }
+
+    // Kiểm tra ngày hết hạn
+    const currentDate = new Date();
+    const dueDate = new Date(formData.dueDate);
+    if (dueDate <= currentDate) {
+      alert("Ngày hạn phải lớn hơn ngày hiện tại.");
+      return;
+    }
+
     const updatedData = {
       id: jobId,
       title: formData.title,
@@ -106,10 +129,10 @@ export default function EditJob() {
 
     try {
       await updatePost(updatedData); // Gọi API cập nhật
-      alert("Cập nhật công việc thành công!");
+      toast.success("Cập nhật công việc thành công!");
       router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
     } catch (error) {
-      alert("Đã xảy ra lỗi khi cập nhật công việc.");
+      toast.error("Đã xảy ra lỗi khi cập nhật công việc.");
       console.error("Error updating job:", error);
     }
   };

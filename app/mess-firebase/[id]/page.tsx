@@ -5,7 +5,7 @@ import { ref, onValue, push, set } from "firebase/database";
 import { database } from "@/app/lib/firebaseConfig";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
-import Header from "@/app/ui/recruiter/Header";
+import Header from "@/app/ui/user/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
@@ -15,14 +15,14 @@ type Message = {
   text: string;
   senderId: string;
   timestamp: number;
-}
+};
 
 type User = {
   id: string;
   name: string;
   lastMessage?: string;
   lastMessageTimestamp?: number;
-}
+};
 
 type Metadata = {
   lastMessage: string;
@@ -37,7 +37,9 @@ type Metadata = {
 
 const fetchUserName = async (userId: string): Promise<string> => {
   try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${userId}`);
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${userId}`
+    );
     return response.data.name;
   } catch (error) {
     console.error("Error fetching user name:", error);
@@ -56,8 +58,6 @@ const MessagesPage: React.FC = () => {
 
   const { id: receiverId } = useParams<{ id: string }>();
 
-
-
   useEffect(() => {
     if (!currentUser) return;
     const userMessagesRef = ref(database, `messages`);
@@ -69,16 +69,23 @@ const MessagesPage: React.FC = () => {
         );
         const userListPromises = userThreads.map(async (thread) => {
           const [userId1, userId2] = thread.split("_");
-          const otherUserId = userId1 === currentUser.userId ? userId2 : userId1;
+          const otherUserId =
+            userId1 === currentUser.userId ? userId2 : userId1;
           const metadataRef = ref(database, `messages/${thread}/metadata`);
           const metadataSnapshot = await new Promise<Metadata>((resolve) => {
-            onValue(metadataRef, (snapshot) => {
-              resolve(snapshot.val());
-            }, { onlyOnce: true });
+            onValue(
+              metadataRef,
+              (snapshot) => {
+                resolve(snapshot.val());
+              },
+              { onlyOnce: true }
+            );
           });
           let otherUsername: string;
           if (currentUser.role === "recruiter") {
-            otherUsername = metadataSnapshot?.candidateName || await fetchUserName(otherUserId);
+            otherUsername =
+              metadataSnapshot?.candidateName ||
+              (await fetchUserName(otherUserId));
           } else {
             otherUsername = metadataSnapshot?.recruiterName;
           }
@@ -101,7 +108,10 @@ const MessagesPage: React.FC = () => {
     if (!selectedUser) return;
     if (!currentUser) return;
 
-    const chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
+    const chatId =
+      currentUser.role === "recruiter"
+        ? `${currentUser.userId}_${selectedUser.id}`
+        : `${selectedUser.id}_${currentUser.userId}`;
     const messagesRef = ref(database, `messages/${chatId}/messages`);
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
@@ -119,9 +129,15 @@ const MessagesPage: React.FC = () => {
     if (!currentUser || !message) return;
     let chatId: string;
     if (!selectedUser) {
-      chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${receiverId}` : `${receiverId}_${currentUser.userId}`;
+      chatId =
+        currentUser.role === "recruiter"
+          ? `${currentUser.userId}_${receiverId}`
+          : `${receiverId}_${currentUser.userId}`;
     } else {
-      chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
+      chatId =
+        currentUser.role === "recruiter"
+          ? `${currentUser.userId}_${selectedUser.id}`
+          : `${selectedUser.id}_${currentUser.userId}`;
     }
 
     if (message.trim() === "") return;
@@ -130,17 +146,25 @@ const MessagesPage: React.FC = () => {
     const metadataRef = ref(database, `messages/${chatId}/metadata`);
 
     const metadataSnapshot = await new Promise<Metadata | null>((resolve) => {
-      onValue(metadataRef, (snapshot) => {
-        resolve(snapshot.val());
-      }, { onlyOnce: true });
+      onValue(
+        metadataRef,
+        (snapshot) => {
+          resolve(snapshot.val());
+        },
+        { onlyOnce: true }
+      );
     });
 
-    let candidateName = currentUser.role === "candidate" ? currentUser.name : selectedUser?.name;
-    let recruiterName = currentUser.role === "recruiter" ? currentUser.name : selectedUser?.name;
+    let candidateName =
+      currentUser.role === "candidate" ? currentUser.name : selectedUser?.name;
+    let recruiterName =
+      currentUser.role === "recruiter" ? currentUser.name : selectedUser?.name;
 
     if (!metadataSnapshot) {
       if (currentUser.role === "recruiter") {
-        const candidateResponse = await axios.get(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${receiverId}`);
+        const candidateResponse = await axios.get(
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${receiverId}`
+        );
         candidateName = candidateResponse.data.name;
       }
     } else {
@@ -172,7 +196,7 @@ const MessagesPage: React.FC = () => {
   if (!currentUser || !token) {
     router.push("/");
     return;
-  };
+  }
 
   return (
     <div className="flex flex-col">
@@ -183,10 +207,13 @@ const MessagesPage: React.FC = () => {
             <div
               key={user.id}
               onClick={() => {
-                handleUserSelection(user)
+                handleUserSelection(user);
               }}
-              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${selectedUser?.id === user.id ? "bg-gray-200" : "hover:bg-gray-100"
-                }`}
+              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${
+                selectedUser?.id === user.id
+                  ? "bg-gray-200"
+                  : "hover:bg-gray-100"
+              }`}
             >
               <img
                 src="/avatar_temp.jpg"

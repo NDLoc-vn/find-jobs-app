@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/contexts/auth-context";
 
 const MobileNav = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -57,7 +57,7 @@ const MobileNav = () => {
         </button>
 
         <nav className="px-4 flex flex-col items-center justify-start mt-20 h-full space-y-6">
-          {isLoggedIn ? (
+          {isLoggedIn && user?.role === "recruiter" ? (
             // {true ? (
             <>
               <Link href="/recruiter/dashboard" className="w-full">
@@ -89,8 +89,8 @@ const MobileNav = () => {
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
                     pathname === "/recruiter/post-manager" ||
-                      pathname === "/recruiter/candidate-manager" ||
-                      pathname === "/recruiter/edit-post"
+                      pathname.startsWith("/recruiter/candidate-manager") ||
+                      pathname.startsWith("/recruiter/edit-post")
                       ? activeClass
                       : inactiveClass
                   )}
@@ -98,11 +98,11 @@ const MobileNav = () => {
                   Bài đăng
                 </button>
               </Link>
-              <Link href="/recruiter/message" className="w-full">
+              <Link href="/recruiter/mess-firebase" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/recruiter/message"
+                    pathname.startsWith("/recruiter/mess-firebase")
                       ? activeClass
                       : inactiveClass
                   )}

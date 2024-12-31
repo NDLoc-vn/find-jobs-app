@@ -38,6 +38,7 @@ const ApplyFormPopup = ({
   // const [cv, setCv] = React.useState<File | null>(null);
   const [cv, setCv] = React.useState<File | null>(null);
   const [coverLetter, setCoverLetter] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -45,7 +46,7 @@ const ApplyFormPopup = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cv) {
       alert("Vui lòng điền đầy đủ thông tin và tải lên CV!");
@@ -57,20 +58,37 @@ const ApplyFormPopup = ({
     formData.append("coverLetter", coverLetter);
     formData.append("idPost", idPost);
 
-    appliedJob(formData).then(() => {
+    setIsLoading(true);
+    try {
+      await appliedJob(formData);
       onApplySuccess();
       onClose();
       toast.success("Ứng tuyển thành công!");
-    });
+    } catch (error) {
+      toast.error("Đã xảy ra lỗi khi ứng tuyển!");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${isOpen ? "block" : "hidden"
-        }`}
+      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${
+        isOpen ? "block" : "hidden"
+      }`}
     >
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">Ứng tuyển công việc</h2>
+        {isLoading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="flex items-center space-x-2">
+              <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"></div>
+              <span className="text-white text-lg">Đang xử lý...</span>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -233,10 +251,17 @@ const JobPage = ({ params }: JobDetailPageProps) => {
         dueDate: job?.postDate,
         status: "close",
       };
+      if (job.status.toLowerCase() === "close") {
+        updatedData.status = "open";
+      }
 
       try {
         await updatePost(updatedData); // Gọi API cập nhật
-        alert("Đóng tuyển dụng thành công");
+        if (job.status.toLowerCase() === "open") {
+          toast.success("Đóng tuyển dụng thành công");
+        } else {
+          toast.success("Mở tuyển dụng thành công");
+        }
         router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
       } catch (error: unknown) {
         console.log("Error updating job:", error);
@@ -326,8 +351,9 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                       </div> */}
                       <div className="flex-grow">
                         <button
-                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${job?.isApplied ? "cursor-not-allowed" : ""
-                            }`}
+                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${
+                            job?.isApplied ? "cursor-not-allowed" : ""
+                          }`}
                           onClick={() => {
                             if (!job?.isApplied) {
                               openPopup();
@@ -348,6 +374,24 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   );
                 } else if (
                   isLoggedIn &&
+                  job?.status.toLowerCase() === "close" &&
+                  (user?.role === "recruiter" || user?.role === "company")
+                ) {
+                  return (
+                    <div className="flex-grow">
+                      <button
+                        className={
+                          "w-full bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap"
+                        }
+                        onClick={handleCloseJobClick}
+                      >
+                        Mở tuyển dụng !
+                      </button>
+                    </div>
+                  );
+                } else if (
+                  isLoggedIn &&
+                  job?.status.toLowerCase() === "open" &&
                   (user?.role === "recruiter" || user?.role === "company")
                 ) {
                   return (
@@ -396,14 +440,14 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   </h3>
                   <p className="font-semibold text-lg text-green-500 text-center whitespace-nowrap">
                     {job?.salary?.min !== undefined &&
-                      job?.salary?.max !== undefined
+                    job?.salary?.max !== undefined
                       ? job.salary.min > 0 && job.salary.max > 0
                         ? `${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}`
                         : job.salary.min > 0
-                          ? `${job.salary.min.toLocaleString()}`
-                          : job.salary.max > 0
-                            ? `${job.salary.max.toLocaleString()}`
-                            : "Negotiable"
+                        ? `${job.salary.min.toLocaleString()}`
+                        : job.salary.max > 0
+                        ? `${job.salary.max.toLocaleString()}`
+                        : "Negotiable"
                       : "Salary information unavailable"}
                   </p>
                 </div>

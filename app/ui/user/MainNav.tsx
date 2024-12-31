@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/app/contexts/auth-context";
 
 const MainNav = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
   const pathname = usePathname();
@@ -24,41 +24,45 @@ const MainNav = () => {
 
   return (
     <div className="flex items-center space-x-4">
-      {isLoggedIn ? (
+      {isLoggedIn && user?.role === "candidate" ? (
         <>
           <Link
             href="/search-job"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/search-job")
-              ? "bg-xanhduong-600 text-white"
-              : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/search-job")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Tìm việc
           </Link>
           <Link
             href="/my-jobs"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/my-jobs")
-              ? "bg-xanhduong-600 text-white"
-              : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/my-jobs")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Công việc
           </Link>
           <Link
-            href="/mess-firebase/"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/mess-firebase/")
-              ? "bg-xanhduong-600 text-white"
-              : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            href="/mess-firebase"
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/mess-firebase")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Nhắn tin
           </Link>
           <Link
             href="/profile"
-            className={`text-lg px-3 py-2 rounded-lg ${isActive("/profile")
-              ? "bg-xanhduong-600 text-white"
-              : "text-blue-600"
-              } hover:bg-xanhduong-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${
+              isActive("/profile")
+                ? "bg-xanhduong-600 text-white"
+                : "text-blue-600"
+            } hover:bg-xanhduong-500 hover:text-white`}
           >
             Cá nhân
           </Link>

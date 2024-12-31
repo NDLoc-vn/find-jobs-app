@@ -7,7 +7,7 @@ import {
   getListJobsWithRecruiter,
 } from "@/app/services/jobService";
 import { JobListSkeleton } from "../sketetons";
-import JobCardClose from "../recruiter/JobCardClose";
+import JobCardClose from "./JobCardClose";
 import { useAuth } from "@/app/contexts/auth-context";
 
 type CloseJobListProps = {
