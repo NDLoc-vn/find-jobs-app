@@ -152,7 +152,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">
                     Salary ({job?.salary.currency})
                   </h3>
-                  <p className="font-semibold text-lg text-green-500 text-center whitespace-nowrap">
+                  <p className="font-semibold text-lg text-green-500 text-center">
                     {job?.salary?.min !== undefined &&
                     job?.salary?.max !== undefined
                       ? job.salary.min > 0 && job.salary.max > 0
