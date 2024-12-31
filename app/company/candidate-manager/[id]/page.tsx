@@ -3,7 +3,7 @@
 // import Pagination from "@/app/ui/Pagination";
 import Header from "@/app/ui/company/Header";
 import JobCardOpen from "@/app/ui/company/JobCardOpen";
-import SearchBar from "@/app/ui/SearchBar";
+// import SearchBar from "@/app/ui/SearchBar";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 import React from "react";
@@ -119,7 +119,7 @@ const CandidateManager = () => {
         <h2 className="text-2xl font-semibold mt-8 mb-2">
           Danh sách ứng viên: {candidates.length}
         </h2>
-        <SearchBar />
+        {/* <SearchBar /> */}
         <div className="mt-4 mb-8">
           {candidates.map((candidate) => (
             <div

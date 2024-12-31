@@ -16,7 +16,7 @@ import {
 import { JobDetailSkeleton } from "@/app/ui/sketetons";
 import Header from "@/app/ui/user/Header";
 import { useAuth } from "@/app/contexts/auth-context";
-import JobCard from "@/app/ui/homepage/JobCart";
+import JobCard from "@/app/ui/user/JobCart";
 import { toast } from "react-toastify";
 
 type JobDetailPageProps = {
@@ -438,7 +438,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">
                     Salary ({job?.salary.currency})
                   </h3>
-                  <p className="font-semibold text-lg text-green-500 text-center whitespace-nowrap">
+                  <p className="font-semibold text-lg text-green-500 text-center">
                     {job?.salary?.min !== undefined &&
                     job?.salary?.max !== undefined
                       ? job.salary.min > 0 && job.salary.max > 0
@@ -499,25 +499,31 @@ const JobPage = ({ params }: JobDetailPageProps) => {
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-1/3 lg:pl-6">
-          <h2 className="text-2xl font-bold mb-4">Những công việc liên quan</h2>
-          <div className="space-y-4">
-            {relatedJobs.map((relatedJob) => (
-              <JobCard
-                key={relatedJob.id}
-                id={relatedJob.id}
-                title={relatedJob.title}
-                company={relatedJob.companyName}
-                salaryMin={relatedJob.salary.min}
-                salaryMax={relatedJob.salary.max}
-                currency={relatedJob.salary.currency}
-                city={relatedJob.location.city}
-                address={relatedJob.location.address}
-                employmentType={relatedJob.employmentType}
-              />
-            ))}
+        {!isLoggedIn || user?.role === "candidate" ? (
+          <div className="w-full lg:w-1/3 lg:pl-6">
+            <h2 className="text-2xl font-bold mb-4">
+              Những công việc liên quan
+            </h2>
+            <div className="space-y-4">
+              {relatedJobs.map((relatedJob) => (
+                <JobCard
+                  key={relatedJob.id}
+                  id={relatedJob.id}
+                  title={relatedJob.title}
+                  company={relatedJob.companyName}
+                  salaryMin={relatedJob.salary.min}
+                  salaryMax={relatedJob.salary.max}
+                  currency={relatedJob.salary.currency}
+                  city={relatedJob.location.city}
+                  address={relatedJob.location.address}
+                  employmentType={relatedJob.employmentType}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
