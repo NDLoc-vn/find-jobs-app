@@ -47,9 +47,9 @@ const MainNav = () => {
             Công việc
           </Link>
           <Link
-            href="/mess-firebase/"
+            href="/mess-firebase"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/mess-firebase/")
+              isActive("/mess-firebase")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}

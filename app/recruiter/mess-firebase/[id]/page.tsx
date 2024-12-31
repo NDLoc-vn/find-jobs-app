@@ -5,31 +5,31 @@ import { ref, onValue, push, set } from "firebase/database";
 import { database } from "@/app/lib/firebaseConfig";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
-import Header from "@/app/ui/user/Header";
+import Header from "@/app/ui/recruiter/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 
-interface Message {
+type Message = {
   id: string;
   text: string;
   senderId: string;
   timestamp: number;
-}
+};
 
-interface User {
+type User = {
   id: string;
   name: string;
   lastMessage?: string;
   lastMessageTimestamp?: number;
-}
+};
 
-interface Metadata {
+type Metadata = {
   lastMessage: string;
   lastMessageTimestamp: number;
   recruiterName: string;
   candidateName: string;
-}
+};
 
 // const generateChatId = (userId1: string, userId2: string) => {
 //   return [userId1, userId2].join("_");
@@ -43,20 +43,20 @@ const fetchUserName = async (userId: string): Promise<string> => {
     return response.data.name;
   } catch (error) {
     console.error("Error fetching user name:", error);
-    return userId;
+    return userId; // Fallback to userId if there's an error
   }
 };
 
 const MessagesPage: React.FC = () => {
   const { user: currentUser, token } = useAuth();
   const router = useRouter();
-  const { id: receiverId } = useParams<{ id: string }>();
 
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  // const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const selectedUser = null;
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [message, setMessage] = useState<string>("");
+
+  const { id: receiverId } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (!currentUser) return;
@@ -90,7 +90,7 @@ const MessagesPage: React.FC = () => {
             otherUsername = metadataSnapshot?.recruiterName;
           }
           if (otherUserId === receiverId) {
-            // setSelectedUser({ id: otherUserId, name: otherUsername });
+            setSelectedUser({ id: otherUserId, name: otherUsername });
           }
           return {
             id: otherUserId,
@@ -105,9 +105,13 @@ const MessagesPage: React.FC = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    if (!currentUser) return;
     if (!selectedUser) return;
-    const chatId = "none";
+    if (!currentUser) return;
+
+    const chatId =
+      currentUser.role === "recruiter"
+        ? `${currentUser.userId}_${selectedUser.id}`
+        : `${selectedUser.id}_${currentUser.userId}`;
     const messagesRef = ref(database, `messages/${chatId}/messages`);
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
@@ -123,16 +127,18 @@ const MessagesPage: React.FC = () => {
 
   const sendMessage = async () => {
     if (!currentUser || !message) return;
-    // if (!selectedUser || !message) {
-    // if (!message) {
-    const chatId =
-      currentUser.role === "recruiter"
-        ? `${currentUser.userId}_${receiverId}`
-        : `${receiverId}_${currentUser.userId}`;
-    // }
-    // else {
-    //   chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
-    // }
+    let chatId: string;
+    if (!selectedUser) {
+      chatId =
+        currentUser.role === "recruiter"
+          ? `${currentUser.userId}_${receiverId}`
+          : `${receiverId}_${currentUser.userId}`;
+    } else {
+      chatId =
+        currentUser.role === "recruiter"
+          ? `${currentUser.userId}_${selectedUser.id}`
+          : `${selectedUser.id}_${currentUser.userId}`;
+    }
 
     if (message.trim() === "") return;
 
@@ -150,9 +156,9 @@ const MessagesPage: React.FC = () => {
     });
 
     let candidateName =
-      currentUser.role === "candidate" ? currentUser.name : "recruiter";
+      currentUser.role === "candidate" ? currentUser.name : selectedUser?.name;
     let recruiterName =
-      currentUser.role === "recruiter" ? currentUser.name : "candidate";
+      currentUser.role === "recruiter" ? currentUser.name : selectedUser?.name;
 
     if (!metadataSnapshot) {
       if (currentUser.role === "recruiter") {
@@ -184,7 +190,7 @@ const MessagesPage: React.FC = () => {
   };
 
   const handleUserSelection = (user: User) => {
-    router.push(`/mess-firebase/${user.id}`);
+    router.push(`/recruiter/mess-firebase/${user.id}`);
   };
 
   if (!currentUser || !token) {
@@ -203,7 +209,11 @@ const MessagesPage: React.FC = () => {
               onClick={() => {
                 handleUserSelection(user);
               }}
-              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg`}
+              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${
+                selectedUser?.id === user.id
+                  ? "bg-gray-200"
+                  : "hover:bg-gray-100"
+              }`}
             >
               <img
                 src="/avatar_temp.jpg"
@@ -225,6 +235,7 @@ const MessagesPage: React.FC = () => {
               alt="avatar"
               className="w-10 h-10 rounded-full mr-2"
             />
+            <p className="font-semibold">{selectedUser?.name}</p>
           </div>
           <MessageList messages={messages} currentUserId={currentUser.userId} />
           <MessageInput

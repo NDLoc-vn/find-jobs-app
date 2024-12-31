@@ -73,7 +73,8 @@ const Login = () => {
         `${process.env.NEXT_PUBLIC_AUTH_API_URL}/api/auth`,
         userData
       );
-      if (response.status === 200 &&
+      if (
+        response.status === 200 &&
         // response.headers["authorization"] &&
         response.data.token &&
         response.data.account.role === "candidate"
@@ -89,6 +90,8 @@ const Login = () => {
         // bughh return wrong status code
         setError("Đăng nhập thất bại");
       } else if (response.status === 401) {
+        setError("Đăng nhập thất bại");
+      } else if (response.data.account.role !== "candidate") {
         setError("Đăng nhập thất bại");
       }
     } catch (err) {

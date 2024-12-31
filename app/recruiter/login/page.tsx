@@ -270,6 +270,8 @@ const Login = () => {
         setError("Đăng nhập thất bại");
       } else if (response.status === 401) {
         setError("Đăng nhập thất bại");
+      } else if (response.data.account.role === "candidate") {
+        setError("Đăng nhập thất bại");
       }
     } catch (err) {
       setError("Đăng nhập thất bại");

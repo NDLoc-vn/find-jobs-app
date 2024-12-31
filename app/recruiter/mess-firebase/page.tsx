@@ -5,7 +5,7 @@ import { ref, onValue, push, set } from "firebase/database";
 import { database } from "@/app/lib/firebaseConfig";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
-import Header from "@/app/ui/user/Header";
+import Header from "@/app/ui/recruiter/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
@@ -184,7 +184,7 @@ const MessagesPage: React.FC = () => {
   };
 
   const handleUserSelection = (user: User) => {
-    router.push(`/mess-firebase/${user.id}`);
+    router.push(`/recruiter/mess-firebase/${user.id}`);
   };
 
   if (!currentUser || !token) {

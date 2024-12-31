@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/app/contexts/auth-context";
 
 const MainNav = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
   const pathname = usePathname();
@@ -19,11 +19,11 @@ const MainNav = () => {
     setShowDropdown((prev) => !prev);
   };
 
-  const isActive = (route: string) => pathname === route;
+  const isActive = (route: string) => pathname.startsWith(route);
 
   return (
     <div className="flex items-center space-x-4">
-      {isLoggedIn ? (
+      {isLoggedIn && user?.role === "company" ? (
         // {true ? (
         <>
           <Link
@@ -59,7 +59,9 @@ const MainNav = () => {
           <Link
             href="/company/post-manager"
             className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/company/post-manager")
+              isActive("/company/post-manager") ||
+              isActive("/company/candidate-manager") ||
+              isActive("/company/edit-post")
                 ? "bg-xanhduong-600 text-white"
                 : "text-blue-600"
             } hover:bg-xanhduong-500 hover:text-white`}

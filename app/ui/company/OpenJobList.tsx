@@ -1,7 +1,7 @@
 "use client";
 
 import { CardJob } from "@/app/lib/definitions";
-import JobCardOpen from "../recruiter/JobCardOpen";
+import JobCardOpen from "./JobCardOpen";
 import { useEffect, useState } from "react";
 import {
   getListJobsWithCompany,

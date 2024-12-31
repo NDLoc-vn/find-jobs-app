@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/contexts/auth-context";
 
 const MobileNav = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -57,7 +57,7 @@ const MobileNav = () => {
         </button>
 
         <nav className="px-4 flex flex-col items-center justify-start mt-20 h-full space-y-6">
-          {isLoggedIn ? (
+          {isLoggedIn && user?.role === "company" ? (
             // {true ? (
             <>
               <Link href="/company/dashboard" className="w-full">
@@ -100,7 +100,9 @@ const MobileNav = () => {
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/company/post-manager"
+                    pathname === "/company/post-manager" ||
+                      pathname.startsWith("/company/candidate-manager") ||
+                      pathname.startsWith("/company/edit-post")
                       ? activeClass
                       : inactiveClass
                   )}
