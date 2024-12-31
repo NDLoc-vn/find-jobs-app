@@ -45,6 +45,14 @@ export const getListCardJobs = async (
     const response = await apiClient.get("/all-jobs", { params });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -58,6 +66,14 @@ export const getDetailJobForGuest = async (
     console.log("Guest");
     return response.data.data as JobDetail;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching post job details:", error);
     throw error;
   }
@@ -70,6 +86,14 @@ export const getDetailJob = async (postId: string): Promise<JobDetail> => {
     });
     return response.data.data as JobDetail;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching post job details:", error);
     throw error;
   }
@@ -82,6 +106,14 @@ export const getListAppliedJobs = async (): Promise<CardJob[]> => {
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -94,6 +126,14 @@ export const appliedJob = async (formData: FormData): Promise<void> => {
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error adding job list:", error);
     throw error;
   }
@@ -111,6 +151,14 @@ export const getListCandidateAppliedJobs = async (
     );
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -123,6 +171,14 @@ export const getListBookmarkedJobs = async (): Promise<CardJob[]> => {
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -139,6 +195,14 @@ export const addBookmarkedJob = async (postId: string): Promise<void> => {
     );
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error adding job list:", error);
     throw error;
   }
@@ -154,6 +218,14 @@ export const deleteBookmarkedJob = async (postId: string): Promise<void> => {
     );
     return response.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -166,6 +238,14 @@ export const getListOpenedJobs = async (): Promise<CardJob[]> => {
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -178,6 +258,14 @@ export const getListClosedJobs = async (): Promise<CardJob[]> => {
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -196,6 +284,14 @@ export const getListJobsWithCompany = async (
     );
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -214,6 +310,14 @@ export const getListJobsWithRecruiter = async (
     );
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -228,6 +332,14 @@ export const getListOpenedJobsWithId = async (
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -242,6 +354,14 @@ export const getListClosedJobsWithId = async (
     });
     return response.data.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error fetching job list:", error);
     throw error;
   }
@@ -279,6 +399,14 @@ export const createPost = async (postData: {
     });
     console.log("Post created successfully:", response.data);
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error creating job post:", error);
     throw error;
   }
@@ -326,7 +454,15 @@ export const updatePost = async (postData: {
     });
     console.log("Post update successfully:", response.data);
   } catch (error) {
-    console.error("Error creating job post:", error);
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
+    console.error("Error updating job post:", error);
     throw error;
   }
 };
@@ -338,7 +474,15 @@ export const deletePost = async (postId: string): Promise<void> => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error fetching post job details:", error);
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
+    console.error("Error delete job:", error);
     throw error;
   }
 };
@@ -358,6 +502,14 @@ export const editStatusCv = async (
     );
     return response.data;
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response: { status?: number } }).response?.status === 403
+    ) {
+      window.location.href = "/error";
+    }
     console.error("Error update status cv:", error);
     throw error;
   }
