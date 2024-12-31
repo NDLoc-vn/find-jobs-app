@@ -5,6 +5,7 @@ import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/recruiter/Header";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function PostJob() {
   const [formData, setFormData] = useState({
@@ -92,10 +93,10 @@ export default function PostJob() {
 
     try {
       await createPost(postData);
-      alert("Đăng tin tuyển dụng thành công!");
+      toast.success("Đăng tin tuyển dụng thành công!");
       router.push("/recruiter/post-manager");
     } catch (error) {
-      alert("Đã xảy ra lỗi khi đăng tin.");
+      toast.error("Đã xảy ra lỗi khi đăng tin.");
       console.error("Error creating job post:", error);
     }
   };

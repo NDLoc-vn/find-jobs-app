@@ -3,6 +3,7 @@
 import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/company/Header";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function PostJob() {
   const [formData, setFormData] = useState({
@@ -65,9 +66,9 @@ export default function PostJob() {
 
     try {
       await createPost(postData);
-      alert("Đăng tin tuyển dụng thành công!");
+      toast.success("Đăng tin tuyển dụng thành công!");
     } catch (error) {
-      alert("Đã xảy ra lỗi khi đăng tin.");
+      toast.error("Đã xảy ra lỗi khi đăng tin.");
       console.error("Error creating job post:", error);
     }
   };

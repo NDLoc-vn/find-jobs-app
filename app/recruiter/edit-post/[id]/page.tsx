@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation"; // Nếu sử dụng App
 import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
 import { categories } from "@/app/lib/data";
 import Header from "@/app/ui/recruiter/Header";
+import { toast } from "react-toastify";
 
 export default function EditJob() {
   const [formData, setFormData] = useState({
@@ -128,10 +129,10 @@ export default function EditJob() {
 
     try {
       await updatePost(updatedData); // Gọi API cập nhật
-      alert("Cập nhật công việc thành công!");
+      toast.success("Cập nhật công việc thành công!");
       router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
     } catch (error) {
-      alert("Đã xảy ra lỗi khi cập nhật công việc.");
+      toast.error("Đã xảy ra lỗi khi cập nhật công việc.");
       console.error("Error updating job:", error);
     }
   };

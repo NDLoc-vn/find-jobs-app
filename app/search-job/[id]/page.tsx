@@ -258,9 +258,9 @@ const JobPage = ({ params }: JobDetailPageProps) => {
       try {
         await updatePost(updatedData); // Gọi API cập nhật
         if (job.status.toLowerCase() === "open") {
-          alert("Đóng tuyển dụng thành công");
+          toast.success("Đóng tuyển dụng thành công");
         } else {
-          alert("Mở tuyển dụng thành công");
+          toast.success("Mở tuyển dụng thành công");
         }
         router.push("/recruiter/post-manager"); // Redirect sau khi cập nhật
       } catch (error: unknown) {

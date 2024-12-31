@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { deletePost } from "@/app/services/jobService";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface JobCardProps {
   id: string;
@@ -52,11 +53,11 @@ const JobCardClose: React.FC<JobCardProps> = ({
     if (isConfirmed) {
       try {
         await deletePost(id);
-        alert("Xóa công việc thành công");
+        toast.success("Xóa công việc thành công");
         onDelete(id);
       } catch (error) {
         console.error("Lỗi khi xóa công việc:", error);
-        alert("Xóa công việc thất bại");
+        toast.error("Xóa công việc thất bại");
       }
     }
   };
