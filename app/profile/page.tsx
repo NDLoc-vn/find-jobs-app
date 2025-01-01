@@ -14,6 +14,7 @@ import { ObjectId } from "bson";
 import { toast } from "react-toastify";
 import moment from "moment";
 import ProvinceInput from "../ui/ProvinceInput";
+import withAuth from "../lib/withAuth";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -1051,4 +1052,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default withAuth(ProfilePage, ["candidate"]);

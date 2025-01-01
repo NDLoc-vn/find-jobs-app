@@ -1,13 +1,14 @@
 "use client";
 
 import { categories } from "@/app/lib/data";
+import withAuth from "@/app/lib/withAuth";
 import { createPost } from "@/app/services/jobService";
 import Header from "@/app/ui/recruiter/Header";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-export default function PostJob() {
+function PostJob() {
   const [formData, setFormData] = useState({
     title: "",
     categories: categories[0]?.name || "",
@@ -362,3 +363,5 @@ export default function PostJob() {
     </>
   );
 }
+
+export default withAuth(PostJob, ["recruiter"]);

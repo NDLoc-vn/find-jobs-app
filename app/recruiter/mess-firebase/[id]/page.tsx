@@ -9,6 +9,7 @@ import Header from "@/app/ui/recruiter/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import withAuth from "@/app/lib/withAuth";
 
 type Message = {
   id: string;
@@ -209,11 +210,10 @@ const MessagesPage: React.FC = () => {
               onClick={() => {
                 handleUserSelection(user);
               }}
-              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${
-                selectedUser?.id === user.id
-                  ? "bg-gray-200"
-                  : "hover:bg-gray-100"
-              }`}
+              className={`flex items-center mb-4 cursor-pointer p-2 rounded-lg ${selectedUser?.id === user.id
+                ? "bg-gray-200"
+                : "hover:bg-gray-100"
+                }`}
             >
               <img
                 src="/avatar_temp.jpg"
@@ -249,4 +249,4 @@ const MessagesPage: React.FC = () => {
   );
 };
 
-export default MessagesPage;
+export default withAuth(MessagesPage, ["recruiter"]);

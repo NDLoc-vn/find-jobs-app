@@ -5,6 +5,7 @@ import Header from "../ui/user/Header";
 import AppliedJobList from "../ui/user/AppliedJobList";
 import BookmarkedJobList from "../ui/user/BookmarkedJobList";
 import SearchBar from "../ui/homepage/SearchBar";
+import withAuth from "../lib/withAuth";
 
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState<"applied" | "saved">("applied");
@@ -30,18 +31,16 @@ const MyJobs = () => {
           <div className="flex justify-start mt-5 gap-8 text-xl">
             <button
               ref={appliedRef}
-              className={`py-2 text-xl ${
-                activeTab === "applied" ? "text-blue-500" : "text-gray-500"
-              }`}
+              className={`py-2 text-xl ${activeTab === "applied" ? "text-blue-500" : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("applied")}
             >
               Đã Ứng Tuyển
             </button>
             <button
               ref={savedRef}
-              className={`py-2 text-xl ${
-                activeTab === "saved" ? "text-blue-500" : "text-gray-500"
-              }`}
+              className={`py-2 text-xl ${activeTab === "saved" ? "text-blue-500" : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("saved")}
             >
               Đã Lưu
@@ -61,4 +60,4 @@ const MyJobs = () => {
   );
 };
 
-export default MyJobs;
+export default withAuth(MyJobs, ["candidate"]);

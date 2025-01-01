@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/chart";
 import Header from "@/app/ui/recruiter/Header";
 import Link from "next/link";
+import withAuth from "@/app/lib/withAuth";
 
 const chartData = [
   //   { date: "2024-04-01", candidate: 222, company: 150 },
@@ -275,4 +276,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard, ["recruiter"]);

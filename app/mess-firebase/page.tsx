@@ -9,6 +9,8 @@ import Header from "@/app/ui/user/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import withAuth from "../lib/withAuth";
+import { toast } from "react-toastify";
 
 interface Message {
   id: string;
@@ -230,7 +232,9 @@ const MessagesPage: React.FC = () => {
           <MessageInput
             message={message}
             onMessageChange={setMessage}
-            onSendMessage={sendMessage}
+            onSendMessage={() => {
+              toast.error("Chọn nhà tuyển dụng mà bạn muốn nhắn tin");
+            }}
           />
         </div>
       </div>
@@ -238,4 +242,4 @@ const MessagesPage: React.FC = () => {
   );
 };
 
-export default MessagesPage;
+export default withAuth(MessagesPage, ["candidate"]);
