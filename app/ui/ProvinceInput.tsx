@@ -7,8 +7,8 @@ type ProvinceInputProps = {
   onChange: (value: string) => void;
 };
 
-const ProvinceInput: React.FC<ProvinceInputProps> = ({ onChange }) => {
-  const [selectedCity, setSelectedCity] = useState('');
+const ProvinceInput: React.FC<ProvinceInputProps> = ({ value, onChange }) => {
+  const [selectedCity, setSelectedCity] = useState(value);
 
   return (
     <div className="relative w-full">

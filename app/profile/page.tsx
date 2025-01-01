@@ -12,12 +12,14 @@ import SkillsForm from "../ui/user/profile/SkillsForm";
 import { UserDetailSkeleton } from "../ui/sketetons";
 import { ObjectId } from "bson";
 import { toast } from "react-toastify";
+import moment from "moment";
+import ProvinceInput from "../ui/ProvinceInput";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 type UserProfileType = {
   name: string;
-  location?: string;
+  address?: string;
   phone?: string;
   dateOfBirth?: string;
   gender?: string;
@@ -29,6 +31,8 @@ type EducationType = {
   major: string;
   duration: string;
   description: string;
+  start?: string;
+  end?: string;
 };
 
 type ExperienceType = {
@@ -37,6 +41,8 @@ type ExperienceType = {
   position: string;
   duration: string;
   description: string;
+  start?: string;
+  end?: string;
 };
 
 type SkillType = {
@@ -94,7 +100,7 @@ const ProfilePage = () => {
       );
       setUserProfile({
         name: response.data.name,
-        location: response.data.location,
+        address: response.data.address,
         phone: response.data.phone,
         dateOfBirth: response.data.dateOfBirth,
         gender: response.data.gender,
@@ -109,13 +115,41 @@ const ProfilePage = () => {
     }
   };
 
+  const formatDurationToDates = (duration: string | undefined) => {
+    if (!duration) return { start: '', end: '' };
+    const [start, end] = duration.split(" - ");
+    const formattedStart = start ? moment(start, 'MM/YYYY').format('YYYY-MM') : '';
+    const formattedEnd = end ? moment(end, 'MM/YYYY').format('YYYY-MM') : '';
+    return { start: formattedStart, end: formattedEnd };
+  };
+
+  const handleDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "start" | "end"
+  ) => {
+    console.log(type)
+    const { name, value } = e.target;
+    if (activeForm === "education") {
+      setEducation({ ...education!, [name]: value });
+    } else if (activeForm === "experience") {
+      setExperience({ ...experience!, [name]: value });
+    }
+  };
+
+  const formatDuration = (start: string, end: string) => {
+    const formattedStart = start ? moment(start).format('MM/YYYY') : '';
+    const formattedEnd = end ? moment(end).format('MM/YYYY') : '';
+    return `${formattedStart} - ${formattedEnd}`;
+  };
+
   const handleSave = () => {
     if (activeForm === "editProfile") {
       axios
-        .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${user?.userId}`,
+        .put(
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${user?.userId}`,
           {
             name: userProfile?.name,
-            location: userProfile?.location,
+            address: userProfile?.address,
             phone: userProfile?.phone,
             dateOfBirth: userProfile?.dateOfBirth,
             gender: userProfile?.gender,
@@ -134,21 +168,31 @@ const ProfilePage = () => {
           console.error(err);
         });
     } else if (activeForm === "education") {
+      const start = education?.start || "";
+      const end = education?.end || "";
+      const duration = formatDuration(start, end);
       if (isEdit) {
         const education = educations.find((item) => item._id === check?._id);
-        if (!education?.school || !education?.major || !education?.duration || !education?.description) {
+        if (
+          !education?.school ||
+          !education?.major ||
+          !duration ||
+          !education?.description
+        ) {
           toast.error("All fields are required.");
+          console.log(1);
           return;
         }
         axios
-          .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${check?._id}`,
+          .put(
+            `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${check?._id}`,
             {
-              "education": {
-                "school": education?.school,
-                "major": education?.major,
-                "duration": education?.duration,
-                "description": education?.description
-              }
+              education: {
+                school: education?.school,
+                major: education?.major,
+                duration: duration,
+                description: education?.description,
+              },
             },
             {
               headers: {
@@ -164,19 +208,26 @@ const ProfilePage = () => {
             console.error(err);
           });
       } else {
-        if (!education?.school || !education?.major || !education?.duration || !education?.description) {
+        if (
+          !education?.school ||
+          !education?.major ||
+          !duration ||
+          !education?.description
+        ) {
           toast.error("All fields are required.");
+          console.log(2);
           return;
         }
         axios
-          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?.userId}`,
+          .post(
+            `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?.userId}`,
             {
-              "education": {
-                "school": education?.school,
-                "major": education?.major,
-                "duration": education?.duration,
-                "description": education?.description
-              }
+              education: {
+                school: education?.school,
+                major: education?.major,
+                duration: duration,
+                description: education?.description,
+              },
             },
             {
               headers: {
@@ -193,25 +244,30 @@ const ProfilePage = () => {
           });
       }
     } else if (activeForm === "skills") {
-      const postSkills: SkillType[] = skills.map(skill => {
-        const existingSkill = fetchedSkills.find(fetchedSkill => fetchedSkill.title === skill);
+      const postSkills: SkillType[] = skills.map((skill) => {
+        const existingSkill = fetchedSkills.find(
+          (fetchedSkill) => fetchedSkill.title === skill
+        );
         return {
           _id: existingSkill ? existingSkill._id : new ObjectId().toHexString(),
           title: skill,
         };
       });
 
-      const skillsToDelete = fetchedSkills.filter(fetchedSkill => !skills.includes(fetchedSkill.title));
-      skillsToDelete.forEach(skill => {
+      const skillsToDelete = fetchedSkills.filter(
+        (fetchedSkill) => !skills.includes(fetchedSkill.title)
+      );
+      skillsToDelete.forEach((skill) => {
         axios
-          .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills/${user?.userId}`,
+          .delete(
+            `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills/${user?.userId}`,
             {
               headers: {
                 Authorization: token,
               },
               data: {
                 skillId: skill._id,
-              }
+              },
             }
           )
           .catch((err) => {
@@ -220,9 +276,10 @@ const ProfilePage = () => {
       });
 
       axios
-        .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills/${user?.userId}`,
+        .post(
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/skills/${user?.userId}`,
           {
-            "skills": postSkills
+            skills: postSkills,
           },
           {
             headers: {
@@ -236,24 +293,33 @@ const ProfilePage = () => {
         })
         .catch((err) => {
           console.error(err);
-        }
-        );
+        });
     } else if (activeForm === "experience") {
+      const start = experience?.start || "";
+      const end = experience?.end || "";
+      const duration = formatDuration(start, end);
       if (isEdit) {
         const experience = experiences.find((item) => item._id === check?._id);
-        if (!experience?.company || !experience?.position || !experience?.duration || !experience?.description) {
+        if (
+          !experience?.company ||
+          !experience?.position ||
+          !duration ||
+          !experience?.description
+        ) {
           toast.error("All fields are required.");
+          console.log(3);
           return;
         }
         axios
-          .put(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${check?._id}`,
+          .put(
+            `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${check?._id}`,
             {
-              "experience": {
-                "company": experience?.company,
-                "position": experience?.position,
-                "duration": experience?.duration,
-                "description": experience?.description,
-              }
+              experience: {
+                company: experience?.company,
+                position: experience?.position,
+                duration: duration,
+                description: experience?.description,
+              },
             },
             {
               headers: {
@@ -269,15 +335,26 @@ const ProfilePage = () => {
             console.error(err);
           });
       } else {
+        if (
+          !experience?.company ||
+          !experience?.position ||
+          !duration ||
+          !experience?.description
+        ) {
+          toast.error("All fields are required.");
+          console.log(4);
+          return;
+        }
         axios
-          .post(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?.userId}`,
+          .post(
+            `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?.userId}`,
             {
-              "experience": {
-                "company": experience?.company,
-                "position": experience?.position,
-                "duration": experience?.duration,
-                "description": experience?.description
-              }
+              experience: {
+                company: experience?.company,
+                position: experience?.position,
+                duration: duration,
+                description: experience?.description,
+              },
             },
             {
               headers: {
@@ -295,25 +372,28 @@ const ProfilePage = () => {
       }
     }
     closeForm();
-  }
+  };
 
   const handleDelete = () => {
     const isConfirmed = confirm("Bạn có chắc chắn muốn xoá không?");
     if (!isConfirmed) return;
     if (activeForm === "education") {
       axios
-        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?._id}`,
+        .delete(
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?._id}`,
           {
             headers: {
               Authorization: token,
             },
             data: {
               eduId: check?._id,
-            }
+            },
           }
         )
         .then(() => {
-          setEducations(prevList => prevList.filter(item => item._id !== check?._id));
+          setEducations((prevList) =>
+            prevList.filter((item) => item._id !== check?._id)
+          );
           closeForm();
         })
         .catch((err) => {
@@ -321,51 +401,72 @@ const ProfilePage = () => {
         });
     } else if (activeForm === "experience") {
       axios
-        .delete(`${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?._id}`,
+        .delete(
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?._id}`,
           {
             headers: {
               Authorization: token,
             },
             data: {
               expId: check?._id,
-            }
+            },
           }
         )
         .then(() => {
-          setExperiences(prevList => prevList.filter(item => item._id !== check?._id));
+          setExperiences((prevList) =>
+            prevList.filter((item) => item._id !== check?._id)
+          );
           closeForm();
         })
         .catch((err) => {
           console.error(err);
         });
     }
-  }
+  };
 
-  const handleUserProfileInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+  const handleUserProfileInputChange = (
+    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     console.log(name, value);
     setUserProfile({ ...userProfile!, [name]: value });
   };
 
-  const handleEducationInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleCityInputChange = (value: string) => {
+    setUserProfile({ ...userProfile!, address: value });
+  }
+
+  const handleEducationInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (isEdit) {
       const { name, value } = e.target;
-      setEducations(prevList => prevList.map(item => item._id === check?._id ? { ...item, [name]: value } : item));
+      setEducations((prevList) =>
+        prevList.map((item) =>
+          item._id === check?._id ? { ...item, [name]: value } : item
+        )
+      );
     } else {
       const { name, value } = e.target;
       setEducation({ ...education!, [name]: value });
     }
-  }
+  };
 
-  const handleExperienceInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleExperienceInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (isEdit) {
       const { name, value } = e.target;
-      setExperiences(prevList => prevList.map(item => item._id === check?._id ? { ...item, [name]: value } : item));
+      setExperiences((prevList) =>
+        prevList.map((item) =>
+          item._id === check?._id ? { ...item, [name]: value } : item
+        )
+      );
     } else {
       const { name, value } = e.target;
       setExperience({ ...experience!, [name]: value });
     }
-  }
+  };
 
   useEffect(() => {
     fetchUserInfo();
@@ -383,11 +484,14 @@ const ProfilePage = () => {
     setActiveForm(null);
   };
 
+
   if (isLoading) {
-    return <>
-      <Header />
-      <UserDetailSkeleton />
-    </>
+    return (
+      <>
+        <Header />
+        <UserDetailSkeleton />
+      </>
+    );
   }
 
   return (
@@ -413,16 +517,14 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📅</span>
-                  <p>
-                    {formatDOB(userProfile?.dateOfBirth)}
-                  </p>
+                  <p>{formatDOB(userProfile?.dateOfBirth)}</p>
                 </div>
                 <div className="flex items-center mb-4">
                   <span className="mr-2 text-blue-500">📍</span>
                   <p>
-                    {userProfile?.location === ""
+                    {userProfile?.address === ""
                       ? "Địa chỉ"
-                      : userProfile?.location}
+                      : userProfile?.address}
                   </p>
                 </div>
                 <div className="flex items-center mb-4">
@@ -438,8 +540,9 @@ const ProfilePage = () => {
                   <p>
                     {userProfile?.gender === ""
                       ? "Giới tính"
-                      : userProfile?.gender === "male" ? "Nam" : "Nữ"
-                    }
+                      : userProfile?.gender?.toLowerCase() === "male"
+                        ? "Nam"
+                        : "Nữ"}
                   </p>
                 </div>
               </div>
@@ -475,26 +578,28 @@ const ProfilePage = () => {
           )}
           <ul className="mt-2 space-y-2">
             {educations.map((education: EducationType) => (
-              <li key={education._id} className="border-b pb-2 flex justify-between">
+              <li
+                key={education._id}
+                className="border-b pb-2 flex justify-between"
+              >
                 <div>
                   <h4 className="font-bold">{education.school}</h4>
                   <p>{education.major}</p>
-                  <p>
-                    {education.duration}
-                  </p>
+                  <p>{education.duration}</p>
                   <p>{education.description}</p>
                 </div>
                 <div className="flex-shrink-0">
-                  <button onClick={
-                    () => {
+                  <button
+                    onClick={() => {
                       setIsEdit(true);
                       setCheck({
                         _id: education._id,
-                        name: "education"
+                        name: "education",
                       });
                       openForm("education");
-                    }
-                  } className="p-2">
+                    }}
+                    className="p-2"
+                  >
                     <Image
                       src="/icon/edit-button.svg"
                       width={20}
@@ -551,32 +656,33 @@ const ProfilePage = () => {
             </button>
           </div>
 
-
           {experiences.length === 0 && (
             <p className="text-gray-500 mt-2">No Experience</p>
           )}
           <ul className="mt-2 space-y-2">
             {experiences.map((experience: ExperienceType) => (
-              <li key={experience._id} className="border-b pb-2 flex justify-between">
+              <li
+                key={experience._id}
+                className="border-b pb-2 flex justify-between"
+              >
                 <div>
                   <h4 className="font-bold">{experience.company}</h4>
                   <p>{experience.position}</p>
-                  <p>
-                    {experience.duration}
-                  </p>
+                  <p>{experience.duration}</p>
                   <p>{experience.description}</p>
                 </div>
                 <div className="flex-shrink-0">
-                  <button onClick={
-                    () => {
+                  <button
+                    onClick={() => {
                       setIsEdit(true);
                       setCheck({
                         _id: experience._id,
-                        name: "experience"
+                        name: "experience",
                       });
                       openForm("experience");
-                    }
-                  } className="p-2">
+                    }}
+                    className="p-2"
+                  >
                     <Image
                       src="/icon/edit-button.svg"
                       width={20}
@@ -589,9 +695,6 @@ const ProfilePage = () => {
               </li>
             ))}
           </ul>
-
-
-
         </div>
 
         {/* <div className="mt-4 bg-white shadow-md rounded-lg p-4">
@@ -678,14 +781,18 @@ const ProfilePage = () => {
                       <label className="block text-sm font-medium text-gray-700">
                         Địa chỉ
                       </label>
-                      <input
+                      <ProvinceInput
+                        value={userProfile?.address || ''}
+                        onChange={handleCityInputChange}
+                      />
+                      {/* <input
                         type="text"
                         placeholder="Nhập địa chỉ"
-                        name="location"
-                        value={userProfile?.location}
+                        name="address"
+                        value={userProfile?.address}
                         onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                      />
+                      /> */}
                     </div>
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
@@ -717,7 +824,15 @@ const ProfilePage = () => {
                     </div>
                   </form>
                 ) : activeForm === "education" ? (
-                  <form>
+                  <form
+                    onClick={() => {
+                      const { start, end } = formatDurationToDates(
+                        educations.find((item) => item._id === check?._id)
+                          ?.duration
+                      )
+                      setEducation({ ...education!, start: start, end: end });
+                    }}
+                  >
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
                         Trường học
@@ -725,7 +840,10 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="school"
-                        value={educations.find((item) => item._id === check?._id)?.school}
+                        value={
+                          educations.find((item) => item._id === check?._id)
+                            ?.school
+                        }
                         onChange={handleEducationInputChange}
                         placeholder="Nhập trường học"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -738,7 +856,10 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="major"
-                        value={educations.find((item) => item._id === check?._id)?.major}
+                        value={
+                          educations.find((item) => item._id === check?._id)
+                            ?.major
+                        }
                         onChange={handleEducationInputChange}
                         placeholder="Nhập chuyên ngành"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -750,11 +871,29 @@ const ProfilePage = () => {
                       </label>
                       <div className="flex space-x-4">
                         <input
-                          type="text"
-                          name="duration"
-                          value={educations.find((item) => item._id === check?._id)?.duration}
-                          onChange={handleEducationInputChange}
-                          placeholder="Nhập chuyên ngành"
+                          type="month"
+                          name="start"
+                          defaultValue={
+                            formatDurationToDates(
+                              educations.find((item) => item._id === check?._id)
+                                ?.duration
+                            ).start
+                          }
+                          onChange={(e) => handleDateChange(e, "start")}
+                          placeholder="Bắt đầu"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                        <input
+                          type="month"
+                          name="end"
+                          defaultValue={
+                            formatDurationToDates(
+                              educations.find((item) => item._id === check?._id)
+                                ?.duration
+                            ).end
+                          }
+                          onChange={(e) => handleDateChange(e, "end")}
+                          placeholder="Kết thúc"
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                         />
                       </div>
@@ -765,7 +904,10 @@ const ProfilePage = () => {
                       </label>
                       <textarea
                         name="description"
-                        value={educations.find((item) => item._id === check?._id)?.description}
+                        value={
+                          educations.find((item) => item._id === check?._id)
+                            ?.description
+                        }
                         onChange={handleEducationInputChange}
                         placeholder="Nhập mô tả"
                         rows={5}
@@ -774,9 +916,12 @@ const ProfilePage = () => {
                     </div>
                   </form>
                 ) : activeForm === "skills" ? (
-
-                  <SkillsForm skills={skills} inputValue={inputSkillValue} handleSkillsInputChange={handleSkillsInputChange} addSkill={addSkill} />
-
+                  <SkillsForm
+                    skills={skills}
+                    inputValue={inputSkillValue}
+                    handleSkillsInputChange={handleSkillsInputChange}
+                    addSkill={addSkill}
+                  />
                 ) : activeForm === "experience" ? (
                   <form>
                     <div className="mb-4">
@@ -786,7 +931,10 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="company"
-                        value={experiences.find((item) => item._id === check?._id)?.company}
+                        value={
+                          experiences.find((item) => item._id === check?._id)
+                            ?.company
+                        }
                         onChange={handleExperienceInputChange}
                         placeholder="Nhập công ty"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -799,7 +947,10 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="position"
-                        value={experiences.find((item) => item._id === check?._id)?.position}
+                        value={
+                          experiences.find((item) => item._id === check?._id)
+                            ?.position
+                        }
                         onChange={handleExperienceInputChange}
                         placeholder="Nhập vị trí"
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -811,11 +962,29 @@ const ProfilePage = () => {
                       </label>
                       <div className="flex space-x-4">
                         <input
-                          type="text"
-                          name="duration"
-                          value={experiences.find((item) => item._id === check?._id)?.duration}
-                          onChange={handleExperienceInputChange}
-                          placeholder="Nhập thời gian làm việc"
+                          type="month"
+                          name="start"
+                          defaultValue={
+                            formatDurationToDates(
+                              experiences.find((item) => item._id === check?._id)
+                                ?.duration
+                            ).start
+                          }
+                          onChange={(e) => handleDateChange(e, "start")}
+                          placeholder="Bắt đầu"
+                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        />
+                        <input
+                          type="month"
+                          name="end"
+                          defaultValue={
+                            formatDurationToDates(
+                              experiences.find((item) => item._id === check?._id)
+                                ?.duration
+                            ).end
+                          }
+                          onChange={(e) => handleDateChange(e, "end")}
+                          placeholder="Kết thúc"
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                         />
                       </div>
@@ -826,7 +995,10 @@ const ProfilePage = () => {
                       </label>
                       <textarea
                         name="description"
-                        value={experiences.find((item) => item._id === check?._id)?.description}
+                        value={
+                          experiences.find((item) => item._id === check?._id)
+                            ?.description
+                        }
                         onChange={handleExperienceInputChange}
                         placeholder="Nhập mô tả"
                         rows={5}
@@ -849,7 +1021,7 @@ const ProfilePage = () => {
               </div>
 
               {/* Form Footer */}
-              <  div className="p-4 border-t flex justify-end space-x-4">
+              <div className="p-4 border-t flex justify-end space-x-4">
                 <button
                   onClick={closeForm}
                   className="px-4 py-2 bg-gray-300 rounded-md"
@@ -873,10 +1045,9 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-        )
-        }
-      </div >
-    </div >
+        )}
+      </div>
+    </div>
   );
 };
 

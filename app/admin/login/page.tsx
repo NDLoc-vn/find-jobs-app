@@ -54,12 +54,12 @@ const Login = () => {
         router.push("/admin/dashboard");
       } else if (response.status === 400) {
         // bughh return wrong status code
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       } else if (response.status === 401) {
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       }
     } catch (err) {
-      setError("Đăng nhập thất bại");
+      setError("Sai tài khoản hoặc mật khẩu");
     }
   };
 
