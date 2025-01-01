@@ -381,7 +381,7 @@ const ProfilePage = () => {
     if (activeForm === "education") {
       axios
         .delete(
-          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?._id}`,
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/edu/${user?.userId}`,
           {
             headers: {
               Authorization: token,
@@ -403,7 +403,7 @@ const ProfilePage = () => {
     } else if (activeForm === "experience") {
       axios
         .delete(
-          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?._id}`,
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/exp/${user?.userId}`,
           {
             headers: {
               Authorization: token,
@@ -924,7 +924,15 @@ const ProfilePage = () => {
                     addSkill={addSkill}
                   />
                 ) : activeForm === "experience" ? (
-                  <form>
+                  <form
+                    onClick={() => {
+                      const { start, end } = formatDurationToDates(
+                        experiences.find((item) => item._id === check?._id)
+                          ?.duration
+                      )
+                      setExperience({ ...experience!, start: start, end: end });
+                    }}
+                  >
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
                         Công ty
