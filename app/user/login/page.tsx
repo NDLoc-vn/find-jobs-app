@@ -88,14 +88,14 @@ const Login = () => {
         router.push("/search-job");
       } else if (response.status === 400) {
         // bughh return wrong status code
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       } else if (response.status === 401) {
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       } else if (response.data.account.role !== "candidate") {
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       }
     } catch (err) {
-      setError("Đăng nhập thất bại");
+      setError("Sai tài khoản hoặc mật khẩu");
       // toast.error("Đăng nhập thất bại");
     }
   };
@@ -109,7 +109,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-white to-toreabay-700">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-semibold mb-6 text-center">Đăng nhập</h1>
-        <button className="w-full py-2 px-4 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-6">
+        {/* <button className="w-full py-2 px-4 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-6">
           <Image
             src="/icon/google.svg"
             width={20}
@@ -118,7 +118,7 @@ const Login = () => {
             className="w-5 h-5 mr-2"
           />
           Đăng nhập bằng Google
-        </button>
+        </button> */}
 
         <hr className="my-6" />
 
@@ -162,9 +162,9 @@ const Login = () => {
               <span className="sr-only">Show password</span>
             </button>
           </div>
-          <Link href="#" className="text-blue-600 text-sm">
+          {/* <Link href="#" className="text-blue-600 text-sm">
             Quên mật khẩu
-          </Link>
+          </Link> */}
 
           {error && (
             <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>

@@ -16,7 +16,7 @@ interface JobCardProps {
   employmentType: string;
 }
 
-const JobCard: React.FC<JobCardProps> = ({
+const RecommendedJobCard: React.FC<JobCardProps> = ({
   id,
   title,
   company,
@@ -28,7 +28,7 @@ const JobCard: React.FC<JobCardProps> = ({
   employmentType,
 }) => {
   return (
-    <Link href={`/${id}`}>
+    <Link href={`/search-job/${id}`}>
       <div className="cursor-pointer p-4 border rounded mb-4 gradient-hover">
         <h3 className="font-bold text-lg">{title}</h3>
         <div className="flex flex-wrap items-center mt-1 gap-x-2">
@@ -72,4 +72,4 @@ const JobCard: React.FC<JobCardProps> = ({
   );
 };
 
-export default JobCard;
+export default RecommendedJobCard;

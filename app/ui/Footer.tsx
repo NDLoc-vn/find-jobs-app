@@ -11,7 +11,7 @@ const Footer = () => {
           </div>
           <div className="flex space-x-4">
             <Image
-              src="/icon/facebook.svg"
+              src="/icon/company2.svg"
               alt="Facebook"
               width={50}
               height={50}

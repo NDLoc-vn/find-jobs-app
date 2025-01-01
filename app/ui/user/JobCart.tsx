@@ -64,11 +64,11 @@ const JobCard: React.FC<JobCardProps> = ({
         <div className="flex justify-start items-center mt-2">
           <div className="mr-4 flex-shrink-0">
             <Image
-              src="/icon/google.svg"
+              src="/icon/company2.svg"
               width={40}
               height={40}
               alt="Company Logo"
-              className="rounded-full"
+            // className="rounded-full"
             />
           </div>
 

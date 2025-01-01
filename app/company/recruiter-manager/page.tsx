@@ -132,9 +132,8 @@ const RecruiterManager = () => {
               <div
                 key={account._id}
                 onClick={() => handleAccountClick(account._id)}
-                className={`border p-4 rounded-lg shadow-md cursor-pointer ${
-                  activeAccount === account._id ? "border-blue-500" : ""
-                }`}
+                className={`border p-4 rounded-lg shadow-md cursor-pointer ${activeAccount === account._id ? "border-blue-500" : ""
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -179,22 +178,20 @@ const RecruiterManager = () => {
                   <div className="flex justify-start gap-8 text-xl">
                     <button
                       ref={openJobsRef}
-                      className={`py-2 text-xl ${
-                        activeTab === "openJobs"
+                      className={`py-2 text-xl ${activeTab === "openJobs"
                           ? "text-blue-500"
                           : "text-gray-500"
-                      }`}
+                        }`}
                       onClick={() => setActiveTab("openJobs")}
                     >
                       Đang tuyển
                     </button>
                     <button
                       ref={closeJobsRef}
-                      className={`py-2 text-xl ${
-                        activeTab === "closeJobs"
+                      className={`py-2 text-xl ${activeTab === "closeJobs"
                           ? "text-blue-500"
                           : "text-gray-500"
-                      }`}
+                        }`}
                       onClick={() => setActiveTab("closeJobs")}
                     >
                       Đã đóng
@@ -215,7 +212,7 @@ const RecruiterManager = () => {
                 {activeTab === "openJobs" ? (
                   <OpenJobList recruiterId={activeAccount} />
                 ) : (
-                  <CloseJobList recruiterId={userId} />
+                  <CloseJobList recruiterId={activeAccount} />
                 )}
               </>
             ) : (

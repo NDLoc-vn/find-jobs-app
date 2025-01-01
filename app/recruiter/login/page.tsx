@@ -267,14 +267,14 @@ const Login = () => {
         else router.push("/company/dashboard");
       } else if (response.status === 400) {
         // bughh return wrong status code
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       } else if (response.status === 401) {
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       } else if (response.data.account.role === "candidate") {
-        setError("Đăng nhập thất bại");
+        setError("Sai tài khoản hoặc mật khẩu");
       }
     } catch (err) {
-      setError("Đăng nhập thất bại");
+      setError("Sai tài khoản hoặc mật khẩu");
       // toast.error("Đăng nhập thất bại");
     }
   };
@@ -331,9 +331,9 @@ const Login = () => {
                 <span className="sr-only">Show password</span>
               </button>
             </div>
-            <Link href="#" className="text-blue-600 text-sm">
+            {/* <Link href="#" className="text-blue-600 text-sm">
               Quên mật khẩu
-            </Link>
+            </Link> */}
 
             {error && (
               <p className="text-red-500 col-span-1 md:col-span-2">{error}</p>
