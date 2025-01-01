@@ -13,7 +13,6 @@ import { UserDetailSkeleton } from "../ui/sketetons";
 import { ObjectId } from "bson";
 import { toast } from "react-toastify";
 import moment from "moment";
-import CityInput from "../ui/CityInput";
 import ProvinceInput from "../ui/ProvinceInput";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -128,6 +127,7 @@ const ProfilePage = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     type: "start" | "end"
   ) => {
+    console.log(type)
     const { name, value } = e.target;
     if (activeForm === "education") {
       setEducation({ ...education!, [name]: value });

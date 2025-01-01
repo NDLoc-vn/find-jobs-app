@@ -65,7 +65,7 @@ const RecruiterManager = () => {
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
 
   const { user, token } = useAuth();
-  const userId = user?.userId || "";
+  // const userId = user?.userId || "";
 
   const getListAccount = async (): Promise<RecruiterAccount[]> => {
     try {
@@ -179,8 +179,8 @@ const RecruiterManager = () => {
                     <button
                       ref={openJobsRef}
                       className={`py-2 text-xl ${activeTab === "openJobs"
-                          ? "text-blue-500"
-                          : "text-gray-500"
+                        ? "text-blue-500"
+                        : "text-gray-500"
                         }`}
                       onClick={() => setActiveTab("openJobs")}
                     >
@@ -189,8 +189,8 @@ const RecruiterManager = () => {
                     <button
                       ref={closeJobsRef}
                       className={`py-2 text-xl ${activeTab === "closeJobs"
-                          ? "text-blue-500"
-                          : "text-gray-500"
+                        ? "text-blue-500"
+                        : "text-gray-500"
                         }`}
                       onClick={() => setActiveTab("closeJobs")}
                     >
