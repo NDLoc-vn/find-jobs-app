@@ -74,9 +74,8 @@ const ApplyFormPopup = ({
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${
-        isOpen ? "block" : "hidden"
-      }`}
+      className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 ${isOpen ? "block" : "hidden"
+        }`}
     >
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">Ứng tuyển công việc</h2>
@@ -160,7 +159,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   };
   const [job, setJob] = React.useState<JobDetail | null>(null);
   const [relatedJobs, setRelatedJobs] = React.useState<CardJob[]>([]);
-  const [copied, setCopied] = React.useState(false);
+  // const [copied, setCopied] = React.useState(false);
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
 
   useEffect(() => {
@@ -216,8 +215,9 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   const handleCopy = () => {
     const currentURL = window.location.href;
     navigator.clipboard.writeText(currentURL).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      toast.success("Link đã được sao chép!");
+      // setCopied(true);
+      // setTimeout(() => setCopied(false), 2000);
     });
   };
 
@@ -351,9 +351,8 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                       </div> */}
                       <div className="flex-grow">
                         <button
-                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${
-                            job?.isApplied ? "cursor-not-allowed" : ""
-                          }`}
+                          className={`w-full bg-xanhduong-600 hover:bg-xanhduong-500 text-white px-4 py-2 rounded shadow-md whitespace-nowrap ${job?.isApplied ? "cursor-not-allowed" : ""
+                            }`}
                           onClick={() => {
                             if (!job?.isApplied) {
                               openPopup();
@@ -440,14 +439,14 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   </h3>
                   <p className="font-semibold text-lg text-green-500 text-center">
                     {job?.salary?.min !== undefined &&
-                    job?.salary?.max !== undefined
+                      job?.salary?.max !== undefined
                       ? job.salary.min > 0 && job.salary.max > 0
                         ? `${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}`
                         : job.salary.min > 0
-                        ? `${job.salary.min.toLocaleString()}`
-                        : job.salary.max > 0
-                        ? `${job.salary.max.toLocaleString()}`
-                        : "Negotiable"
+                          ? `${job.salary.min.toLocaleString()}`
+                          : job.salary.max > 0
+                            ? `${job.salary.max.toLocaleString()}`
+                            : "Negotiable"
                       : "Salary information unavailable"}
                   </p>
                 </div>
@@ -490,11 +489,11 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   />
                   <span className="ml-2">Copy Link</span>
                 </button>
-                {copied && (
+                {/* {copied && (
                   <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-sm rounded px-4 py-2 shadow-lg">
                     Link đã được sao chép!
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

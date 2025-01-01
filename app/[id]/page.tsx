@@ -11,6 +11,7 @@ import Link from "next/link";
 import { getDetailJobForGuest, getListCardJobs } from "../services/jobService";
 import { useAuth } from "../contexts/auth-context";
 import JobCard from "../ui/homepage/JobCart";
+import { toast } from "react-toastify";
 
 type JobDetailPageProps = {
   params: { id: string };
@@ -27,7 +28,7 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   };
   const [job, setJob] = React.useState<JobDetail | null>(null);
   const [relatedJobs, setRelatedJobs] = React.useState<CardJob[]>([]);
-  const [copied, setCopied] = React.useState(false);
+  // const [copied, setCopied] = React.useState(false);
 
   useEffect(() => {
     const fetchJobDetail = async () => {
@@ -75,8 +76,9 @@ const JobPage = ({ params }: JobDetailPageProps) => {
   const handleCopy = () => {
     const currentURL = window.location.href;
     navigator.clipboard.writeText(currentURL).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      toast.success("Link đã được sao chép!");
+      // setCopied(true);
+      // setTimeout(() => setCopied(false), 2000);
     });
   };
 
@@ -154,14 +156,14 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   </h3>
                   <p className="font-semibold text-lg text-green-500 text-center">
                     {job?.salary?.min !== undefined &&
-                    job?.salary?.max !== undefined
+                      job?.salary?.max !== undefined
                       ? job.salary.min > 0 && job.salary.max > 0
                         ? `${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}`
                         : job.salary.min > 0
-                        ? `${job.salary.min.toLocaleString()}`
-                        : job.salary.max > 0
-                        ? `${job.salary.max.toLocaleString()}`
-                        : "Negotiable"
+                          ? `${job.salary.min.toLocaleString()}`
+                          : job.salary.max > 0
+                            ? `${job.salary.max.toLocaleString()}`
+                            : "Negotiable"
                       : "Salary information unavailable"}
                   </p>
                 </div>
@@ -204,11 +206,11 @@ const JobPage = ({ params }: JobDetailPageProps) => {
                   />
                   <span className="ml-2">Copy Link</span>
                 </button>
-                {copied && (
+                {/* {copied && (
                   <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-sm rounded px-4 py-2 shadow-lg">
                     Link đã được sao chép!
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

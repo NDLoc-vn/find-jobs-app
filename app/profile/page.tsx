@@ -13,6 +13,8 @@ import { UserDetailSkeleton } from "../ui/sketetons";
 import { ObjectId } from "bson";
 import { toast } from "react-toastify";
 import moment from "moment";
+import CityInput from "../ui/CityInput";
+import ProvinceInput from "../ui/ProvinceInput";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -430,6 +432,10 @@ const ProfilePage = () => {
     setUserProfile({ ...userProfile!, [name]: value });
   };
 
+  const handleCityInputChange = (value: string) => {
+    setUserProfile({ ...userProfile!, address: value });
+  }
+
   const handleEducationInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -775,14 +781,18 @@ const ProfilePage = () => {
                       <label className="block text-sm font-medium text-gray-700">
                         Địa chỉ
                       </label>
-                      <input
+                      <ProvinceInput
+                        value={userProfile?.address || ''}
+                        onChange={handleCityInputChange}
+                      />
+                      {/* <input
                         type="text"
                         placeholder="Nhập địa chỉ"
                         name="address"
                         value={userProfile?.address}
                         onChange={handleUserProfileInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                      />
+                      /> */}
                     </div>
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
