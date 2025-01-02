@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ref, onValue, push, set } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { database } from "@/app/lib/firebaseConfig";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
@@ -9,6 +9,8 @@ import Header from "@/app/ui/user/Header";
 import { useAuth } from "@/app/contexts/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import withAuth from "../lib/withAuth";
+import { toast } from "react-toastify";
 
 interface Message {
   id: string;
@@ -121,68 +123,6 @@ const MessagesPage: React.FC = () => {
     });
   }, [selectedUser]);
 
-  const sendMessage = async () => {
-    if (!currentUser || !message) return;
-    // if (!selectedUser || !message) {
-    // if (!message) {
-    const chatId =
-      currentUser.role === "recruiter"
-        ? `${currentUser.userId}_${receiverId}`
-        : `${receiverId}_${currentUser.userId}`;
-    // }
-    // else {
-    //   chatId = (currentUser.role === "recruiter") ? `${currentUser.userId}_${selectedUser.id}` : `${selectedUser.id}_${currentUser.userId}`;
-    // }
-
-    if (message.trim() === "") return;
-
-    const messagesRef = ref(database, `messages/${chatId}/messages`);
-    const metadataRef = ref(database, `messages/${chatId}/metadata`);
-
-    const metadataSnapshot = await new Promise<Metadata | null>((resolve) => {
-      onValue(
-        metadataRef,
-        (snapshot) => {
-          resolve(snapshot.val());
-        },
-        { onlyOnce: true }
-      );
-    });
-
-    let candidateName =
-      currentUser.role === "candidate" ? currentUser.name : "recruiter";
-    let recruiterName =
-      currentUser.role === "recruiter" ? currentUser.name : "candidate";
-
-    if (!metadataSnapshot) {
-      if (currentUser.role === "recruiter") {
-        const candidateResponse = await axios.get(
-          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/user/profile/${receiverId}`
-        );
-        candidateName = candidateResponse.data.name;
-      }
-    } else {
-      candidateName = metadataSnapshot.candidateName;
-      recruiterName = metadataSnapshot.recruiterName;
-    }
-
-    const newMessageRef = push(messagesRef);
-    set(newMessageRef, {
-      text: message,
-      senderId: currentUser.userId,
-      timestamp: Date.now(),
-    });
-
-    setMessage("");
-
-    set(metadataRef, {
-      recruiterName,
-      candidateName,
-      lastMessage: message,
-      lastMessageTimestamp: Date.now(),
-    });
-  };
-
   const handleUserSelection = (user: User) => {
     router.push(`/mess-firebase/${user.id}`);
   };
@@ -230,7 +170,9 @@ const MessagesPage: React.FC = () => {
           <MessageInput
             message={message}
             onMessageChange={setMessage}
-            onSendMessage={sendMessage}
+            onSendMessage={() => {
+              toast.error("Chọn nhà tuyển dụng mà bạn muốn nhắn tin");
+            }}
           />
         </div>
       </div>
@@ -238,4 +180,4 @@ const MessagesPage: React.FC = () => {
   );
 };
 
-export default MessagesPage;
+export default withAuth(MessagesPage, ["candidate"]);

@@ -1,5 +1,6 @@
 "use client";
 
+import withAuth from "@/app/lib/withAuth";
 import CloseJobList from "@/app/ui/recruiter/CloseJobList";
 import Header from "@/app/ui/recruiter/Header";
 import OpenJobList from "@/app/ui/recruiter/OpenJobList";
@@ -32,18 +33,16 @@ const PostManager = () => {
           <div className="flex justify-start gap-8 text-xl">
             <button
               ref={openJobsdRef}
-              className={`py-2 text-xl ${
-                activeTab === "openJobs" ? "text-blue-500" : "text-gray-500"
-              }`}
+              className={`py-2 text-xl ${activeTab === "openJobs" ? "text-blue-500" : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("openJobs")}
             >
               Đang tuyển
             </button>
             <button
               ref={closeJobsRef}
-              className={`py-2 text-xl ${
-                activeTab === "closeJobs" ? "text-blue-500" : "text-gray-500"
-              }`}
+              className={`py-2 text-xl ${activeTab === "closeJobs" ? "text-blue-500" : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("closeJobs")}
             >
               Đã đóng
@@ -63,4 +62,4 @@ const PostManager = () => {
   );
 };
 
-export default PostManager;
+export default withAuth(PostManager, ["recruiter"]);

@@ -27,46 +27,42 @@ const MainNav = () => {
       {isLoggedIn && user?.role === "recruiter" ? (
         // {true ? (
         <>
-          <Link
-            href="/recruiter/dashboard"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/recruiter/dashboard")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+          {/* <Link
+            href="/"
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/")
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Trang chủ
-          </Link>
+          </Link> */}
           <Link
             href="/recruiter/post-job"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/recruiter/post-job")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/recruiter/post-job")
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Đăng tuyển
           </Link>
           <Link
             href="/recruiter/post-manager"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/recruiter/post-manager") ||
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/recruiter/post-manager") ||
               isActive("/recruiter/candidate-manager") ||
               isActive("/recruiter/edit-post") ||
               isActive("/search-job")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Bài đăng
           </Link>
           <Link
             href="/recruiter/mess-firebase"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/recruiter/mess-firebase")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/recruiter/mess-firebase")
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Nhắn tin
           </Link>

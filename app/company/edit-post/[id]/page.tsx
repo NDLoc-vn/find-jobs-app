@@ -6,8 +6,10 @@ import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
 import { categories } from "@/app/lib/data";
 import Header from "@/app/ui/company/Header";
 import { toast } from "react-toastify";
+import withAuth from "@/app/lib/withAuth";
+import ProvinceInput from "@/app/ui/ProvinceInput";
 
-export default function EditJob() {
+function EditJob() {
   const [formData, setFormData] = useState({
     title: "",
     categories: categories[0]?.name || "",
@@ -75,6 +77,13 @@ export default function EditJob() {
     });
   };
 
+  const handleProvinceChange = (city: string) => {
+    setFormData({
+      ...formData,
+      city,
+    });
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -138,7 +147,7 @@ export default function EditJob() {
   };
 
   if (isLoading) {
-    return <div>Đang tải dữ liệu...</div>;
+    return <div></div>;
   }
 
   return (
@@ -247,7 +256,8 @@ export default function EditJob() {
                 >
                   Thành phố<span className="text-red-500">*</span>
                 </label>
-                <input
+                <ProvinceInput value={formData.city} onChange={handleProvinceChange} />
+                {/* <input
                   id="city"
                   name="city"
                   type="text"
@@ -256,7 +266,7 @@ export default function EditJob() {
                   placeholder="Đà Nẵng, ..."
                   required
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
-                />
+                /> */}
               </div>
               <div>
                 <label
@@ -402,3 +412,5 @@ export default function EditJob() {
     </>
   );
 }
+
+export default withAuth(EditJob, ["company"]);

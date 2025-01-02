@@ -60,18 +60,18 @@ const MobileNav = () => {
           {isLoggedIn && user?.role === "recruiter" ? (
             // {true ? (
             <>
-              <Link href="/recruiter/dashboard" className="w-full">
+              {/* <Link href="/" className="w-full">
                 <button
                   className={clsx(
                     "h-12 w-full px-4 py-2 rounded-lg font-semibold",
-                    pathname === "/recruiter/dashboard"
+                    pathname === "/"
                       ? activeClass
                       : inactiveClass
                   )}
                 >
                   Trang chủ
                 </button>
-              </Link>
+              </Link> */}
               <Link href="/recruiter/post-job" className="w-full">
                 <button
                   className={clsx(

@@ -27,12 +27,11 @@ const MainNav = () => {
         // {true ? (
         <>
           <Link
-            href="/company/dashboard"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/company/dashboard")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+            href="/company/company-profile"
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/company/company-profile")
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Trang chủ
           </Link>
@@ -48,23 +47,21 @@ const MainNav = () => {
           </Link> */}
           <Link
             href="/company/recruiter-manager"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/company/recruiter-manager")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/company/recruiter-manager")
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             TK tuyển dụng
           </Link>
           <Link
             href="/company/post-manager"
-            className={`text-lg px-3 py-2 rounded-lg ${
-              isActive("/company/post-manager") ||
+            className={`text-lg px-3 py-2 rounded-lg ${isActive("/company/post-manager") ||
               isActive("/company/candidate-manager") ||
               isActive("/company/edit-post")
-                ? "bg-xanhduong-600 text-white"
-                : "text-blue-600"
-            } hover:bg-xanhduong-500 hover:text-white`}
+              ? "bg-xanhduong-600 text-white"
+              : "text-blue-600"
+              } hover:bg-xanhduong-500 hover:text-white`}
           >
             Bài đăng
           </Link>

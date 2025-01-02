@@ -6,8 +6,9 @@ import { getDetailJobForGuest, updatePost } from "@/app/services/jobService";
 import { categories } from "@/app/lib/data";
 import Header from "@/app/ui/recruiter/Header";
 import { toast } from "react-toastify";
+import withAuth from "@/app/lib/withAuth";
 
-export default function EditJob() {
+function EditJob() {
   const [formData, setFormData] = useState({
     title: "",
     categories: categories[0]?.name || "",
@@ -138,7 +139,7 @@ export default function EditJob() {
   };
 
   if (isLoading) {
-    return <div>Đang tải dữ liệu...</div>;
+    return <div></div>;
   }
 
   return (
@@ -402,3 +403,5 @@ export default function EditJob() {
     </>
   );
 }
+
+export default withAuth(EditJob, ["recruiter"]);

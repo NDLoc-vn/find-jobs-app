@@ -13,6 +13,7 @@ import {
   getDetailJobForGuest,
   getListCandidateAppliedJobs,
 } from "@/app/services/jobService";
+import withAuth from "@/app/lib/withAuth";
 
 const CandidateManager = () => {
   const router = useRouter();
@@ -190,4 +191,4 @@ const CandidateManager = () => {
   );
 };
 
-export default CandidateManager;
+export default withAuth(CandidateManager, ["company"]);

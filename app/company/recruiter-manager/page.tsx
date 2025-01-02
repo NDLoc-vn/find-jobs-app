@@ -8,6 +8,7 @@ import OpenJobList from "@/app/ui/company/OpenJobList";
 import CloseJobList from "@/app/ui/company/CloseJobList";
 import { useAuth } from "@/app/contexts/auth-context";
 import axios from "axios";
+import withAuth from "@/app/lib/withAuth";
 
 interface RecruiterAccount {
   _id: string;
@@ -227,4 +228,4 @@ const RecruiterManager = () => {
   );
 };
 
-export default RecruiterManager;
+export default withAuth(RecruiterManager, ["company"]);
