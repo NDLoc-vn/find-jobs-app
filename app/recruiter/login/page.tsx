@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useAuth } from "@/app/contexts/auth-context";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,7 @@ const Login = () => {
         login(token, userData);
         toast.success("Đăng nhập thành công");
         if (response.data.account.role === "recruiter")
-          router.push("/recruiter/dashboard");
+          router.push("/recruiter/post-job");
         else router.push("/company/dashboard");
       } else if (response.status === 400) {
         // bughh return wrong status code

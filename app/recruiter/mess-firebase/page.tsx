@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ref, onValue, push, set } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { database } from "@/app/lib/firebaseConfig";
 import MessageList from "@/app/ui/message/MessageList";
 import MessageInput from "@/app/ui/message/MessageInput";
