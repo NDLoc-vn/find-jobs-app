@@ -7,6 +7,7 @@ import Header from "@/app/ui/recruiter/Header";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import ProvinceInput from "@/app/ui/ProvinceInput";
 
 function PostJob() {
   const [formData, setFormData] = useState({
@@ -37,6 +38,13 @@ function PostJob() {
       [name]: value,
     });
   };
+  const handleProvinceChange = (city: string) => {
+    setFormData({
+      ...formData,
+      city,
+    });
+  }
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -208,7 +216,8 @@ function PostJob() {
                 >
                   Thành phố<span className="text-red-500">*</span>
                 </label>
-                <input
+                <ProvinceInput value={formData.city} onChange={handleProvinceChange} />
+                {/* <input
                   id="city"
                   name="city"
                   type="text"
@@ -217,7 +226,7 @@ function PostJob() {
                   placeholder="Đà Nẵng, ..."
                   required
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
-                />
+                /> */}
               </div>
               <div>
                 <label

@@ -56,7 +56,7 @@ const Login = () => {
         toast.success("Đăng nhập thành công");
         if (response.data.account.role === "recruiter")
           router.push("/recruiter/post-job");
-        else router.push("/company/dashboard");
+        else router.push("/company/company-profile");
       } else if (response.status === 400) {
         // bughh return wrong status code
         setError("Sai tài khoản hoặc mật khẩu");

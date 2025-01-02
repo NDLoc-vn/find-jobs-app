@@ -7,6 +7,7 @@ import { categories } from "@/app/lib/data";
 import Header from "@/app/ui/company/Header";
 import { toast } from "react-toastify";
 import withAuth from "@/app/lib/withAuth";
+import ProvinceInput from "@/app/ui/ProvinceInput";
 
 function EditJob() {
   const [formData, setFormData] = useState({
@@ -75,6 +76,13 @@ function EditJob() {
       [name]: value,
     });
   };
+
+  const handleProvinceChange = (city: string) => {
+    setFormData({
+      ...formData,
+      city,
+    });
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -248,7 +256,8 @@ function EditJob() {
                 >
                   Thành phố<span className="text-red-500">*</span>
                 </label>
-                <input
+                <ProvinceInput value={formData.city} onChange={handleProvinceChange} />
+                {/* <input
                   id="city"
                   name="city"
                   type="text"
@@ -257,7 +266,7 @@ function EditJob() {
                   placeholder="Đà Nẵng, ..."
                   required
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-xanhduong-500"
-                />
+                /> */}
               </div>
               <div>
                 <label
