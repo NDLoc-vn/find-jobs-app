@@ -118,11 +118,11 @@ const CandidateManager = () => {
           onDelete={handleDeleteJob}
         />
         <h2 className="text-2xl font-semibold mt-8 mb-2">
-          Danh sách ứng viên: {candidates.length}
+          Danh sách ứng viên: {candidates?.length || "0"}
         </h2>
         {/* <SearchBar /> */}
         <div className="mt-4 mb-8">
-          {candidates.map((candidate) => (
+          {candidates?.map((candidate) => (
             <div
               key={candidate.idUser}
               className="flex flex-col sm:flex-row justify-between items-center border p-4 rounded-lg shadow-md mb-3 space-y-4 sm:space-y-0"
