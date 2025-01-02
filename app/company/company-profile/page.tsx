@@ -35,7 +35,7 @@ interface CompanyProfile {
   __v: number;
 }
 
-const CompanyProfilePage: React.FC<{ companyId: string }> = ({ companyId }) => {
+const CompanyProfilePage = () => {
   const [profile, setProfile] = useState<CompanyProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +45,7 @@ const CompanyProfilePage: React.FC<{ companyId: string }> = ({ companyId }) => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `https://user-service-job-system.onrender.com/api/company/profile/${user?.userId}`,
+          `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/company/profile/${user?.userId}`,
           {
             headers: {
               Authorization: `${token}`,
@@ -61,7 +61,7 @@ const CompanyProfilePage: React.FC<{ companyId: string }> = ({ companyId }) => {
     };
 
     fetchProfile();
-  }, [companyId]);
+  }, []);
 
   if (loading) return <div></div>;
   if (error) return <div>{error}</div>;
