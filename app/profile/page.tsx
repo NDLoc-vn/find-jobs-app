@@ -116,13 +116,13 @@ const ProfilePage = () => {
     }
   };
 
-  const formatDurationToDates = (duration: string | undefined) => {
-    if (!duration) return { start: '', end: '' };
-    const [start, end] = duration.split(" - ");
-    const formattedStart = start ? moment(start, 'MM/YYYY').format('YYYY-MM') : '';
-    const formattedEnd = end ? moment(end, 'MM/YYYY').format('YYYY-MM') : '';
-    return { start: formattedStart, end: formattedEnd };
-  };
+  // const formatDurationToDates = (duration: string | undefined) => {
+  //   if (!duration) return { start: '', end: '' };
+  //   const [start, end] = duration.split(" - ");
+  //   const formattedStart = start ? moment(start, 'MM/YYYY').format('YYYY-MM') : '';
+  //   const formattedEnd = end ? moment(end, 'MM/YYYY').format('YYYY-MM') : '';
+  //   return { start: formattedStart, end: formattedEnd };
+  // };
 
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
