@@ -826,13 +826,13 @@ const ProfilePage = () => {
                   </form>
                 ) : activeForm === "education" ? (
                   <form
-                    onClick={() => {
-                      const { start, end } = formatDurationToDates(
-                        educations.find((item) => item._id === check?._id)
-                          ?.duration
-                      )
-                      setEducation({ ...education!, start: start, end: end });
-                    }}
+                  // onClick={() => {
+                  //   const { start, end } = formatDurationToDates(
+                  //     educations.find((item) => item._id === check?._id)
+                  //       ?.duration
+                  //   )
+                  //   setEducation({ ...education!, start: start, end: end });
+                  // }}
                   >
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
@@ -874,12 +874,12 @@ const ProfilePage = () => {
                         <input
                           type="month"
                           name="start"
-                          defaultValue={
-                            formatDurationToDates(
-                              educations.find((item) => item._id === check?._id)
-                                ?.duration
-                            ).start
-                          }
+                          // defaultValue={
+                          //   formatDurationToDates(
+                          //     educations.find((item) => item._id === check?._id)
+                          //       ?.duration
+                          //   ).start
+                          // }
                           onChange={(e) => handleDateChange(e, "start")}
                           placeholder="Bắt đầu"
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -887,12 +887,12 @@ const ProfilePage = () => {
                         <input
                           type="month"
                           name="end"
-                          defaultValue={
-                            formatDurationToDates(
-                              educations.find((item) => item._id === check?._id)
-                                ?.duration
-                            ).end
-                          }
+                          // defaultValue={
+                          //   formatDurationToDates(
+                          //     educations.find((item) => item._id === check?._id)
+                          //       ?.duration
+                          //   ).end
+                          // }
                           onChange={(e) => handleDateChange(e, "end")}
                           placeholder="Kết thúc"
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -925,13 +925,13 @@ const ProfilePage = () => {
                   />
                 ) : activeForm === "experience" ? (
                   <form
-                    onClick={() => {
-                      const { start, end } = formatDurationToDates(
-                        experiences.find((item) => item._id === check?._id)
-                          ?.duration
-                      )
-                      setExperience({ ...experience!, start: start, end: end });
-                    }}
+                  // onClick={() => {
+                  //   const { start, end } = formatDurationToDates(
+                  //     experiences.find((item) => item._id === check?._id)
+                  //       ?.duration
+                  //   )
+                  //   setExperience({ ...experience!, start: start, end: end });
+                  // }}
                   >
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
@@ -973,12 +973,12 @@ const ProfilePage = () => {
                         <input
                           type="month"
                           name="start"
-                          defaultValue={
-                            formatDurationToDates(
-                              experiences.find((item) => item._id === check?._id)
-                                ?.duration
-                            ).start
-                          }
+                          // defaultValue={
+                          //   formatDurationToDates(
+                          //     experiences.find((item) => item._id === check?._id)
+                          //       ?.duration
+                          //   ).start
+                          // }
                           onChange={(e) => handleDateChange(e, "start")}
                           placeholder="Bắt đầu"
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -986,12 +986,12 @@ const ProfilePage = () => {
                         <input
                           type="month"
                           name="end"
-                          defaultValue={
-                            formatDurationToDates(
-                              experiences.find((item) => item._id === check?._id)
-                                ?.duration
-                            ).end
-                          }
+                          // defaultValue={
+                          //   formatDurationToDates(
+                          //     experiences.find((item) => item._id === check?._id)
+                          //       ?.duration
+                          //   ).end
+                          // }
                           onChange={(e) => handleDateChange(e, "end")}
                           placeholder="Kết thúc"
                           className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
