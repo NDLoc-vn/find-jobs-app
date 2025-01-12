@@ -2,23 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Company } from "@/app/lib/definitions";
-import CityInput from "@/app/ui/CityInput";
 import Header from "@/app/ui/homepage/Header";
+import axios from "axios";
+import ProvinceInput from "@/app/ui/ProvinceInput";
+import CompanyFieldInput from "@/app/ui/admin/CompanyFieldInput";
 
 export default function CompanySignup() {
-  const [companyData, setCompanyData] = useState<Company>({
+  const [companyData, setCompanyData] = useState({
     name: "",
     email: "",
-    industry: "",
-    city: "",
+    password: "",
     address: "",
     website: "",
+    phone: "",
+    category: "",
   });
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isValidCity, setIsValidCity] = useState<boolean>(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,11 +29,21 @@ export default function CompanySignup() {
     });
   };
 
-  const handleCityValidChange = (isValid: boolean) => {
-    setIsValidCity(isValid);
-  };
+  const handleCityChange = (city: string) => {
+    setCompanyData({
+      ...companyData,
+      address: city,
+    });
+  }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCategoryChange = (category: string) => {
+    setCompanyData({
+      ...companyData,
+      category: category,
+    });
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -40,25 +51,26 @@ export default function CompanySignup() {
     if (
       !companyData.name ||
       !companyData.email ||
-      !companyData.industry ||
+      !companyData.password ||
       !companyData.address ||
-      !companyData.city ||
-      !companyData.website
+      !companyData.website ||
+      !companyData.phone ||
+      !companyData.category
     ) {
       setError("Vui lòng điền đầy đủ thông tin");
       return;
     }
 
-    if (!isValidCity) {
-      setError("Vui lòng chọn thành phố hợp lệ");
-      return;
-    }
-
     try {
-      console.log(companyData);
-      //api
-
-      setSuccess("Company registered successfully!");
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_USERS_API_URL}/api/company/register`,
+        companyData
+      );
+      if (response.status === 201) {
+        setSuccess("Đăng ký thành công. Vui lòng đợi xác nhận từ admin");
+      } else {
+        setError("Đăng ký thất bại");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -79,7 +91,7 @@ export default function CompanySignup() {
 
           <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-2 gap-x-4"
+            className="gap-x-4"
           >
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -90,7 +102,6 @@ export default function CompanySignup() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg mb-8"
                 name="name"
-                // value={companyData.name}
                 onChange={handleInputChange}
                 placeholder="Tên công ty"
               />
@@ -103,9 +114,20 @@ export default function CompanySignup() {
                 type="email"
                 className="w-full p-2 border border-gray-300 rounded-lg mb-8"
                 name="email"
-                // value={companyData.email}
                 onChange={handleInputChange}
                 placeholder="Email"
+              />
+
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                <strong>Mật khẩu</strong>
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="password"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-8"
+                name="password"
+                onChange={handleInputChange}
+                placeholder="Mật khẩu"
               />
             </div>
 
@@ -114,36 +136,31 @@ export default function CompanySignup() {
                 <strong>Địa chỉ</strong>
                 <span className="text-red-500">*</span>
               </label>
-              <input
+              <div
+                className="w-full p-2 rounded-lg mb-8"
+              >
+                <ProvinceInput value={""} onChange={handleCityChange} />
+              </div>
+              {/* <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg mb-8"
                 name="address"
-                // value={companyData.address}
                 onChange={handleInputChange}
                 placeholder="Địa chỉ"
-              />
-              <label className="block mb-1 text-sm font-medium text-gray-700">
-                <strong>Tỉnh thành</strong>
-                <span className="text-red-500">*</span>
-              </label>
-              <CityInput
-                onCityInput={handleInputChange}
-                changeCityValid={handleCityValidChange}
-              />
+              /> */}
             </div>
 
-            <div className="col-span-1 md:col-span-2 mt-8 md:mt-0">
+            <div>
               <label className="block mb-1 text-sm font-medium text-gray-700">
-                <strong>Lĩnh vực</strong>
+                <strong>Số điện thoại</strong>
                 <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg mb-8"
-                name="industry"
-                // value={companyData.industry}
+                name="phone"
                 onChange={handleInputChange}
-                placeholder="Lĩnh vực"
+                placeholder="Số điện thoại"
               />
             </div>
 
@@ -156,10 +173,22 @@ export default function CompanySignup() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg mb-8"
                 name="website"
-                // value={companyData.website}
                 onChange={handleInputChange}
                 placeholder="Website"
               />
+
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                <strong>Lĩnh vực</strong>
+                <span className="text-red-500">*</span>
+              </label>
+              <CompanyFieldInput value={""} onChange={handleCategoryChange} />
+              {/* <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-lg mb-8"
+                name="category"
+                onChange={handleInputChange}
+                placeholder="Lĩnh vực"
+              /> */}
             </div>
 
             {error && (
@@ -194,7 +223,7 @@ export default function CompanySignup() {
             </p>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
